@@ -31,3 +31,23 @@ services:
       - ./frontend/public:/frontend/public
     ports:
       - "3000:3000"
+
+  backend:
+    image: backend-rpg-pal
+    container_name: backend-rpg-pal
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "5005:5005" #debugging port
+    working_dir: /workspace
+    entrypoint: [ "mvn", "clean", "quarkus:dev" ]
+    volumes:
+      - .:/workspace/
+    links:
+      - db
+    depends_on:
+      - db
+    healthcheck:
+        test: [ "CMD", "mysqladmin", "ping", "--silent" ]
