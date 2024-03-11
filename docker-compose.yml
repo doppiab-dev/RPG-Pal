@@ -1,0 +1,53 @@
+version: "3.8"
+volumes:
+  rpg_pal_data:
+services:
+  db:
+    container_name: db-rpg-pal
+    image: postgres
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: devPassword
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - rpg_pal_data:/var/lib/postgresql/data/
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dev -d postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  frontend:
+    container_name: frontend-rpg-pal
+    image: frontend-rpg-pal
+    build:
+      context: ./frontend
+      target: development
+    volumes:
+      - ./frontend/src:/frontend/src
+      - ./frontend/public:/frontend/public
+    ports:
+      - "3000:3000"
+
+  backend:
+    image: backend-rpg-pal
+    container_name: backend-rpg-pal
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "5005:5005" #debugging port
+    working_dir: /workspace
+    entrypoint: [ "mvn", "clean", "quarkus:dev" ]
+    volumes:
+      - ./backend/:/workspace/
+    links:
+      - db
+    depends_on:
+      - db
+    healthcheck:
+        test: [ "CMD", "mysqladmin", "ping", "--silent" ]
