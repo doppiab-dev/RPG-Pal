@@ -36,7 +36,7 @@ services:
     image: backend-rpg-pal
     container_name: backend-rpg-pal
     build:
-      context: backend
+      context: ./backend
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
@@ -44,7 +44,7 @@ services:
     working_dir: /workspace
     entrypoint: [ "mvn", "clean", "quarkus:dev" ]
     volumes:
-      - .:/workspace/
+      - ./backend/:/workspace/
     links:
       - db
     depends_on:
