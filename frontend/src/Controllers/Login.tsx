@@ -17,6 +17,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import GoogleIcon from '@mui/icons-material/Google'
 import useGoogleLoginWithRedux from '../Hooks/useGoogleLoginWithRedux'
 import ErrorComponent from '../Components/Error'
+import LanguageSelector from '../Components/LanguageSelector'
 
 const Login: FC = () => {
   const { t } = useTranslation()
@@ -68,7 +69,7 @@ const Login: FC = () => {
           flexDirection: 'column',
           alignItems: 'center',
           alignSelf: 'center',
-          justifyContent: 'center',
+          justifyContent: 'space-between',
           width: '35%',
           padding: '4%',
           borderRadius: '5%',
@@ -77,11 +78,12 @@ const Login: FC = () => {
           color: theme.palette.text.primary
         }}
       >
-        <Avatar sx={{ bgcolor: 'secondary.main' }}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5"> {t('login.signin')} </Typography>
-        <Box>
+        <LanguageSelector style={{ height: '35%' }} />
+        <Box display='flex' flexDirection='column' alignItems='center' height='65%'>
+          <Avatar sx={{ bgcolor: 'secondary.main' }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5"> {t('login.signin')} </Typography>
           <Button
             type="submit"
             fullWidth

@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 const loader = {
-  title: 'Table Football',
+  title: 'RPG-Pal',
   text: '...Loading'
 }
 const login = {

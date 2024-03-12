@@ -15,10 +15,9 @@ const useGoogleLoginWithRedux = (): UseGoogleLoginWithRedux => {
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onSuccess: async (codeResponse) => {
       try {
-        const res = await dispatch(authenticateUser(codeResponse.access_token))
-        console.log('res', res)
+        await dispatch(authenticateUser(codeResponse.access_token))
       } catch (error) {
-        return dispatch(setErrorMessage(`Login Failed: ${String(error)}`))
+        dispatch(setErrorMessage(typeof error === 'string' ? error : String(error)))
       }
     },
     onError: (error) =>
