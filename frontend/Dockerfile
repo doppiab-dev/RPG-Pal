@@ -1,5 +1,4 @@
 FROM node:lts-alpine AS builder
-ENV NODE_ENV development
 
 WORKDIR /frontend
 
@@ -14,7 +13,7 @@ COPY .env .
 RUN yarn install --network-timeout 1000000000
 
 FROM builder AS development
-
+ENV NODE_ENV development
 EXPOSE $PORT
 CMD ["yarn", "start"]
 
