@@ -2,6 +2,8 @@ package com.rpgpal.group.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "group", schema = "public")
 public class Group {
@@ -13,10 +15,12 @@ public class Group {
     private long id;
     @Column(name = "group_name")
     private String name;
-    @Column(name = "group_descriptio")
+    @Column(name = "group_description")
     private String description;
     @Column(name = "group_master")
     private String master; //TODO relazione con entity utenza
+    @Column(name = "next_meeting")
+    private LocalDateTime nextMeeting;
     @Column(name = "group_status")
     private String status; //TODO enum di stati (attiva, chiusa, annullata?, conlcusa?)
     @Column(name = "update_date")
@@ -44,6 +48,14 @@ public class Group {
 
     public void setMaster(String master) {
         this.master = master;
+    }
+
+    public LocalDateTime getNextMeeting() {
+        return nextMeeting;
+    }
+
+    public void setNextMeeting(LocalDateTime nextMeeting) {
+        this.nextMeeting = nextMeeting;
     }
 
     public String getStatus() {
