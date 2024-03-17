@@ -12,7 +12,7 @@ import {
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../Utils/store'
-import { clearErrorMessage, clearUserAuthStatus, selectErrorMessage, selectUserInfoStatus, setErrorMessage } from '../Store/users'
+import { clearErrorMessage, clearUserAuthStatus, selectErrorMessage, selectAuthStatus, setErrorMessage } from '../Store/users'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import GoogleIcon from '@mui/icons-material/Google'
 import useGoogleLoginWithRedux from '../Hooks/useGoogleLoginWithRedux'
@@ -27,7 +27,7 @@ const Login: FC = () => {
   const navigate = useNavigate()
 
   const errorMessage = useAppSelector(selectErrorMessage)
-  const userInfoStatus = useAppSelector(selectUserInfoStatus)
+  const authStatus = useAppSelector(selectAuthStatus)
 
   const clearError = useCallback(() => {
     dispatch(clearUserAuthStatus())
@@ -44,7 +44,7 @@ const Login: FC = () => {
     }
   }, [dispatch, logIn])
 
-  if (userInfoStatus === 'error') {
+  if (authStatus === 'error') {
     const msg = errorMessage === '' ? 'Authentication error' : errorMessage
 
     return (
@@ -52,55 +52,54 @@ const Login: FC = () => {
     )
   }
 
-  return (
-    <Stack
-      display='flex'
-      height='100vh'
-      justifyContent='center'
-      width='100vw'
+  return <Stack
+    data-testid="login-component"
+    display='flex'
+    height='100vh'
+    width='100vw'
+    justifyContent='center'
+    sx={{
+      backgroundColor: lighten(theme.palette.secondary.light, 0.7)
+    }}
+  >
+    <CssBaseline />
+    <Box
       sx={{
-        backgroundColor: lighten(theme.palette.secondary.light, 0.7)
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        alignSelf: 'center',
+        justifyContent: 'space-between',
+        width: '35%',
+        padding: '4%',
+        borderRadius: '5%',
+        minHeight: '55%',
+        backgroundColor: theme.palette.background.default,
+        color: theme.palette.text.primary
       }}
     >
-      <CssBaseline />
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          alignSelf: 'center',
-          justifyContent: 'space-between',
-          width: '35%',
-          padding: '4%',
-          borderRadius: '5%',
-          minHeight: '50vh',
-          backgroundColor: theme.palette.background.default,
-          color: theme.palette.text.primary
-        }}
-      >
-        <LanguageSelector style={{ height: '35%' }} />
-        <Box display='flex' flexDirection='column' alignItems='center' height='65%'>
-          <Avatar sx={{ bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5"> {t('login.signin')} </Typography>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            data-testid="login-button"
-            // eslint-disable-next-line @typescript-eslint/no-misused-promises
-            onClick={handleLoginClick}
-            sx={{ mt: 3, mb: 2, fontWeight: 800 }}
-            startIcon={<GoogleIcon />}
-            size='large'
-          >
-            {t('login.signin')}
-          </Button>
-        </Box>
+      <LanguageSelector style={{ height: '35%' }} />
+      <Box display='flex' flexDirection='column' alignItems='center' height='65%'>
+        <Avatar sx={{ bgcolor: 'secondary.main' }}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5"> {t('login.signin')} </Typography>
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          data-testid="login-button"
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises
+          onClick={handleLoginClick}
+          sx={{ mt: 3, mb: 2, fontWeight: 800 }}
+          startIcon={<GoogleIcon />}
+          size='large'
+        >
+          {t('login.signin')}
+        </Button>
       </Box>
-    </Stack>
-  )
+    </Box>
+  </Stack>
 }
 
 export default Login

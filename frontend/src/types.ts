@@ -2,7 +2,9 @@
 /**
  * Forms
  */
-
+interface FormDataUsername {
+  username: string
+}
 /**
  * API
 */
@@ -81,7 +83,7 @@ interface UserInfo {
   master: { campaigns: number }
 }
 interface Username {
-  username: string
+  username: string | null
 }
 interface Campaign {
   id: number

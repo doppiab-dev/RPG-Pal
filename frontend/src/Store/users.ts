@@ -141,7 +141,7 @@ export const selectUser = (state: State): State['userInfo']['user'] => state.use
 export const selectAuthStatus = (state: State): State['userInfo']['authStatus'] => state.userInfo.authStatus
 export const selectUsernameStatus = (state: State): State['userInfo']['authStatus'] => state.userInfo.usernameStatus
 export const selectUserInfoStatus = (state: State): State['userInfo']['authStatus'] => state.userInfo.userInfoStatus
-export const selectToken = (state: State): State['userInfo']['token'] => state.userInfo.token
+export const selectToken = (state: State): State['userInfo']['token'] => state.userInfo.user.id // TODO: change this to state.userInfo.token when implement login BE explicit flow
 export const selectUsername = (state: State): State['userInfo']['username'] => state.userInfo.username
 export const selectUserInfo = (state: State): State['userInfo']['userInfo'] => state.userInfo.userInfo
 export const selectErrorMessage = (state: State): State['userInfo']['errorMessage'] => state.userInfo.errorMessage

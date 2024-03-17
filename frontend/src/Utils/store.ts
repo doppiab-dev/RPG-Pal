@@ -54,7 +54,7 @@ export const userInitialState: UserStore = {
   authStatus: 'idle',
   userInfoStatus: 'idle',
   usernameStatus: 'idle',
-  username: '',
+  username: null,
   isUserLogged: false,
   token: '',
   userInfo: {
