@@ -1,31 +1,47 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { environment } from './Utils/config'
+import { clientId, environment } from './Utils/config'
 import { BrowserRouter as Router } from 'react-router-dom'
+import { Provider } from 'react-redux'
+import { GoogleOAuthProvider } from '@react-oauth/google'
 import AppRouter from './Controllers/Router'
 import LoggerProvider from './Hooks/Logger'
+import store from './Store'
+import './Translations'
 import './index.css'
 
 const rootElement = document.getElementById('root')
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const root = createRoot(rootElement!)
+if (rootElement !== null) {
+  const root = createRoot(rootElement)
 
-root.render(
-  environment === 'DEV'
-    ? (
-      <LoggerProvider>
-        <Router>
-          <AppRouter />
-        </Router>
-      </LoggerProvider>
+  if (clientId === undefined) root.render(null)
+  else if (environment === 'DEV') {
+    root.render(
+      <GoogleOAuthProvider clientId={clientId}>
+        <Provider store={store}>
+          <LoggerProvider>
+            <Router>
+              <AppRouter />
+            </Router>
+          </LoggerProvider>
+        </Provider>
+      </GoogleOAuthProvider>
     )
-    : (
+  } else {
+    root.render(
       <StrictMode>
-        <LoggerProvider>
-          <Router>
-            <AppRouter />
-          </Router>
-        </LoggerProvider>
+        <GoogleOAuthProvider clientId={clientId}>
+          <Provider store={store}>
+            <LoggerProvider>
+              <Router>
+                <AppRouter />
+              </Router>
+            </LoggerProvider>
+          </Provider>
+        </GoogleOAuthProvider>
       </StrictMode>
     )
-)
+  }
+} else {
+  throw new Error('root element id is not in document')
+}

@@ -1,3 +1,4 @@
+import { usernameIsValid } from '../Api/user'
 import { authorization } from './config'
 
 export const apply = <T>(x: T, f: (x: T) => T): T => f(x)
@@ -25,3 +26,12 @@ export const createApiHeaders = (token: string): Headers => ({
     [authorization]: `Bearer ${token}`
   }
 })
+
+export const validateUsername = async (value: string, token: string): Promise<boolean> => {
+  try {
+    const res = await usernameIsValid(value, token)
+    return res.data
+  } catch {
+    return false
+  }
+}
