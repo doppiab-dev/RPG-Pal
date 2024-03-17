@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 const loader = {
   title: 'RPG-Pal',
-  text: '...Loading'
+  text: '...Sta Caricando'
 }
 const login = {
   signin: 'Accedi',

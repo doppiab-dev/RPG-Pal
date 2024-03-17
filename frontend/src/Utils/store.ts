@@ -10,7 +10,9 @@ export const loadState = (): State => {
 
     if (serializedStore === null || serializedStore === undefined) {
       return {
-        userInfo: userInitialState
+        userInfo: userInitialState,
+        masterInfo: masterInitialState,
+        playerInfo: playerInitialState
       }
     }
 
@@ -19,7 +21,9 @@ export const loadState = (): State => {
     }
   } catch (e) {
     return {
-      userInfo: userInitialState
+      userInfo: userInitialState,
+      masterInfo: masterInitialState,
+      playerInfo: playerInitialState
     }
   }
 }
@@ -47,9 +51,29 @@ export const userInitialState: UserStore = {
     picture: '',
     verifiedEmail: false
   },
-  isUserLogged: false,
   authStatus: 'idle',
+  userInfoStatus: 'idle',
+  usernameStatus: 'idle',
+  username: null,
+  isUserLogged: false,
   token: '',
+  userInfo: {
+    master: { campaigns: 0 },
+    player: { characters: 0 },
+    username: ''
+  },
+  errorMessage: ''
+}
+
+export const playerInitialState: PlayerStore = {
+  characters: [],
+  charactersInfoStatus: 'idle',
+  errorMessage: ''
+}
+
+export const masterInitialState: MasterStore = {
+  campaigns: [],
+  campaignsInfoStatus: 'idle',
   errorMessage: ''
 }
 
