@@ -6,4 +6,4 @@ export const userInfo = async (token: string): Promise<AxiosResponse<UserInfoDTO
   await axiosClient.get('/user/info', createApiHeaders(token))
 
 export const updateUsername = async (token: string, username: string): Promise<AxiosResponse<UsernameDTO>> =>
-  await axiosClient.post('/user/info', { username } satisfies UsernameBody, createApiHeaders(token))
+  await axiosClient.post('/user/username', { username } satisfies UsernameBody, createApiHeaders(token))
