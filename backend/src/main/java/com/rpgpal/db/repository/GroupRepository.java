@@ -1,11 +1,11 @@
-package com.rpgpal.group.repository;
+package com.rpgpal.db.repository;
 
-import com.rpgpal.group.model.Group;
+import com.rpgpal.db.model.GroupEntity;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.UUID;
 
 @ApplicationScoped
-public class GroupRepository implements PanacheRepositoryBase<Group, UUID> {
+public class GroupRepository implements PanacheRepositoryBase<GroupEntity, Long> {
 }

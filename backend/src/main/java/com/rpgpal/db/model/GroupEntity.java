@@ -1,4 +1,4 @@
-package com.rpgpal.group.model;
+package com.rpgpal.db.model;
 
 import jakarta.persistence.*;
 
@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "group", schema = "public")
-public class Group {
+public class GroupEntity {
 
     @Id
     @SequenceGenerator(name = "groupSeq", sequenceName = "group_id_seq", allocationSize = 1, initialValue = 1000)
