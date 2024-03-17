@@ -40,11 +40,10 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-      - "5005:5005" #debugging port
-    working_dir: /workspace
-    entrypoint: [ "mvn", "clean", "quarkus:dev" ]
+      - "5005:5005"
     volumes:
       - ./backend/:/workspace/
+      - ${C_HOME}/.m2:/root/.m2
     links:
       - db
     depends_on:
