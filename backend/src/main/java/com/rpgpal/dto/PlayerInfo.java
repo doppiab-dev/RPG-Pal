@@ -1,6 +1,6 @@
 package com.rpgpal.dto;
 
-public class PlayerInfoDTO {
+public class PlayerInfo {
     private Integer characters;
 
     public Integer getCharacters() {

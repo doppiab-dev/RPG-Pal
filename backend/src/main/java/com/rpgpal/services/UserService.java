@@ -1,12 +1,15 @@
 package com.rpgpal.services;
 
+import com.rpgpal.controllers.UserController;
 import com.rpgpal.db.model.UserEntity;
 import com.rpgpal.db.repository.UserRepository;
-import com.rpgpal.dto.MasterInfoDTO;
-import com.rpgpal.dto.PlayerInfoDTO;
-import com.rpgpal.dto.UserInfoDTO;
+import com.rpgpal.dto.MasterInfo;
+import com.rpgpal.dto.PlayerInfo;
+import com.rpgpal.dto.UserInfo;
+import com.rpgpal.dto.UsernameCheck;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import org.jboss.logging.Logger;
 
 @ApplicationScoped
 public class UserService {
@@ -14,28 +17,61 @@ public class UserService {
     @Inject
     UserRepository userRepository;
 
-    public UserInfoDTO getUserInfo(String userId) {
+    private static final Logger logger = Logger.getLogger(UserController.class);
+
+    /**
+     * Get the user info needed at login.
+     *
+     * @param userId the Google id of the user
+     * @return UserInfoDTO
+     */
+    public UserInfo getUserInfo(String userId) {
         UserEntity entity = userRepository.findById(userId);
 
         if (entity != null) {
-            UserInfoDTO userInfoDTO = new UserInfoDTO();
+            logger.info("User found, start mapping.");
+            UserInfo userInfo = new UserInfo();
 
             if (!entity.getCampaigns().isEmpty()) {
-                MasterInfoDTO masterInfoDTO = new MasterInfoDTO();
-                masterInfoDTO.setCampaigns(entity.getCampaigns().size());
-                userInfoDTO.setMaster(masterInfoDTO);
+                MasterInfo masterInfo = new MasterInfo();
+                masterInfo.setCampaigns(entity.getCampaigns().size());
+                userInfo.setMaster(masterInfo);
             }
 
             if (!entity.getCharacters().isEmpty()) {
-                PlayerInfoDTO playerInfoDTO = new PlayerInfoDTO();
-                playerInfoDTO.setCharacters(entity.getCharacters().size());
-                userInfoDTO.setPlayer(playerInfoDTO);
+                PlayerInfo playerInfo = new PlayerInfo();
+                playerInfo.setCharacters(entity.getCharacters().size());
+                userInfo.setPlayer(playerInfo);
             }
 
-            userInfoDTO.setUsername(entity.getUsername());
+            userInfo.setUsername(entity.getUsername());
 
-            return userInfoDTO;
+            return userInfo;
         }
         return null;
+    }
+
+    /**
+     * Checks if the user logged in has already chosen a username.
+     *
+     * @param userId the Google id of the user
+     * @return UsernameCheckDTO
+     */
+    public UsernameCheck checkUsername(String userId) {
+        UsernameCheck usernameCheck = new UsernameCheck();
+        usernameCheck.setUsernameCheck(userRepository.checkUsernameById(userId));
+
+        return usernameCheck;
+    }
+
+    /**
+     * Updates the username of the user found by its id with the given value.
+     *
+     * @param userId the Google id of the user
+     * @param username the username to set
+     * @return int - the number of rows updated
+     */
+    public int updateUsername(String userId, String username) {
+        return userRepository.update("username = ?1 where id = ?12", username, userId);
     }
 }

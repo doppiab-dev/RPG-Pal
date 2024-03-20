@@ -1,9 +1,9 @@
 package com.rpgpal.dto;
 
-public class UserInfoDTO {
+public class UserInfo {
     private String username;
-    private MasterInfoDTO master;
-    private PlayerInfoDTO player;
+    private MasterInfo master;
+    private PlayerInfo player;
 
     public String getUsername() {
         return username;
@@ -13,19 +13,19 @@ public class UserInfoDTO {
         this.username = username;
     }
 
-    public MasterInfoDTO getMaster() {
+    public MasterInfo getMaster() {
         return master;
     }
 
-    public void setMaster(MasterInfoDTO master) {
+    public void setMaster(MasterInfo master) {
         this.master = master;
     }
 
-    public PlayerInfoDTO getPlayer() {
+    public PlayerInfo getPlayer() {
         return player;
     }
 
-    public void setPlayer(PlayerInfoDTO player) {
+    public void setPlayer(PlayerInfo player) {
         this.player = player;
     }
 }

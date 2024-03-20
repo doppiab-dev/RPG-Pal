@@ -1,6 +1,6 @@
 package com.rpgpal.dto;
 
-public class MasterInfoDTO {
+public class MasterInfo {
     private Integer campaigns;
 
     public Integer getCampaigns() {
