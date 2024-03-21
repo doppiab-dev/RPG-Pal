@@ -7,7 +7,8 @@ import {
   Stack,
   Typography,
   lighten,
-  useTheme
+  useTheme,
+  Paper
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -64,6 +65,8 @@ const Login: FC = () => {
   >
     <CssBaseline />
     <Box
+      component={Paper}
+      elevation={10}
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -78,12 +81,12 @@ const Login: FC = () => {
         color: theme.palette.text.primary
       }}
     >
-      <LanguageSelector style={{ height: '35%' }} />
-      <Box display='flex' flexDirection='column' alignItems='center' height='65%'>
-        <Avatar sx={{ bgcolor: 'secondary.main' }}>
+      <LanguageSelector style={{ height: '35%', width: '100%' }} />
+      <Box display='flex' flexDirection='column' alignItems='center' height='65%' width='40%'>
+        <Avatar sx={{ bgcolor: 'secondary.main', marginTop: '2vh' }} component={Paper} elevation={5}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5"> {t('login.signin')} </Typography>
+        <Typography variant="h5"> {t('login.signin')} </Typography>
         <Button
           type="submit"
           fullWidth
@@ -91,7 +94,7 @@ const Login: FC = () => {
           data-testid="login-button"
           // eslint-disable-next-line @typescript-eslint/no-misused-promises
           onClick={handleLoginClick}
-          sx={{ mt: 3, mb: 2, fontWeight: 800 }}
+          sx={{ margin: '3vh 0', fontWeight: 800, boxShadow: 10 }}
           startIcon={<GoogleIcon />}
           size='large'
         >

@@ -2,13 +2,13 @@ import { useCallback, type FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAppDispatch, useAppSelector } from '../Utils/store'
 import { selectToken, setErrorMessage, updateTheUsername } from '../Store/users'
-import { Stack, useTheme, lighten, CssBaseline, Box, Typography, Button, TextField } from '@mui/material'
+import { Stack, useTheme, lighten, CssBaseline, Box, Typography, Button, TextField, Paper } from '@mui/material'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGamepad } from '@fortawesome/free-solid-svg-icons'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { validateUsername } from '../Utils/f'
 import { type SubmitHandler, useForm, Controller } from 'react-hook-form'
-import LeftSideHome from '../Components/LeftSideHome'
+import HomeInfo from '../Components/LeftSideHome'
 import * as Yup from 'yup'
 
 interface InsertUsernameProps {
@@ -69,6 +69,8 @@ const InsertUsername: FC<InsertUsernameProps> = ({ handleLogOut }) => {
     <CssBaseline />
     <Box width='32.5%' />
     <Box
+      component={Paper}
+      elevation={10}
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -83,32 +85,38 @@ const InsertUsername: FC<InsertUsernameProps> = ({ handleLogOut }) => {
         color: theme.palette.primary.main
       }}
     >
-      <Box display='flex' height='35%' flexDirection='column' alignItems='center'>
+      <Box display='flex' height='35%' flexDirection='column' alignItems='center' marginTop='1vh'>
         <Typography variant='h6'>{t('username.title')}</Typography>
         <Typography mt='2vh'>{t('username.text')}</Typography>
       </Box>
-      {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-      <form onSubmit={handleSubmit(onSubmit)} id="username" style={{ display: 'flex', width: '100%', flexDirection: 'column', height: '65%' }}>
+      <form
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
+        onSubmit={handleSubmit(onSubmit)}
+        id="username"
+        style={{ display: 'flex', width: '100%', flexDirection: 'column', height: '65%', gap: '5vh' }}
+      >
         <Controller
           name="username"
           control={control}
-          render={({ field }) => (
+          render={({ field }) =>
             <TextField
               label={t('username.label')}
               placeholder={t('username.placeholder')}
               fullWidth
+              data-testid='username-text'
               error={Boolean(errors.username)}
               helperText={errors.username?.message}
-              data-testid='username-text'
-              sx={{ width: '100%' }}
-              {...field} />
-          )} />
+              sx={{ width: '100%', boxShadow: Boolean(errors.username) ? 0 : 5 }}
+              {...field}
+            />
+          }
+        />
         <Button
           type="submit"
           variant="contained"
           color="primary"
           data-testid="update-username-button"
-          sx={{ mt: 3, fontWeight: 800 }}
+          sx={{ mt: 3, fontWeight: 800, boxShadow: 10 }}
           endIcon={<FontAwesomeIcon icon={faGamepad} />}
           size='large'
         >
@@ -116,7 +124,7 @@ const InsertUsername: FC<InsertUsernameProps> = ({ handleLogOut }) => {
         </Button>
       </form>
     </Box>
-    <LeftSideHome handleLogOut={handleLogOut} />
+    <HomeInfo handleLogOut={handleLogOut} />
   </Stack>
 }
 

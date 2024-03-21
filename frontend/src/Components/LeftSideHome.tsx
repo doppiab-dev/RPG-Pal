@@ -5,11 +5,11 @@ import { Version } from '../Utils/config'
 import InfoIcon from '@mui/icons-material/InfoOutlined'
 import LogOutIcon from '@mui/icons-material/Logout'
 
-interface LeftSideHomeProps {
+interface HomeInfoProps {
   handleLogOut: () => void
 }
 
-const LeftSideHome: FC<LeftSideHomeProps> = ({ handleLogOut }) => {
+const HomeInfo: FC<HomeInfoProps> = ({ handleLogOut }) => {
   const { t } = useTranslation()
   const theme = useTheme()
 
@@ -39,9 +39,19 @@ const LeftSideHome: FC<LeftSideHomeProps> = ({ handleLogOut }) => {
       <LogOutIcon sx={{ color: theme.palette.primary.main }} />
     </Box>
     <Tooltip title={`${t('home.version')} ${Version}`}>
-      <InfoIcon sx={{ alignSelf: 'flex-end', cursor: 'pointer', margin: '0 1vw 1vh 0', color: theme.palette.primary.main }} />
+      <InfoIcon
+        fontSize='medium'
+        sx={{
+          alignSelf: 'flex-end',
+          cursor: 'pointer',
+          margin: '0 1vw 1vh 0',
+          color: theme.palette.primary.main,
+          boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)',
+          borderRadius: '50%'
+        }}
+      />
     </Tooltip>
   </Box>
 }
 
-export default LeftSideHome
+export default HomeInfo

@@ -10,13 +10,13 @@ import {
   selectUsername,
   setErrorMessage
 } from '../Store/users'
-import { Stack, useTheme, lighten, CssBaseline, Box, Typography, Button } from '@mui/material'
+import { Stack, useTheme, lighten, CssBaseline, Box, Typography, Button, Paper } from '@mui/material'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDiceD20, faDungeon } from '@fortawesome/free-solid-svg-icons'
 import useGoogleLoginWithRedux from '../Hooks/useGoogleLoginWithRedux'
 import InsertUsername from './InsertUsername'
 import Loader from '../Components/Loader'
-import LeftSideHome from '../Components/LeftSideHome'
+import HomeInfo from '../Components/LeftSideHome'
 import * as ls from '../Utils/ls'
 
 const Home: FC = () => {
@@ -62,12 +62,14 @@ const Home: FC = () => {
     <CssBaseline />
     <Box width='32.5%' />
     <Box
+      component={Paper}
+      elevation={10}
       sx={{
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         alignSelf: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         width: '35%',
         padding: '4%',
         borderRadius: '5%',
@@ -76,13 +78,13 @@ const Home: FC = () => {
         color: theme.palette.primary.main
       }}
     >
-      <Box display='flex' width='100%' height='20%' justifyContent='center'>
+      <Box display='flex' width='100%' justifyContent='center' height='30%'>
         <Typography variant='h6'>{t('home.title')}</Typography>
       </Box>
-      <Box display='flex' width='100%' height='45%' justifyContent='space-between' flexDirection='column'>
-        <Box display='flex' flexDirection='column'>
+      <Box display='flex' width='100%' justifyContent='space-between' flexDirection='column' gap='4vh'>
+        <Box display='flex' flexDirection='column' gap='1vh'>
           <Typography alignSelf='center'>{userInfo.player.characters === 0 ? t('home.becomePlayer') : t('home.Player')}</Typography>
-          <Button variant="contained" endIcon={<FontAwesomeIcon icon={faDiceD20} />} >
+          <Button variant="contained" endIcon={<FontAwesomeIcon icon={faDiceD20} />} sx={{ boxShadow: 10 }}>
             {
               userInfo.player.characters === 0
                 ? t('home.emptyPlayer')
@@ -90,9 +92,9 @@ const Home: FC = () => {
             }
           </Button>
         </Box>
-        <Box display='flex' flexDirection='column'>
+        <Box display='flex' flexDirection='column' gap='1vh'>
           <Typography alignSelf='center'>{userInfo.master.campaigns === 0 ? t('home.becomeMaster') : t('home.Master')}</Typography>
-          <Button variant="contained" endIcon={<FontAwesomeIcon icon={faDungeon} />}>
+          <Button variant="contained" endIcon={<FontAwesomeIcon icon={faDungeon} />} sx={{ boxShadow: 10 }}>
             {
               userInfo.master.campaigns === 0
                 ? t('home.emptyMaster')
@@ -101,9 +103,9 @@ const Home: FC = () => {
           </Button>
         </Box>
       </Box>
-    </Box >
-    <LeftSideHome handleLogOut={handleLogOut} />
-  </Stack >
+    </Box>
+    <HomeInfo handleLogOut={handleLogOut} />
+  </Stack>
 }
 
 export default Home
