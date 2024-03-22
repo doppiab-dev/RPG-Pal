@@ -4,13 +4,11 @@ import com.rpgpal.dto.UserInfo;
 import com.rpgpal.dto.Username;
 import com.rpgpal.dto.UsernameCheck;
 import com.rpgpal.services.UserService;
-import com.rpgpal.utils.LoginUtils;
+import com.rpgpal.services.LoginService;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
-import org.jboss.logging.Logger;
-import org.jboss.resteasy.reactive.RestQuery;
 
 import static jakarta.ws.rs.core.HttpHeaders.AUTHORIZATION;
 
@@ -21,14 +19,14 @@ public class UserController {
     UserService userService;
 
     @Inject
-    LoginUtils loginUtils;
+    LoginService loginService;
     
     @GET
     @Path("/info")
     public Response getUserInfo(@HeaderParam(AUTHORIZATION) String bearer) throws UnauthorizedException {
-        String userId = loginUtils.checkToken(bearer);
+        String userId = loginService.checkToken(bearer);
 
-        if (!loginUtils.checkId(userId))
+        if (!loginService.checkId(userId))
             throw new UnauthorizedException();
 
         try {
@@ -47,13 +45,13 @@ public class UserController {
     @GET
     @Path("check/{username}")
     public Response checkUsername(@HeaderParam(AUTHORIZATION) String bearer, String username) throws UnauthorizedException {
-        String userId = loginUtils.checkToken(bearer);
+        String userId = loginService.checkToken(bearer);
 
-        if (!loginUtils.checkId(userId))
+        if (!loginService.checkId(userId))
             throw new UnauthorizedException();
 
         try {
-            UsernameCheck usernameCheck = userService.checkUsername(userId);
+            UsernameCheck usernameCheck = userService.checkUsernameExistance(username);
             return Response.ok().entity(usernameCheck).build();
         } catch (Exception e) {
             throw new InternalServerErrorException(e);
@@ -63,9 +61,9 @@ public class UserController {
     @POST
     @Path("/username")
     public Response saveUsername(@HeaderParam(AUTHORIZATION) String bearer, Username username) {
-        String userId = loginUtils.checkToken(bearer);
+        String userId = loginService.checkToken(bearer);
 
-        if (!loginUtils.checkId(userId))
+        if (!loginService.checkId(userId))
             throw new UnauthorizedException();
 
         try {

@@ -52,14 +52,14 @@ public class UserService {
     }
 
     /**
-     * Checks if the user logged in has already chosen a username.
+     * Checks if the username in input is already taken.
      *
-     * @param userId the Google id of the user
+     * @param username the username to check
      * @return UsernameCheckDTO
      */
-    public UsernameCheck checkUsername(String userId) {
+    public UsernameCheck checkUsernameExistance(String username) {
         UsernameCheck usernameCheck = new UsernameCheck();
-        usernameCheck.setUsernameCheck(userRepository.checkUsernameById(userId));
+        usernameCheck.setUsernameCheck(userRepository.checkUsernameExistance(username));
 
         return usernameCheck;
     }

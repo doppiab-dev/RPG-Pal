@@ -1,4 +1,4 @@
-package com.rpgpal.utils;
+package com.rpgpal.services;
 
 import com.rpgpal.db.repository.UserRepository;
 import io.quarkus.security.UnauthorizedException;
@@ -6,7 +6,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
 @ApplicationScoped
-public class LoginUtils {
+public class LoginService {
 
     @Inject
     UserRepository userRepository;
