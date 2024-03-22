@@ -2,6 +2,7 @@ package com.rpgpal.controllers;
 
 import com.rpgpal.db.model.GroupEntity;
 import com.rpgpal.db.repository.GroupRepository;
+import com.rpgpal.utils.LoginUtils;
 import io.quarkus.logging.Log;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -11,18 +12,22 @@ import jakarta.ws.rs.core.Response;
 import java.util.List;
 import java.util.UUID;
 
+import static jakarta.ws.rs.core.HttpHeaders.AUTHORIZATION;
 import static jakarta.ws.rs.core.Response.Status.*;
 
 @Path("/group")
 public class GroupController {
 
     @Inject
+    LoginUtils loginUtils;
+
+    @Inject
     GroupRepository groupRepository;
 
     @GET
     @Path("/all")
-    public Response getAll() {
-        Log.info("Get all groups");
+    public Response getAll(@HeaderParam(AUTHORIZATION) String bearer) {
+        String userId = loginUtils.checkToken(bearer);
         try {
             List<GroupEntity> groupEntities = groupRepository.findAll().stream().toList();
             if (groupEntities.isEmpty())
@@ -37,8 +42,8 @@ public class GroupController {
 
     @GET
     @Path("/{id}")
-    public Response getById(String id) {
-        Log.info("Get group by id: " + id);
+    public Response getById(@HeaderParam(AUTHORIZATION) String bearer, String id) {
+        String userId = loginUtils.checkToken(bearer);
         try {
             GroupEntity groupEntity = groupRepository.findById(Long.parseLong(id));
             if (groupEntity != null)
@@ -56,8 +61,8 @@ public class GroupController {
     @POST
     @Path("/save")
     @Transactional
-    public Response save(GroupEntity groupEntity) {
-        Log.info("Save group: " + groupEntity.toString());
+    public Response save(@HeaderParam(AUTHORIZATION) String bearer, GroupEntity groupEntity) {
+        String userId = loginUtils.checkToken(bearer);
         try {
             if (!groupRepository.isPersistent(groupEntity)) {
                 groupRepository.persist(groupEntity);
@@ -76,8 +81,8 @@ public class GroupController {
     @DELETE
     @Path("/delete")
     @Transactional
-    public Response delete(GroupEntity groupEntity) {
-        Log.info("Delete group: " + groupEntity.toString());
+    public Response delete(@HeaderParam(AUTHORIZATION) String bearer, GroupEntity groupEntity) {
+        String userId = loginUtils.checkToken(bearer);
         try {
             groupRepository.delete(groupEntity);
             return Response.ok().build();

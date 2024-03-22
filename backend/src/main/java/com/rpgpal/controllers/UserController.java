@@ -10,6 +10,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 import org.jboss.logging.Logger;
+import org.jboss.resteasy.reactive.RestQuery;
 
 import static jakarta.ws.rs.core.HttpHeaders.AUTHORIZATION;
 
@@ -21,14 +22,11 @@ public class UserController {
 
     @Inject
     LoginUtils loginUtils;
-
-    private static final Logger logger = Logger.getLogger(UserController.class);
-
+    
     @GET
     @Path("/info")
     public Response getUserInfo(@HeaderParam(AUTHORIZATION) String bearer) throws UnauthorizedException {
-        logger.info("[%C] - %M");
-        String userId = bearer.substring("Bearer ".length());
+        String userId = loginUtils.checkToken(bearer);
 
         if (!loginUtils.checkId(userId))
             throw new UnauthorizedException();
@@ -48,9 +46,8 @@ public class UserController {
 
     @GET
     @Path("check/{username}")
-    public Response checkUsername(@HeaderParam(AUTHORIZATION) String bearer) throws UnauthorizedException {
-        logger.info("[%C] - %M");
-        String userId = bearer.substring("Bearer ".length());
+    public Response checkUsername(@HeaderParam(AUTHORIZATION) String bearer, String username) throws UnauthorizedException {
+        String userId = loginUtils.checkToken(bearer);
 
         if (!loginUtils.checkId(userId))
             throw new UnauthorizedException();
@@ -66,8 +63,7 @@ public class UserController {
     @POST
     @Path("/username")
     public Response saveUsername(@HeaderParam(AUTHORIZATION) String bearer, Username username) {
-        logger.info("[%C] - %M");
-        String userId = bearer.substring("Bearer ".length());
+        String userId = loginUtils.checkToken(bearer);
 
         if (!loginUtils.checkId(userId))
             throw new UnauthorizedException();
