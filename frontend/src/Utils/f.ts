@@ -12,10 +12,19 @@ export const effect =
       return val
     }
 
-export const vhToPixel = (vh: number): number => {
-  const height = Cypress.config('viewportHeight')
+export const vhToPixel = (vh: number, height: number): number =>
+  (vh * height) / 100
 
-  return (vh * height) / 100
+export const vwToPixel = (vw: number, width: number): number =>
+  (vw * width) / 100
+
+export const hexToRgb = (hex: string): string => {
+  hex = hex.replace('#', '')
+  const r = parseInt(hex.substring(0, 2), 16)
+  const g = parseInt(hex.substring(2, 4), 16)
+  const b = parseInt(hex.substring(4, 6), 16)
+
+  return `rgb(${r}, ${g}, ${b})`
 }
 
 interface Headers {
@@ -35,3 +44,8 @@ export const validateUsername = async (value: string, token: string): Promise<bo
     return false
   }
 }
+export const parseErrorMessage = (error: any): string => typeof error === 'string'
+  ? error
+  : 'message' in error
+    ? error.message
+    : JSON.stringify(error)
