@@ -35,6 +35,7 @@ const username = {
   text: 'This can be edited later',
   label: 'Username',
   placeholder: 'Username',
+  valid: 'Username is valid',
   send: 'Select Username',
   validationErrorRequired: 'A username is required',
   validationErrorTooLong: 'Username should be 16 character maximum',

@@ -1,6 +1,5 @@
 import { type AxiosResponse } from 'axios'
 import mock from '.'
-import errorMock from './errorMock'
 
 export const userInfoMock = async (_token: string): Promise<AxiosResponse<UserInfoDTO>> => {
   await new Promise(resolve => setTimeout(resolve, 500))
@@ -19,12 +18,13 @@ export const userInfoMock = async (_token: string): Promise<AxiosResponse<UserIn
   }
 }
 
-export const usernameIsValidMock = async (_token: string, _username: string): Promise<AxiosResponse<boolean>> => {
+export const usernameIsValidMock = async (_token: string, username: string): Promise<AxiosResponse<boolean>> => {
   await new Promise(resolve => setTimeout(resolve, 500))
 
+  const data = username.toLocaleLowerCase() !== 'pippo'
   const mockResponse: AxiosResponse<boolean> = {
     ...mock,
-    data: false
+    data
   }
 
   return {
@@ -35,16 +35,14 @@ export const usernameIsValidMock = async (_token: string, _username: string): Pr
 export const updateUsernameMock = async (_token: string, username: string): Promise<AxiosResponse<UsernameDTO>> => {
   await new Promise(resolve => setTimeout(resolve, 500))
 
-  return errorMock()
+  const mockResponse: AxiosResponse<UsernameDTO> = {
+    ...mock,
+    data: {
+      username
+    }
+  }
 
-  // const mockResponse: AxiosResponse<UsernameDTO> = {
-  //   ...mock,
-  //   data: {
-  //     username
-  //   }
-  // }
-
-  // return {
-  //   ...mockResponse
-  // }
+  return {
+    ...mockResponse
+  }
 }
