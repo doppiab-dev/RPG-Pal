@@ -27,7 +27,8 @@ const home = {
   masterButton2: 'Campaign/s',
   emptyMaster: 'Create your first campaign',
   logout: 'Log Out',
-  version: 'Frontend Version: '
+  version: 'Frontend Version: ',
+  error: 'Data validation failed, try to log in again.'
 }
 const username = {
   title: 'Choose your username',

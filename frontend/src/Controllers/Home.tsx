@@ -13,10 +13,15 @@ import {
 import { Stack, useTheme, lighten, CssBaseline, Box, Typography, Button, Paper } from '@mui/material'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDiceD20, faDungeon } from '@fortawesome/free-solid-svg-icons'
+import { isEmpty } from 'lodash'
+import { clearPlayerState } from '../Store/player'
+import { clearMasterState } from '../Store/master'
+import { parseErrorMessage } from '../Utils/f'
 import useGoogleLoginWithRedux from '../Hooks/useGoogleLoginWithRedux'
 import InsertUsername from './InsertUsername'
 import Loader from '../Components/Loader'
 import HomeInfo from '../Components/LeftSideHome'
+import ErrorComponent from '../Components/Error'
 import * as ls from '../Utils/ls'
 
 const Home: FC = () => {
@@ -32,6 +37,9 @@ const Home: FC = () => {
 
   const handleLogOut = useCallback(() => {
     dispatch(clearUserState())
+    dispatch(clearPlayerState())
+    dispatch(clearMasterState())
+
     ls.del('rpgPal')
     logOut()
   }, [dispatch, logOut])
@@ -41,15 +49,21 @@ const Home: FC = () => {
       try {
         await dispatch(retrieveUserInfo({ token }))
       } catch (e) {
-        dispatch(setErrorMessage(typeof e === 'string' ? e : String(e)))
+        const msg = parseErrorMessage((e))
+        dispatch(setErrorMessage(msg))
       }
     })()
-      .catch(e => { dispatch(setErrorMessage(typeof e === 'string' ? e : String(e))) })
+      .catch(e => {
+        const msg = parseErrorMessage((e))
+        dispatch(setErrorMessage(msg))
+      })
   }, [token, dispatch])
 
   if (userInfoStatus === 'loading') return <Loader />
 
   if (username === null) return <InsertUsername handleLogOut={handleLogOut} />
+
+  if (isEmpty(userInfo)) return <ErrorComponent clearError={handleLogOut} msg={(t('home.error'))} />
 
   return <Stack
     data-testid="home-component"

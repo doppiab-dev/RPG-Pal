@@ -2,6 +2,7 @@ import { useGoogleLogin, googleLogout, type OverridableTokenClientConfig } from 
 import { useCallback } from 'react'
 import { useAppDispatch } from '../Utils/store'
 import { authenticateUser, setErrorMessage } from '../Store/users'
+import { parseErrorMessage } from '../Utils/f'
 
 interface UseGoogleLoginWithRedux {
   logIn: (overrideConfig?: OverridableTokenClientConfig | undefined) => void
@@ -17,11 +18,14 @@ const useGoogleLoginWithRedux = (): UseGoogleLoginWithRedux => {
       try {
         await dispatch(authenticateUser(codeResponse.access_token))
       } catch (error) {
-        dispatch(setErrorMessage(typeof error === 'string' ? error : String(error)))
+        const msg = parseErrorMessage((error))
+        dispatch(setErrorMessage(msg))
       }
     },
-    onError: (error) =>
-      dispatch(setErrorMessage(`Login Failed: ${String(error)}`))
+    onError: (error) => {
+      const msg = parseErrorMessage((error))
+      return dispatch(setErrorMessage(`Login Failed: ${msg}`))
+    }
   })
 
   const logOut = useCallback(() => { googleLogout() }, [])

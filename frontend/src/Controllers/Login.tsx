@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../Utils/store'
 import { clearErrorMessage, clearUserAuthStatus, selectErrorMessage, selectAuthStatus, setErrorMessage } from '../Store/users'
+import { parseErrorMessage } from '../Utils/f'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import GoogleIcon from '@mui/icons-material/Google'
 import useGoogleLoginWithRedux from '../Hooks/useGoogleLoginWithRedux'
@@ -41,7 +42,8 @@ const Login: FC = () => {
     try {
       logIn()
     } catch (e) {
-      dispatch(setErrorMessage(typeof e === 'string' ? e : String(e)))
+      const msg = parseErrorMessage((e))
+      dispatch(setErrorMessage(msg))
     }
   }, [dispatch, logIn])
 
