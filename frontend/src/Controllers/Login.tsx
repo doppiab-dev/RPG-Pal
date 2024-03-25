@@ -69,6 +69,7 @@ const Login: FC = () => {
     <Box
       component={Paper}
       elevation={10}
+      data-testid="login-box"
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -84,21 +85,21 @@ const Login: FC = () => {
       }}
     >
       <LanguageSelector style={{ height: '35%', width: '100%' }} />
-      <Box display='flex' flexDirection='column' alignItems='center' height='65%' width='40%'>
-        <Avatar sx={{ bgcolor: 'secondary.main', marginTop: '2vh' }} component={Paper} elevation={5}>
+      <Box display='flex' flexDirection='column' alignItems='center' height='65%' width='40%' data-testid="login-box2">
+        <Avatar sx={{ bgcolor: 'secondary.main', marginTop: '2vh' }} component={Paper} elevation={5} data-testid="login-avatar">
           <LockOutlinedIcon />
         </Avatar>
-        <Typography variant="h5"> {t('login.signin')} </Typography>
+        <Typography variant="h5" data-testid="login-text"> {t('login.signin')} </Typography>
         <Button
           type="submit"
           fullWidth
           variant="contained"
-          data-testid="login-button"
           // eslint-disable-next-line @typescript-eslint/no-misused-promises
           onClick={handleLoginClick}
           sx={{ margin: '3vh 0', fontWeight: 800, boxShadow: 10 }}
-          startIcon={<GoogleIcon />}
           size='large'
+          data-testid="login-button"
+          startIcon={<GoogleIcon />}
         >
           {t('login.signin')}
         </Button>
