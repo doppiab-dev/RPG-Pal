@@ -77,6 +77,7 @@ const Login: FC = () => {
         alignSelf: 'center',
         justifyContent: 'space-between',
         width: '35%',
+        maxWidth: '600px',
         padding: '4%',
         borderRadius: '5%',
         minHeight: '55%',
@@ -84,20 +85,19 @@ const Login: FC = () => {
         color: theme.palette.text.primary
       }}
     >
-      <LanguageSelector style={{ height: '35%', width: '100%' }} />
-      <Box display='flex' flexDirection='column' alignItems='center' height='65%' width='40%' data-testid="login-box2">
+      <LanguageSelector style={{ width: '40%', maxWidth: '220px' }} />
+      <Box display='flex' flexDirection='column' alignItems='center' height='65%' data-testid="login-box2" width='100%'>
         <Avatar sx={{ bgcolor: 'secondary.main', marginTop: '2vh' }} component={Paper} elevation={5} data-testid="login-avatar">
           <LockOutlinedIcon />
         </Avatar>
         <Typography variant="h5" data-testid="login-text"> {t('login.signin')} </Typography>
         <Button
           type="submit"
-          fullWidth
           variant="contained"
+          fullWidth
           // eslint-disable-next-line @typescript-eslint/no-misused-promises
           onClick={handleLoginClick}
-          sx={{ margin: '3vh 0', fontWeight: 800, boxShadow: 10 }}
-          size='large'
+          sx={{ margin: '3vh 0', fontWeight: 800, boxShadow: 10, width: '40%', maxWidth: '220px' }}
           data-testid="login-button"
           startIcon={<GoogleIcon />}
         >

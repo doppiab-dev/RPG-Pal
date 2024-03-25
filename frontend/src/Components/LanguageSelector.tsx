@@ -20,23 +20,21 @@ const LanguageSelector: FC<LanguageSelectorProps> = ({ style }) => {
   }
 
   return (
-    <Box display="flex"
+    <Box
       sx={{
+        display: 'flex',
         justifyContent: 'center',
         width: '100%',
         ...style
       }}
       data-testid="language-selector"
     >
-      <Paper elevation={5} sx={{ display: 'flex', height: 'fit-content' }} data-testid="language-paper">
+      <Paper elevation={5} sx={{ display: 'flex', width: '100%' }} data-testid="language-paper">
         <Select
           value={i18n.language}
           onChange={handleLanguageChange}
           variant="outlined"
-          sx={{
-            display: 'flex',
-            height: 'fit-content'
-          }}
+          sx={{ display: 'flex', width: '100%' }}
           data-testid="language-select"
         >
           <MenuItem value="en">🇬🇧🇨🇦 English 🇦🇺🇺🇸</MenuItem>

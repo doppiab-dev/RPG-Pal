@@ -94,6 +94,7 @@ const InsertUsername: FC<InsertUsernameProps> = ({ handleLogOut }) => {
         alignSelf: 'center',
         justifyContent: 'space-between',
         width: '35%',
+        maxWidth: '600px',
         padding: '4%',
         borderRadius: '5%',
         height: '55%',

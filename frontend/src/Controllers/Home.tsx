@@ -85,6 +85,7 @@ const Home: FC = () => {
         alignSelf: 'center',
         justifyContent: 'flex-start',
         width: '35%',
+        maxWidth: '600px',
         padding: '4%',
         borderRadius: '5%',
         height: '55%',
