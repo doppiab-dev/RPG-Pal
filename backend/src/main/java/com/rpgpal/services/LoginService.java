@@ -27,12 +27,4 @@ public class LoginService {
             throw new RuntimeException(e);
         }
     }
-
-    public void fakeRegister(String id, String username) {
-        UserEntity entity = new UserEntity();
-        entity.setId(id);
-        entity.setUsername(username);
-
-        userRepository.persist(entity);
-    }
 }

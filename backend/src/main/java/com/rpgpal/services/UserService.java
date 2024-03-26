@@ -72,6 +72,6 @@ public class UserService {
      * @return int - the number of rows updated
      */
     public int updateUsername(String userId, String username) {
-        return userRepository.update("username = ?1 where id = ?12", username, userId);
+        return userRepository.update("username = ?1 where id = ?2", username, userId);
     }
 }

@@ -7,6 +7,7 @@ import com.rpgpal.services.LoginService;
 import com.rpgpal.services.UserService;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -90,6 +91,8 @@ public class UserController {
 
     @POST
     @Path("/username")
+    @Transactional
+    @Consumes(MediaType.APPLICATION_JSON)
     @SecurityRequirement(name = "Authorization")
     @Operation(summary = "Saves a username for the current user")
     @APIResponses(value = {
@@ -113,7 +116,7 @@ public class UserController {
                 throw new RuntimeException("More than one record was updated, something went wrong");
 
         } catch (Exception e) {
-            throw new InternalServerErrorException(e);
+            throw new RuntimeException(e);
         }
     }
 }
