@@ -19,6 +19,7 @@ const HomeInfo: FC<HomeInfoProps> = ({ handleLogOut }) => {
     width='32.5%'
     height='100%'
     justifyContent='space-between'
+    data-testid="home-info-component"
   >
     <Box
       display='flex'

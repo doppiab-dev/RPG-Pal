@@ -6,6 +6,7 @@ import { theme } from "./utils";
 import store from '../Store'
 import LoggerProvider from "../Hooks/Logger"
 import '../Translations'
+import '../index.css'
 
 const TestContainer: FC<WithChildren> = ({ children }) =>
   <Provider store={store}>

@@ -10,9 +10,7 @@ import {
   selectUsername,
   setErrorMessage
 } from '../Store/users'
-import { Stack, useTheme, lighten, CssBaseline, Box, Typography, Button, Paper } from '@mui/material'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faDiceD20, faDungeon } from '@fortawesome/free-solid-svg-icons'
+import { Stack, useTheme, lighten, CssBaseline, Box } from '@mui/material'
 import { isEmpty } from 'lodash'
 import { clearPlayerState } from '../Store/player'
 import { clearMasterState } from '../Store/master'
@@ -20,11 +18,12 @@ import { parseErrorMessage } from '../Utils/f'
 import useGoogleLoginWithRedux from '../Hooks/useGoogleLoginWithRedux'
 import InsertUsername from './InsertUsername'
 import Loader from '../Components/Loader'
-import HomeInfo from '../Components/LeftSideHome'
+import HomeInfo from '../Components/HomeInfo'
 import ErrorComponent from '../Components/Error'
+import Component from '../Components/Home'
 import * as ls from '../Utils/ls'
 
-const Home: FC = () => {
+export const Home: FC = () => {
   const { t } = useTranslation()
   const { logOut } = useGoogleLoginWithRedux()
   const theme = useTheme()
@@ -66,7 +65,6 @@ const Home: FC = () => {
   if (isEmpty(userInfo)) return <ErrorComponent clearError={handleLogOut} msg={(t('home.error'))} />
 
   return <Stack
-    data-testid="home-component"
     display='flex'
     height='100vh'
     width='100vw'
@@ -75,50 +73,7 @@ const Home: FC = () => {
   >
     <CssBaseline />
     <Box width='32.5%' />
-    <Box
-      component={Paper}
-      elevation={10}
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        alignSelf: 'center',
-        justifyContent: 'flex-start',
-        width: '35%',
-        maxWidth: '600px',
-        padding: '4%',
-        borderRadius: '5%',
-        height: '55%',
-        backgroundColor: theme.palette.background.default,
-        color: theme.palette.primary.main
-      }}
-    >
-      <Box display='flex' width='100%' justifyContent='center' height='30%'>
-        <Typography variant='h6'>{t('home.title')}</Typography>
-      </Box>
-      <Box display='flex' width='100%' justifyContent='space-between' flexDirection='column' gap='4vh'>
-        <Box display='flex' flexDirection='column' gap='1vh'>
-          <Typography alignSelf='center'>{userInfo.player.characters === 0 ? t('home.becomePlayer') : t('home.Player')}</Typography>
-          <Button variant="contained" endIcon={<FontAwesomeIcon icon={faDiceD20} />} sx={{ boxShadow: 10 }}>
-            {
-              userInfo.player.characters === 0
-                ? t('home.emptyPlayer')
-                : `${t('home.playerButton1')} ${userInfo.player.characters} ${t('home.playerButton2')}`
-            }
-          </Button>
-        </Box>
-        <Box display='flex' flexDirection='column' gap='1vh'>
-          <Typography alignSelf='center'>{userInfo.master.campaigns === 0 ? t('home.becomeMaster') : t('home.Master')}</Typography>
-          <Button variant="contained" endIcon={<FontAwesomeIcon icon={faDungeon} />} sx={{ boxShadow: 10 }}>
-            {
-              userInfo.master.campaigns === 0
-                ? t('home.emptyMaster')
-                : `${t('home.masterButton1')} ${userInfo.master.campaigns} ${t('home.masterButton2')}`
-            }
-          </Button>
-        </Box>
-      </Box>
-    </Box>
+    <Component userInfo={userInfo} />
     <HomeInfo handleLogOut={handleLogOut} />
   </Stack>
 }

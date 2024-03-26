@@ -10,7 +10,7 @@ import { validateUsername, parseErrorMessage } from '../Utils/f'
 import { type SubmitHandler, useForm, Controller } from 'react-hook-form'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
-import HomeInfo from '../Components/LeftSideHome'
+import HomeInfo from '../Components/HomeInfo'
 import useDebouncerValidation from '../Hooks/useDebouncerValidation'
 import * as Yup from 'yup'
 
