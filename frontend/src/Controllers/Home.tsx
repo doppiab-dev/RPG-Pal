@@ -23,7 +23,7 @@ import ErrorComponent from '../Components/Error'
 import Component from '../Components/Home'
 import * as ls from '../Utils/ls'
 
-export const Home: FC = () => {
+const Home: FC = () => {
   const { t } = useTranslation()
   const { logOut } = useGoogleLoginWithRedux()
   const theme = useTheme()
