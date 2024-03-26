@@ -45,9 +45,7 @@ const HomeInfo: FC<HomeInfoProps> = ({ handleLogOut }) => {
           alignSelf: 'flex-end',
           cursor: 'pointer',
           margin: '0 1vw 1vh 0',
-          color: theme.palette.primary.main,
-          boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)',
-          borderRadius: '50%'
+          color: theme.palette.primary.main
         }}
       />
     </Tooltip>
