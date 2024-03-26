@@ -5,6 +5,7 @@ import com.rpgpal.dto.Username;
 import com.rpgpal.dto.UsernameCheck;
 import com.rpgpal.services.LoginService;
 import com.rpgpal.services.UserService;
+import io.quarkus.logging.Log;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -53,16 +54,20 @@ public class UserController {
         if (!loginService.checkId(userId))
             throw new UnauthorizedException();
 
+        Log.info("Starting getUserInfo");
+
         try {
             UserInfo userInfo = userService.getUserInfo(userId);
 
-            if (userInfo != null)
+            if (userInfo != null) {
+                Log.info("User mapped: " + userInfo);
                 return Response.ok(userInfo).build();
+            }
             else
                 throw new NotFoundException("No user with id: " + userId);
 
         } catch (Exception e) {
-            throw new InternalServerErrorException(e);
+            throw new InternalServerErrorException(e.getMessage());
         }
     }
 
@@ -81,8 +86,11 @@ public class UserController {
         if (!loginService.checkId(userId))
             throw new UnauthorizedException();
 
+        Log.info("Starting checkUsername");
+
         try {
             UsernameCheck usernameCheck = userService.checkUsernameExistance(username);
+            Log.info("UsernameCheck mapped: " + usernameCheck);
             return Response.ok().entity(usernameCheck).build();
         } catch (Exception e) {
             throw new InternalServerErrorException(e);
@@ -105,8 +113,11 @@ public class UserController {
         if (!loginService.checkId(userId))
             throw new UnauthorizedException();
 
+        Log.info("Starting saveUsername");
+
         try {
             int row = userService.updateUsername(userId, username.getUsername());
+            Log.info("Updated " + row + " row/s");
 
             if (row == 1)
                 return Response.noContent().build();
@@ -116,7 +127,7 @@ public class UserController {
                 throw new RuntimeException("More than one record was updated, something went wrong");
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new InternalServerErrorException(e);
         }
     }
 }

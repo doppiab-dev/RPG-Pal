@@ -26,29 +26,33 @@ public class UserService {
      * @return UserInfoDTO
      */
     public UserInfo getUserInfo(String userId) {
-        UserEntity entity = userRepository.findById(userId);
+        try {
+            UserEntity entity = userRepository.findById(userId);
 
-        if (entity != null) {
-            logger.info("User found, start mapping.");
-            UserInfo userInfo = new UserInfo();
+            if (entity != null) {
+                logger.info("User found, start mapping.");
+                UserInfo userInfo = new UserInfo();
 
-            if (!entity.getCampaigns().isEmpty()) {
-                MasterInfo masterInfo = new MasterInfo();
-                masterInfo.setCampaigns(entity.getCampaigns().size());
-                userInfo.setMaster(masterInfo);
+                if (!entity.getCampaigns().isEmpty()) {
+                    MasterInfo masterInfo = new MasterInfo();
+                    masterInfo.setCampaigns(entity.getCampaigns().size());
+                    userInfo.setMaster(masterInfo);
+                }
+
+                if (!entity.getCharacters().isEmpty()) {
+                    PlayerInfo playerInfo = new PlayerInfo();
+                    playerInfo.setCharacters(entity.getCharacters().size());
+                    userInfo.setPlayer(playerInfo);
+                }
+
+                userInfo.setUsername(entity.getUsername());
+
+                return userInfo;
             }
-
-            if (!entity.getCharacters().isEmpty()) {
-                PlayerInfo playerInfo = new PlayerInfo();
-                playerInfo.setCharacters(entity.getCharacters().size());
-                userInfo.setPlayer(playerInfo);
-            }
-
-            userInfo.setUsername(entity.getUsername());
-
-            return userInfo;
+            return null;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     /**
@@ -58,20 +62,27 @@ public class UserService {
      * @return UsernameCheckDTO
      */
     public UsernameCheck checkUsernameExistance(String username) {
-        UsernameCheck usernameCheck = new UsernameCheck();
-        usernameCheck.setUsernameCheck(userRepository.checkUsernameExistance(username));
-
-        return usernameCheck;
+        try {
+            UsernameCheck usernameCheck = new UsernameCheck();
+            usernameCheck.setUsernameCheck(userRepository.checkUsernameExistance(username));
+            return usernameCheck;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
      * Updates the username of the user found by its id with the given value.
      *
-     * @param userId the Google id of the user
+     * @param userId   the Google id of the user
      * @param username the username to set
      * @return int - the number of rows updated
      */
     public int updateUsername(String userId, String username) {
-        return userRepository.update("username = ?1 where id = ?2", username, userId);
+        try {
+            return userRepository.update("username = ?1 where id = ?2", username, userId);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -28,4 +28,13 @@ public class UserInfo {
     public void setPlayer(PlayerInfo player) {
         this.player = player;
     }
+
+    @Override
+    public String toString() {
+        return "UserInfo{" +
+                "username='" + username + '\'' +
+                ", master=" + master +
+                ", player=" + player +
+                '}';
+    }
 }

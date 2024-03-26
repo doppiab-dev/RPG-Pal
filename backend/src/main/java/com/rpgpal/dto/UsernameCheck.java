@@ -10,4 +10,11 @@ public class UsernameCheck {
     public void setUsernameCheck(Boolean usernameCheck) {
         this.usernameCheck = usernameCheck;
     }
+
+    @Override
+    public String toString() {
+        return "UsernameCheck{" +
+                "usernameCheck=" + usernameCheck +
+                '}';
+    }
 }
