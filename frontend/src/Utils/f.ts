@@ -44,8 +44,13 @@ export const validateUsername = async (value: string, token: string): Promise<bo
     return false
   }
 }
-export const parseErrorMessage = (error: any): string => typeof error === 'string'
-  ? error
-  : 'message' in error
-    ? error.message
-    : JSON.stringify(error)
+
+export const parseErrorMessage = (error: any): string => {
+  if (typeof error === 'string') {
+    return error
+  } else if ('message' in error) {
+    return error.message
+  } else {
+    return JSON.stringify(error)
+  }
+}
