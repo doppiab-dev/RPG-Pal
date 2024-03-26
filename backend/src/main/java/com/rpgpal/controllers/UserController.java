@@ -47,9 +47,8 @@ public class UserController {
             @APIResponse(responseCode = "404", description = "Not Found"),
             @APIResponse(responseCode = "500", description = "Internal Server Error")
     })
-    public Response getUserInfo(@HeaderParam(AUTHORIZATION) String bearer) throws UnauthorizedException {
+    public Response getUserInfo(@HeaderParam(AUTHORIZATION) String bearer) {
         String userId = loginService.checkToken(bearer);
-
         if (!loginService.checkId(userId))
             throw new UnauthorizedException();
 
@@ -68,9 +67,16 @@ public class UserController {
 
     @GET
     @Path("check/{username}")
-    public Response checkUsername(@HeaderParam(AUTHORIZATION) String bearer, String username) throws UnauthorizedException {
+    @Produces(value = MediaType.APPLICATION_JSON)
+    @SecurityRequirement(name = "Authorization")
+    @Operation(summary = "Check to find out if a username is already taken")
+    @APIResponses(value = {
+            @APIResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = UsernameCheck.class))),
+            @APIResponse(responseCode = "401", description = "Unauthorized"),
+            @APIResponse(responseCode = "500", description = "Internal Server Error")
+    })
+    public Response checkUsername(@HeaderParam(AUTHORIZATION) String bearer, String username) {
         String userId = loginService.checkToken(bearer);
-
         if (!loginService.checkId(userId))
             throw new UnauthorizedException();
 
@@ -84,9 +90,15 @@ public class UserController {
 
     @POST
     @Path("/username")
+    @SecurityRequirement(name = "Authorization")
+    @Operation(summary = "Saves a username for the current user")
+    @APIResponses(value = {
+            @APIResponse(responseCode = "204", description = "No Content"),
+            @APIResponse(responseCode = "401", description = "Unauthorized"),
+            @APIResponse(responseCode = "500", description = "Internal Server Error")
+    })
     public Response saveUsername(@HeaderParam(AUTHORIZATION) String bearer, Username username) {
         String userId = loginService.checkToken(bearer);
-
         if (!loginService.checkId(userId))
             throw new UnauthorizedException();
 

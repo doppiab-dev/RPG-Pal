@@ -1,5 +1,6 @@
 package com.rpgpal.services;
 
+import com.rpgpal.db.model.UserEntity;
 import com.rpgpal.db.repository.UserRepository;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -25,5 +26,13 @@ public class LoginService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void fakeRegister(String id, String username) {
+        UserEntity entity = new UserEntity();
+        entity.setId(id);
+        entity.setUsername(username);
+
+        userRepository.persist(entity);
     }
 }
