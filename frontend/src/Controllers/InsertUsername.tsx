@@ -2,13 +2,16 @@ import { useCallback, type FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAppDispatch, useAppSelector } from '../Utils/store'
 import { selectToken, setErrorMessage, updateTheUsername } from '../Store/users'
-import { Stack, useTheme, lighten, CssBaseline, Box, Typography, Button, TextField } from '@mui/material'
+import { Stack, useTheme, lighten, CssBaseline, Box, Typography, Button, TextField, Paper, IconButton } from '@mui/material'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGamepad } from '@fortawesome/free-solid-svg-icons'
+import { faGamepad, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { validateUsername } from '../Utils/f'
+import { validateUsername, parseErrorMessage } from '../Utils/f'
 import { type SubmitHandler, useForm, Controller } from 'react-hook-form'
-import LeftSideHome from '../Components/LeftSideHome'
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
+import HighlightOffIcon from '@mui/icons-material/HighlightOff'
+import HomeInfo from '../Components/HomeInfo'
+import useDebouncerValidation from '../Hooks/useDebouncerValidation'
 import * as Yup from 'yup'
 
 interface InsertUsernameProps {
@@ -35,12 +38,20 @@ const InsertUsername: FC<InsertUsernameProps> = ({ handleLogOut }) => {
       })
   })
 
-  const { control, handleSubmit, formState: { errors } } = useForm<FormDataUsername>({
+  const { control, handleSubmit, reset, formState: { errors }, setError, clearErrors } = useForm<FormDataUsername>({
     resolver: yupResolver(schema),
+    shouldFocusError: true,
+    reValidateMode: 'onChange',
     defaultValues: {
       username: ''
     }
   })
+
+  const setUsernameError = useCallback(() => {
+    setError('username', { type: 'custom', message: t('username.validationErrorUsername') }, { shouldFocus: true })
+  }, [setError, t])
+
+  const { handleTextChange } = useDebouncerValidation(token, validateUsername, setUsernameError)
 
   const onSubmit: SubmitHandler<FormDataUsername> = useCallback(async (data) => {
     try {
@@ -51,9 +62,14 @@ const InsertUsername: FC<InsertUsernameProps> = ({ handleLogOut }) => {
         await dispatch(updateTheUsername({ token, username }))
       }
     } catch (e) {
-      dispatch(setErrorMessage(typeof e === 'string' ? e : String(e)))
+      const msg = parseErrorMessage((e))
+      setError('username', { type: 'custom', message: msg ?? 'validation failed' }, { shouldFocus: true })
     }
-  }, [dispatch, token])
+  }, [dispatch, setError, token])
+
+  const handleClearUsername = useCallback(() => {
+    reset()
+  }, [reset])
 
   return <Stack
     data-testid="set-username-component"
@@ -69,6 +85,8 @@ const InsertUsername: FC<InsertUsernameProps> = ({ handleLogOut }) => {
     <CssBaseline />
     <Box width='32.5%' />
     <Box
+      component={Paper}
+      elevation={10}
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -76,6 +94,7 @@ const InsertUsername: FC<InsertUsernameProps> = ({ handleLogOut }) => {
         alignSelf: 'center',
         justifyContent: 'space-between',
         width: '35%',
+        maxWidth: '600px',
         padding: '4%',
         borderRadius: '5%',
         height: '55%',
@@ -83,40 +102,75 @@ const InsertUsername: FC<InsertUsernameProps> = ({ handleLogOut }) => {
         color: theme.palette.primary.main
       }}
     >
-      <Box display='flex' height='35%' flexDirection='column' alignItems='center'>
+      <Box display='flex' height='35%' flexDirection='column' alignItems='center' marginTop='1vh'>
         <Typography variant='h6'>{t('username.title')}</Typography>
         <Typography mt='2vh'>{t('username.text')}</Typography>
       </Box>
-      {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-      <form onSubmit={handleSubmit(onSubmit)} id="username" style={{ display: 'flex', width: '100%', flexDirection: 'column', height: '65%' }}>
+      <form
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
+        onSubmit={handleSubmit(onSubmit)}
+        id="username"
+        style={{ display: 'flex', width: '100%', flexDirection: 'column', height: '65%', gap: '5vh' }}
+      >
         <Controller
           name="username"
           control={control}
-          render={({ field }) => (
+          render={({ field }) =>
             <TextField
               label={t('username.label')}
               placeholder={t('username.placeholder')}
               fullWidth
-              error={Boolean(errors.username)}
-              helperText={errors.username?.message}
               data-testid='username-text'
-              sx={{ width: '100%' }}
-              {...field} />
-          )} />
+              error={Boolean(errors.username)}
+              helperText={
+                field.value.trim() !== '' && !Boolean(errors.username)
+                  ? <span style={{ display: 'flex', color: 'green', alignItems: 'center', gap: '2vw', padding: 0 }}>
+                    <CheckCircleOutlineIcon />
+                    {t('username.valid')}
+                  </span>
+                  : Boolean(errors.username) && <span style={{ display: 'flex', alignItems: 'center', gap: '2vw', padding: 0 }}>
+                    <HighlightOffIcon />
+                    {errors.username?.message}
+                  </span>
+              }
+              sx={{ width: '100%', boxShadow: Boolean(errors.username) || field.value.trim() !== '' ? 0 : 5 }}
+              InputProps={{
+                ...field,
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                onChange: async (e) => {
+                  clearErrors('username')
+                  const { value } = e.target
+                  field.onChange(value)
+                  await handleTextChange(value)
+                },
+                endAdornment: (
+                  <IconButton
+                    aria-label="clear username"
+                    onClick={handleClearUsername}
+                    edge="end"
+                  >
+                    <FontAwesomeIcon icon={faTimes} />
+                  </IconButton>
+                )
+              }}
+            />
+          }
+        />
         <Button
           type="submit"
           variant="contained"
           color="primary"
           data-testid="update-username-button"
-          sx={{ mt: 3, fontWeight: 800 }}
+          sx={{ mt: 3, fontWeight: 800, boxShadow: 10 }}
           endIcon={<FontAwesomeIcon icon={faGamepad} />}
           size='large'
+          disabled={Boolean(errors.username)}
         >
           {t('username.send')}
         </Button>
       </form>
     </Box>
-    <LeftSideHome handleLogOut={handleLogOut} />
+    <HomeInfo handleLogOut={handleLogOut} />
   </Stack>
 }
 

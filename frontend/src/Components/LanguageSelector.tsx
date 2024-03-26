@@ -1,6 +1,6 @@
 import { type FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Box, MenuItem, type SxProps, type Theme } from '@mui/material'
+import { Box, MenuItem, Paper, type SxProps, type Theme } from '@mui/material'
 import Select, { type SelectChangeEvent } from '@mui/material/Select'
 
 interface LanguageSelectorProps {
@@ -20,24 +20,27 @@ const LanguageSelector: FC<LanguageSelectorProps> = ({ style }) => {
   }
 
   return (
-    <Box display="flex"
+    <Box
       sx={{
+        display: 'flex',
         justifyContent: 'center',
         width: '100%',
         ...style
-      }}>
-      <Select
-        value={i18n.language}
-        onChange={handleLanguageChange}
-        variant="outlined"
-        sx={{
-          display: 'flex',
-          height: 'fit-content'
-        }}
-      >
-        <MenuItem value="en">🇬🇧🇨🇦 English 🇦🇺🇺🇸</MenuItem>
-        <MenuItem value="it">🇮🇹🇸🇲 Italiano 🇻🇦🇮🇹</MenuItem>
-      </Select>
+      }}
+      data-testid="language-selector"
+    >
+      <Paper elevation={5} sx={{ display: 'flex', width: '100%' }} data-testid="language-paper">
+        <Select
+          value={i18n.language}
+          onChange={handleLanguageChange}
+          variant="outlined"
+          sx={{ display: 'flex', width: '100%' }}
+          data-testid="language-select"
+        >
+          <MenuItem value="en">🇬🇧🇨🇦 English 🇦🇺🇺🇸</MenuItem>
+          <MenuItem value="it">🇮🇹🇸🇲 Italiano 🇻🇦🇮🇹</MenuItem>
+        </Select>
+      </Paper>
     </Box>
   )
 }

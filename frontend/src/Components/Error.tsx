@@ -21,13 +21,15 @@ const ErrorComponent: FC<ErrorComponentProps> = ({
           display: 'flex',
           flexDirection: 'column'
         }}
+        data-testid="error-component"
       >
-        <Typography variant="h1" sx={{ mb: 2.5 }}>
+        <Typography variant="h1" sx={{ mb: '2.5vh' }} data-testid="error-title">
           {t('error.title')}
         </Typography>
         <Typography
           variant="h5"
-          sx={{ mb: 2.5, fontSize: 'large' }}
+          sx={{ mb: '2.5vh', fontSize: 'large' }}
+          data-testid="error-msg"
         >
           {msg}
         </Typography>
@@ -37,6 +39,7 @@ const ErrorComponent: FC<ErrorComponentProps> = ({
         variant="contained"
         onClick={clearError}
         sx={{ marginTop: '2vh', width: '20vw' }}
+        data-testid="error-button"
       >
         {t('error.button')}
       </Button>

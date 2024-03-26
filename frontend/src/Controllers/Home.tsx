@@ -10,13 +10,17 @@ import {
   selectUsername,
   setErrorMessage
 } from '../Store/users'
-import { Stack, useTheme, lighten, CssBaseline, Box, Typography, Button } from '@mui/material'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faDiceD20, faDungeon } from '@fortawesome/free-solid-svg-icons'
+import { Stack, useTheme, lighten, CssBaseline, Box } from '@mui/material'
+import { isEmpty } from 'lodash'
+import { clearPlayerState } from '../Store/player'
+import { clearMasterState } from '../Store/master'
+import { parseErrorMessage } from '../Utils/f'
 import useGoogleLoginWithRedux from '../Hooks/useGoogleLoginWithRedux'
 import InsertUsername from './InsertUsername'
 import Loader from '../Components/Loader'
-import LeftSideHome from '../Components/LeftSideHome'
+import HomeInfo from '../Components/HomeInfo'
+import ErrorComponent from '../Components/Error'
+import Component from '../Components/Home'
 import * as ls from '../Utils/ls'
 
 const Home: FC = () => {
@@ -32,6 +36,9 @@ const Home: FC = () => {
 
   const handleLogOut = useCallback(() => {
     dispatch(clearUserState())
+    dispatch(clearPlayerState())
+    dispatch(clearMasterState())
+
     ls.del('rpgPal')
     logOut()
   }, [dispatch, logOut])
@@ -41,18 +48,23 @@ const Home: FC = () => {
       try {
         await dispatch(retrieveUserInfo({ token }))
       } catch (e) {
-        dispatch(setErrorMessage(typeof e === 'string' ? e : String(e)))
+        const msg = parseErrorMessage((e))
+        dispatch(setErrorMessage(msg))
       }
     })()
-      .catch(e => { dispatch(setErrorMessage(typeof e === 'string' ? e : String(e))) })
+      .catch(e => {
+        const msg = parseErrorMessage((e))
+        dispatch(setErrorMessage(msg))
+      })
   }, [token, dispatch])
 
   if (userInfoStatus === 'loading') return <Loader />
 
   if (username === null) return <InsertUsername handleLogOut={handleLogOut} />
 
+  if (isEmpty(userInfo)) return <ErrorComponent clearError={handleLogOut} msg={(t('home.error'))} />
+
   return <Stack
-    data-testid="home-component"
     display='flex'
     height='100vh'
     width='100vw'
@@ -61,49 +73,9 @@ const Home: FC = () => {
   >
     <CssBaseline />
     <Box width='32.5%' />
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        alignSelf: 'center',
-        justifyContent: 'center',
-        width: '35%',
-        padding: '4%',
-        borderRadius: '5%',
-        height: '55%',
-        backgroundColor: theme.palette.background.default,
-        color: theme.palette.primary.main
-      }}
-    >
-      <Box display='flex' width='100%' height='20%' justifyContent='center'>
-        <Typography variant='h6'>{t('home.title')}</Typography>
-      </Box>
-      <Box display='flex' width='100%' height='45%' justifyContent='space-between' flexDirection='column'>
-        <Box display='flex' flexDirection='column'>
-          <Typography alignSelf='center'>{userInfo.player.characters === 0 ? t('home.becomePlayer') : t('home.Player')}</Typography>
-          <Button variant="contained" endIcon={<FontAwesomeIcon icon={faDiceD20} />} >
-            {
-              userInfo.player.characters === 0
-                ? t('home.emptyPlayer')
-                : `${t('home.playerButton1')} ${userInfo.player.characters} ${t('home.playerButton2')}`
-            }
-          </Button>
-        </Box>
-        <Box display='flex' flexDirection='column'>
-          <Typography alignSelf='center'>{userInfo.master.campaigns === 0 ? t('home.becomeMaster') : t('home.Master')}</Typography>
-          <Button variant="contained" endIcon={<FontAwesomeIcon icon={faDungeon} />}>
-            {
-              userInfo.master.campaigns === 0
-                ? t('home.emptyMaster')
-                : `${t('home.masterButton1')} ${userInfo.master.campaigns} ${t('home.masterButton2')}`
-            }
-          </Button>
-        </Box>
-      </Box>
-    </Box >
-    <LeftSideHome handleLogOut={handleLogOut} />
-  </Stack >
+    <Component userInfo={userInfo} />
+    <HomeInfo handleLogOut={handleLogOut} />
+  </Stack>
 }
 
 export default Home

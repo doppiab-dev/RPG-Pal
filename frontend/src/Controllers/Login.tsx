@@ -7,12 +7,14 @@ import {
   Stack,
   Typography,
   lighten,
-  useTheme
+  useTheme,
+  Paper
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../Utils/store'
 import { clearErrorMessage, clearUserAuthStatus, selectErrorMessage, selectAuthStatus, setErrorMessage } from '../Store/users'
+import { parseErrorMessage } from '../Utils/f'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import GoogleIcon from '@mui/icons-material/Google'
 import useGoogleLoginWithRedux from '../Hooks/useGoogleLoginWithRedux'
@@ -40,7 +42,8 @@ const Login: FC = () => {
     try {
       logIn()
     } catch (e) {
-      dispatch(setErrorMessage(typeof e === 'string' ? e : String(e)))
+      const msg = parseErrorMessage((e))
+      dispatch(setErrorMessage(msg))
     }
   }, [dispatch, logIn])
 
@@ -64,6 +67,9 @@ const Login: FC = () => {
   >
     <CssBaseline />
     <Box
+      component={Paper}
+      elevation={10}
+      data-testid="login-box"
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -71,6 +77,7 @@ const Login: FC = () => {
         alignSelf: 'center',
         justifyContent: 'space-between',
         width: '35%',
+        maxWidth: '600px',
         padding: '4%',
         borderRadius: '5%',
         minHeight: '55%',
@@ -78,22 +85,21 @@ const Login: FC = () => {
         color: theme.palette.text.primary
       }}
     >
-      <LanguageSelector style={{ height: '35%' }} />
-      <Box display='flex' flexDirection='column' alignItems='center' height='65%'>
-        <Avatar sx={{ bgcolor: 'secondary.main' }}>
+      <LanguageSelector style={{ width: '40%', maxWidth: '220px' }} />
+      <Box display='flex' flexDirection='column' alignItems='center' height='65%' data-testid="login-box2" width='100%'>
+        <Avatar sx={{ bgcolor: 'secondary.main', marginTop: '2vh' }} component={Paper} elevation={5} data-testid="login-avatar">
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5"> {t('login.signin')} </Typography>
+        <Typography variant="h5" data-testid="login-text"> {t('login.signin')} </Typography>
         <Button
           type="submit"
-          fullWidth
           variant="contained"
-          data-testid="login-button"
+          fullWidth
           // eslint-disable-next-line @typescript-eslint/no-misused-promises
           onClick={handleLoginClick}
-          sx={{ mt: 3, mb: 2, fontWeight: 800 }}
+          sx={{ margin: '3vh 0', fontWeight: 800, boxShadow: 10, width: '40%', maxWidth: '220px' }}
+          data-testid="login-button"
           startIcon={<GoogleIcon />}
-          size='large'
         >
           {t('login.signin')}
         </Button>
