@@ -18,7 +18,7 @@ const Loader: FC<LoaderProps> = ({ title, text }) => {
       alignItems="center"
       height="100vh"
     >
-      <Typography data-testid="title" fontSize='1rem'>{(title ?? t('loader.title'))}</Typography>
+      <Typography data-testid="title">{(title ?? t('loader.title'))}</Typography>
       <CircularProgress data-testid="loader" />
       <Typography data-testid="text" marginTop={2}>
         {(text ?? t('loader.text'))}
