@@ -75,7 +75,7 @@ Cypress.Commands.add(('loginByGoogleApi' as any), () => {
       const userData = {
         token: id_token,
         user: {
-          googleId: body.sub,
+          id: body.sub,
           email: body.email,
           givenName: body.given_name,
           familyName: body.family_name,
@@ -88,7 +88,6 @@ Cypress.Commands.add(('loginByGoogleApi' as any), () => {
             ...userData.user,
             picture: "",
             hd: "",
-            id: "",
             locale: "",
             name: "",
             verifiedEmail: false
