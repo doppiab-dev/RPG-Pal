@@ -4,12 +4,13 @@ import LanguageSelector from './LanguageSelector'
 
 describe('<LanguageSelector />', () => {
   const { height, width }: { height: number, width: number } = getViewport()
+  const lsHeight = '100px'
 
   beforeEach(() => {
     cy.viewport(width, height).wait(500)
     cy.mount(
       <TestContainer>
-        <LanguageSelector />
+        <LanguageSelector style={{ height: lsHeight }} />
       </TestContainer>
     )
   })
@@ -23,11 +24,11 @@ describe('<LanguageSelector />', () => {
 
     cy.get("[data-testid='language-paper']").should('exist')
     cy.get("[data-testid='language-paper']").should('have.css', 'display', 'flex')
-    cy.get("[data-testid='language-paper']").should('have.css', 'height', '56px')
+    cy.get("[data-testid='language-paper']").should('have.css', 'height', lsHeight)
 
     cy.get("[data-testid='language-select']").should('exist')
     cy.get("[data-testid='language-select']").should('have.css', 'display', 'flex')
-    cy.get("[data-testid='language-select']").should('have.css', 'height', '56px')
+    cy.get("[data-testid='language-select']").should('have.css', 'height', lsHeight)
   })
 
   it('displays default language as English and both language options', () => {

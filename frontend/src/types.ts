@@ -47,7 +47,6 @@ interface UserStore {
   isUserLogged: boolean
   errorMessage: string
   token: string
-  username: Username['username']
   userInfo: UserInfo
   authStatus: Status
   userInfoStatus: Status
@@ -78,7 +77,7 @@ interface Authenticated {
   token: string
 }
 interface UserInfo {
-  username: string | null
+  username: Username['username']
   player: { characters: number }
   master: { campaigns: number }
 }
