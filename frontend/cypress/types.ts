@@ -1,41 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/**
- * Forms
- */
-interface FormDataUsername {
-  username: string
-}
-/**
- * API
-*/
-interface UserInfoDTO {
-  username: string | null
-  player: { characters: number }
-  master: { campaigns: number }
-}
-interface UsernameBody {
-  username: string
-}
-interface UsernameDTO {
-  username: string
-}
-interface CampaignInfo {
-  id: number
-  name: string
-  groups: number
-  status: string // migliora con enum
-}
-type CampaignsDTO = CampaignInfo[]
-interface CharacterInfo {
-  name: string
-  level: number
-  class: string // migliora con enum
-  img: string
-}
-type CharactersDTO = CharacterInfo[]
-/**
- * Redux
- */
 type Status = 'success' | 'idle' | 'error' | 'loading'
 interface State {
   userInfo: UserStore
@@ -98,9 +60,3 @@ interface Character {
   img: string
 }
 type Characters = Character[]
-/**
- * Utils
- */
-interface WithChildren {
-  children?: React.ReactNode
-}

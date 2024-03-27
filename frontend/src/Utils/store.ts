@@ -54,13 +54,12 @@ export const userInitialState: UserStore = {
   authStatus: 'idle',
   userInfoStatus: 'idle',
   usernameStatus: 'idle',
-  username: null,
   isUserLogged: false,
   token: '',
   userInfo: {
     master: { campaigns: 0 },
     player: { characters: 0 },
-    username: ''
+    username: null
   },
   errorMessage: ''
 }
