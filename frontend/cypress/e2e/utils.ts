@@ -1,3 +1,4 @@
+/// <reference types="cypress" />
 export const checkIfWeAreInSetUsernameComponent = () => {
   cy.get("[data-testid='set-username-component']").should('exist').and('be.visible')
 }
