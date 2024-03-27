@@ -82,7 +82,7 @@ Cypress.Commands.add(('loginByGoogleApi' as any), () => {
           imageUrl: body.picture,
         }
       }
-      const state: State = {
+      const state = {
         userInfo: {
           user: {
             ...userData.user,
