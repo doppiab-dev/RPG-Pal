@@ -103,8 +103,8 @@ const InsertUsername: FC<InsertUsernameProps> = ({ handleLogOut }) => {
       }}
     >
       <Box display='flex' height='35%' flexDirection='column' alignItems='center' marginTop='1vh'>
-        <Typography variant='h6'>{t('username.title')}</Typography>
-        <Typography mt='2vh'>{t('username.text')}</Typography>
+        <Typography variant='h6' data-testid="set-username-title">{t('username.title')}</Typography>
+        <Typography mt='2vh' data-testid="set-username-text">{t('username.text')}</Typography>
       </Box>
       <form
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -124,11 +124,12 @@ const InsertUsername: FC<InsertUsernameProps> = ({ handleLogOut }) => {
               error={Boolean(errors.username)}
               helperText={
                 field.value.trim() !== '' && !Boolean(errors.username)
-                  ? <span style={{ display: 'flex', color: 'green', alignItems: 'center', gap: '2vw', padding: 0 }}>
+                  ? <span style={{ display: 'flex', color: 'green', alignItems: 'center', gap: '2vw', padding: 0 }} data-testid="helpertext-1">
                     <CheckCircleOutlineIcon />
                     {t('username.valid')}
                   </span>
-                  : Boolean(errors.username) && <span style={{ display: 'flex', alignItems: 'center', gap: '2vw', padding: 0 }}>
+                  : Boolean(errors.username) &&
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '2vw', padding: 0 }} data-testid="error-helpertext-1">
                     <HighlightOffIcon />
                     {errors.username?.message}
                   </span>
@@ -149,7 +150,7 @@ const InsertUsername: FC<InsertUsernameProps> = ({ handleLogOut }) => {
                     onClick={handleClearUsername}
                     edge="end"
                   >
-                    <FontAwesomeIcon icon={faTimes} />
+                    <FontAwesomeIcon icon={faTimes} data-testid="clear-username" />
                   </IconButton>
                 )
               }}

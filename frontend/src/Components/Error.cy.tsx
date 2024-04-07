@@ -31,7 +31,7 @@ describe('<ErrorComponent />', () => {
 
   it('has correct styles', () => {
     cy.get("[data-testid='error-title']").should('have.css', 'margin-bottom', `${vhToPixel(2.5, height)}px`)
-    cy.get("[data-testid='error-title']").should('have.css', 'font-size', '96px')
+    cy.get("[data-testid='error-title']").should('have.css', 'font-size', '84px')
 
     cy.get("[data-testid='error-msg']").should('have.css', 'margin-bottom', `${vhToPixel(2.5, height)}px`)
     cy.get("[data-testid='error-msg']").should('have.css', 'font-size', '18px')
