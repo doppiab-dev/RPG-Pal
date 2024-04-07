@@ -18,12 +18,13 @@ export const userInfoMock = async (_token: string): Promise<AxiosResponse<UserIn
   }
 }
 
-export const usernameIsValidMock = async (_token: string, _username: string): Promise<AxiosResponse<boolean>> => {
+export const usernameIsValidMock = async (_token: string, username: string): Promise<AxiosResponse<boolean>> => {
   await new Promise(resolve => setTimeout(resolve, 500))
 
+  const data = username.toLocaleLowerCase() !== 'pippo'
   const mockResponse: AxiosResponse<boolean> = {
     ...mock,
-    data: true
+    data
   }
 
   return {

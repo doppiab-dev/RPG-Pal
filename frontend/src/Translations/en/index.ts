@@ -27,13 +27,15 @@ const home = {
   masterButton2: 'Campaign/s',
   emptyMaster: 'Create your first campaign',
   logout: 'Log Out',
-  version: 'Frontend Version: '
+  version: 'Frontend Version: ',
+  error: 'Data validation failed, try to log in again.'
 }
 const username = {
   title: 'Choose your username',
   text: 'This can be edited later',
   label: 'Username',
   placeholder: 'Username',
+  valid: 'Username is valid',
   send: 'Select Username',
   validationErrorRequired: 'A username is required',
   validationErrorTooLong: 'Username should be 16 character maximum',

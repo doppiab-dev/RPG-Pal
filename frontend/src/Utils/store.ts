@@ -83,4 +83,4 @@ export const useAppDispatch = (): ThunkDispatch<{
 }, undefined, UnknownAction> & Dispatch<UnknownAction> => useDispatch<typeof store.dispatch>()
 
 export const formatThunkError = (e: unknown): AxiosError =>
-  Boolean((e as any).response.data) ? (e as any).response.data : e as AxiosError
+  Boolean((e as any)?.response?.data) ? (e as any).response.data : e as AxiosError
