@@ -8,7 +8,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class UserRepository implements PanacheRepositoryBase<UserEntity, String> {
 
-    public Boolean checkUsernameExistance(String username) {
-        return find("username", username).project(UserUsernameProjection.class).singleResultOptional().isPresent();
+    public Boolean checkUsernameExistence(String username) {
+        return find("username", username).project(UserUsernameProjection.class).singleResultOptional().isEmpty();
     }
 }

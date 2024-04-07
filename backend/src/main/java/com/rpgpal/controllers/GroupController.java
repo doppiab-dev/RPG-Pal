@@ -50,8 +50,8 @@ public class GroupController {
             @APIResponse(responseCode = "500", description = "Internal Server Error")
     })
     public Response getAll(@HeaderParam(AUTHORIZATION) String bearer) {
-        String userId = loginService.checkToken(bearer);
-        if (!loginService.checkId(userId))
+        String userId = loginService.validateToken(bearer);
+        if (!loginService.isFirstLogin(userId))
             throw new UnauthorizedException();
 
         try {
@@ -77,8 +77,8 @@ public class GroupController {
             @APIResponse(responseCode = "500", description = "Internal Server Error")
     })
     public Response getById(@HeaderParam(AUTHORIZATION) String bearer, String id) {
-        String userId = loginService.checkToken(bearer);
-        if (!loginService.checkId(userId))
+        String userId = loginService.validateToken(bearer);
+        if (!loginService.isFirstLogin(userId))
             throw new UnauthorizedException();
 
         try {
@@ -105,8 +105,8 @@ public class GroupController {
             @APIResponse(responseCode = "500", description = "Internal Server Error")
     })
     public Response save(@HeaderParam(AUTHORIZATION) String bearer, GroupEntity groupEntity) {
-        String userId = loginService.checkToken(bearer);
-        if (!loginService.checkId(userId))
+        String userId = loginService.validateToken(bearer);
+        if (!loginService.isFirstLogin(userId))
             throw new UnauthorizedException();
 
         try {
@@ -132,8 +132,8 @@ public class GroupController {
             @APIResponse(responseCode = "500", description = "Internal Server Error")
     })
     public Response delete(@HeaderParam(AUTHORIZATION) String bearer, GroupEntity groupEntity) {
-        String userId = loginService.checkToken(bearer);
-        if (!loginService.checkId(userId))
+        String userId = loginService.validateToken(bearer);
+        if (!loginService.isFirstLogin(userId))
             throw new UnauthorizedException();
 
         try {

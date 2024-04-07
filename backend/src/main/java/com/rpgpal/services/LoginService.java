@@ -1,6 +1,5 @@
 package com.rpgpal.services;
 
-import com.rpgpal.db.model.UserEntity;
 import com.rpgpal.db.repository.UserRepository;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -12,7 +11,7 @@ public class LoginService {
     @Inject
     UserRepository userRepository;
 
-    public String checkToken(String token) {
+    public String validateToken(String token) {
         try {
             return token.substring("Bearer ".length());
         } catch (Exception e) {
@@ -20,9 +19,9 @@ public class LoginService {
         }
     }
 
-    public Boolean checkId(String id) {
+    public Boolean isFirstLogin(String id) {
         try {
-            return userRepository.findByIdOptional(id).isPresent();
+            return userRepository.findByIdOptional(id).isEmpty();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

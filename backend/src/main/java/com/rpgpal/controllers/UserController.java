@@ -50,11 +50,11 @@ public class UserController {
             @APIResponse(responseCode = "500", description = "Internal Server Error")
     })
     public Response getUserInfo(@HeaderParam(AUTHORIZATION) String bearer) {
-        String userId = loginService.checkToken(bearer);
-        if (!loginService.checkId(userId))
-            throw new UnauthorizedException();
-
+        String userId = loginService.validateToken(bearer);
         Log.info("Starting getUserInfo");
+
+        if (loginService.isFirstLogin(userId))
+            return Response.ok().entity(new UserInfo()).build();
 
         try {
             UserInfo userInfo = userService.getUserInfo(userId);
@@ -62,8 +62,7 @@ public class UserController {
             if (userInfo != null) {
                 Log.info("User mapped: " + userInfo);
                 return Response.ok(userInfo).build();
-            }
-            else
+            } else
                 throw new NotFoundException("No user with id: " + userId);
 
         } catch (Exception e) {
@@ -82,16 +81,14 @@ public class UserController {
             @APIResponse(responseCode = "500", description = "Internal Server Error")
     })
     public Response checkUsername(@HeaderParam(AUTHORIZATION) String bearer, String username) {
-        String userId = loginService.checkToken(bearer);
-        if (!loginService.checkId(userId))
-            throw new UnauthorizedException();
+        String userId = loginService.validateToken(bearer);
 
         Log.info("Starting checkUsername");
 
         try {
-            UsernameCheck usernameCheck = userService.checkUsernameExistance(username);
-            Log.info("UsernameCheck mapped: " + usernameCheck);
-            return Response.ok().entity(usernameCheck).build();
+            boolean isOk = userService.checkUsernameExistence(username);
+            Log.info("Is username {} taken: " + isOk);
+            return Response.ok().entity(isOk).build();
         } catch (Exception e) {
             throw new InternalServerErrorException(e);
         }
@@ -109,15 +106,18 @@ public class UserController {
             @APIResponse(responseCode = "500", description = "Internal Server Error")
     })
     public Response saveUsername(@HeaderParam(AUTHORIZATION) String bearer, Username username) {
-        String userId = loginService.checkToken(bearer);
-        if (!loginService.checkId(userId))
-            throw new UnauthorizedException();
+        String userId = loginService.validateToken(bearer);
 
         Log.info("Starting saveUsername");
 
+        if (username.getUsername() == null)
+            throw new BadRequestException("Username is null");
+        else if (username.getUsername().isBlank())
+            throw new BadRequestException("Username is blank");
+
         try {
-            int row = userService.updateUsername(userId, username.getUsername());
-            Log.info("Updated " + row + " row/s");
+            int row = userService.updateUsername(userId, username.getUsername().trim());
+            Log.info("Updated " + row + " row/s for username " + username.getUsername());
 
             if (row == 1)
                 return Response.noContent().build();

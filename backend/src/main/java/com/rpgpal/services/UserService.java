@@ -6,7 +6,6 @@ import com.rpgpal.db.repository.UserRepository;
 import com.rpgpal.dto.MasterInfo;
 import com.rpgpal.dto.PlayerInfo;
 import com.rpgpal.dto.UserInfo;
-import com.rpgpal.dto.UsernameCheck;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.jboss.logging.Logger;
@@ -59,13 +58,11 @@ public class UserService {
      * Checks if the username in input is already taken.
      *
      * @param username the username to check
-     * @return UsernameCheckDTO
+     * @return boolean. True if the username is available, false otherwise
      */
-    public UsernameCheck checkUsernameExistance(String username) {
+    public boolean checkUsernameExistence(String username) {
         try {
-            UsernameCheck usernameCheck = new UsernameCheck();
-            usernameCheck.setUsernameCheck(userRepository.checkUsernameExistance(username));
-            return usernameCheck;
+            return userRepository.checkUsernameExistence(username);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -81,6 +78,21 @@ public class UserService {
     public int updateUsername(String userId, String username) {
         try {
             return userRepository.update("username = ?1 where id = ?2", username, userId);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Saves a new user entity with the given id.
+     *
+     * @param id The new user id
+     */
+    public void saveNewUser(String id) {
+        try {
+            UserEntity entity = new UserEntity();
+            entity.setId(id);
+            userRepository.persist(entity);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
