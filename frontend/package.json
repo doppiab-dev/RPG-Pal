@@ -4,7 +4,6 @@
   "private": true,
   "main": "index.ts",
   "license": "MIT",
-  "proxy": "http://backend:8080",
   "scripts": {
     "start": "craco start",
     "build": "craco build",
