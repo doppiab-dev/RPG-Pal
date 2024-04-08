@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const axiosClient = axios.create({ baseURL: 'beHost/' })
-axiosClient.defaults.headers.common.Accept = 'application/json'
+const outerAxiostClient = axios.create({ baseURL: '/' })
+outerAxiostClient.defaults.headers.common.Accept = 'application/json'
 
-export default axiosClient
+export default outerAxiostClient

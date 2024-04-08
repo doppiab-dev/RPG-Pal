@@ -1,6 +1,7 @@
 import express, { type Request, type Response } from 'express'
 import { ServerPort } from '../config'
 import { Logger } from '../logger'
+import { userRouter } from './routers/user'
 
 export const apiRouter = express.Router()
 
@@ -34,3 +35,5 @@ apiRouter.use((req, _res, next) => {
   Logger.writeEvent(`Received ${req.method} request to ${req.path}`)
   next()
 })
+
+apiRouter.use('/user', userRouter)

@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../Utils/store'
 import {
   clearUserState,
   retrieveUserInfo,
+  selectErrorMessage,
   selectToken,
   selectUserInfo,
   selectUserInfoStatus,
@@ -33,6 +34,7 @@ const Home: FC = () => {
   const userInfoStatus = useAppSelector(selectUserInfoStatus)
   const username = useAppSelector(selectUsername)
   const userInfo = useAppSelector(selectUserInfo)
+  const errorMessage = useAppSelector(selectErrorMessage)
 
   const handleLogOut = useCallback(() => {
     dispatch(clearUserState())
@@ -59,10 +61,9 @@ const Home: FC = () => {
   }, [token, dispatch])
 
   if (userInfoStatus === 'loading') return <Loader />
-
-  if (username === null) return <InsertUsername handleLogOut={handleLogOut} />
-
+  if (userInfoStatus === 'error') return <ErrorComponent clearError={handleLogOut} msg={errorMessage} />
   if (isEmpty(userInfo)) return <ErrorComponent clearError={handleLogOut} msg={(t('home.error'))} />
+  if (username === null) return <InsertUsername handleLogOut={handleLogOut} />
 
   return <Stack
     display='flex'

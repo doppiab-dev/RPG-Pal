@@ -1,5 +1,6 @@
 import { DbName, DbPort, DbPass, DbUser, DbHost } from '../../config'
 import { Pool } from 'pg'
+import { getUserInfo } from './user'
 import { type Connector } from '..'
 
 export const dbConfig = new Pool({
@@ -11,4 +12,5 @@ export const dbConfig = new Pool({
 })
 
 export const dbConnectorPostgreDb: Connector = {
+  getUserInfo
 }
