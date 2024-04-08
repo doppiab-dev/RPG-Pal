@@ -32,6 +32,21 @@ services:
     ports:
       - "3000:3000"
 
+  b4f:
+    container_name: b4f-rpg-pal
+    image: b4f-rpg-pal
+    build:
+      context: ./b4f
+      target: development
+    volumes:
+      - ./b4f:/b4f
+    depends_on:
+      - db
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "--silent"]
+    ports:
+      - "3001:3001"
+
   backend:
     image: backend-rpg-pal
     container_name: backend-rpg-pal
