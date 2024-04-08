@@ -29,5 +29,24 @@ userRouter.get('/info', asyncErrWrapper(async (req, res) => {
 
     return res.status(status).json(error)
   }
-})
-)
+}))
+
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+userRouter.get('/username/:username', asyncErrWrapper(async (req, res) => {
+  try {
+    const { username } = req.params
+    const token = verifyMissingToken(req.headers.authorization)
+    validateToken(token)
+
+    const checkUsernameTimestamp = performance.now()
+    const db = dbFactory(RepositoryType)
+    const data = await db.checkUsername(username)
+    const fetchTime = Math.round(performance.now() - checkUsernameTimestamp)
+    Logger.writeEvent(`User: check username in ${fetchTime} ms`)
+
+    return res.status(200).json(data)
+  } catch (e) {
+    formatError(e as Error, '004-RESPONSE', 'userRouter /username/:username get')
+    return res.status(200).json(false)
+  }
+}))

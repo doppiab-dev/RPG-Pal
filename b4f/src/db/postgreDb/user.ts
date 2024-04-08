@@ -2,7 +2,7 @@
 import { tableCampaigns, tablePlayers, tableUsers } from '../../config'
 import { dbConfig } from '.'
 import { type UserInfoDTO } from '../../api/types'
-import { type DBUserInfo } from '../types'
+import { type DBCheckUsername, type DBUserInfo } from '../types'
 
 export const getUserInfo = async (user_id: string): Promise<UserInfoDTO> => {
   const client = await dbConfig.connect()
@@ -33,4 +33,22 @@ export const getUserInfo = async (user_id: string): Promise<UserInfoDTO> => {
     master: { campaigns: userInfo.campaigns ?? 0 },
     player: { characters: userInfo.characters ?? 0 }
   }
+}
+
+export const checkUsername = async (username: string): Promise<boolean> => {
+  const client = await dbConfig.connect()
+  const checkUsernameQuery = `
+    SELECT EXISTS (
+      SELECT 1
+      FROM ${tableUsers}
+      WHERE username = $1
+    ) as exists;
+  `
+  const checkUsernameValues = [username]
+  const check = await client.query<DBCheckUsername>(checkUsernameQuery, checkUsernameValues)
+  client.release()
+
+  if (check.rowCount == null) return false
+
+  return !check.rows[0].exists
 }

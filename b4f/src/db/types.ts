@@ -3,3 +3,7 @@ export interface DBUserInfo {
   characters: number
   campaigns: number
 }
+
+export interface DBCheckUsername {
+  exists: boolean
+}
