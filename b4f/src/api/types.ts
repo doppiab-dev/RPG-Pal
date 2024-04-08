@@ -11,3 +11,7 @@ export interface UserInfoDTO {
   player: { characters: number }
   master: { campaigns: number }
 }
+
+export interface UsernameBody {
+  username: string
+}

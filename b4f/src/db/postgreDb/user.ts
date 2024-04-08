@@ -52,3 +52,15 @@ export const checkUsername = async (username: string): Promise<boolean> => {
 
   return !check.rows[0].exists
 }
+
+export const setUsername = async (username: string, google_id: string): Promise<void> => {
+  const client = await dbConfig.connect()
+  const inserUsernameQuery = `
+    INSERT INTO ${tableUsers}
+    (username, google_id)
+    VALUES ($1, $2);
+  `
+  const insertUsernameValues = [username, google_id]
+  await client.query(inserUsernameQuery, insertUsernameValues)
+  client.release()
+}

@@ -12,4 +12,5 @@ export const dbFactory = (dbType: DbType): Connector => {
 export interface Connector {
   getUserInfo: (userId: string) => Promise<UserInfoDTO>
   checkUsername: (username: string) => Promise<boolean>
+  setUsername: (username: string, userId: string) => Promise<void>
 }
