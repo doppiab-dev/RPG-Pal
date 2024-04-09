@@ -8,6 +8,7 @@ import com.rpgpal.dto.PlayerInfo;
 import com.rpgpal.dto.UserInfo;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import org.jboss.logging.Logger;
 
 @ApplicationScoped
@@ -88,6 +89,7 @@ public class UserService {
      *
      * @param id The new user id
      */
+    @Transactional
     public void saveNewUser(String id) {
         try {
             UserEntity entity = new UserEntity();

@@ -45,7 +45,6 @@ public class UserController {
     @Operation(summary = "Get general info about the user")
     @APIResponses(value = {
             @APIResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = UserInfo.class))),
-            @APIResponse(responseCode = "401", description = "Unauthorized"),
             @APIResponse(responseCode = "404", description = "Not Found"),
             @APIResponse(responseCode = "500", description = "Internal Server Error")
     })
@@ -53,10 +52,13 @@ public class UserController {
         String userId = loginService.validateToken(bearer);
         Log.info("Starting getUserInfo");
 
-        if (loginService.isFirstLogin(userId))
-            return Response.ok().entity(new UserInfo()).build();
-
         try {
+
+            if (loginService.isFirstLogin(userId)) {
+                userService.saveNewUser(userId);
+                return Response.ok().entity(new UserInfo()).build();
+            }
+
             UserInfo userInfo = userService.getUserInfo(userId);
 
             if (userInfo != null) {
@@ -76,8 +78,7 @@ public class UserController {
     @SecurityRequirement(name = "Authorization")
     @Operation(summary = "Check to find out if a username is already taken")
     @APIResponses(value = {
-            @APIResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = UsernameCheck.class))),
-            @APIResponse(responseCode = "401", description = "Unauthorized"),
+            @APIResponse(responseCode = "200", description = "OK"),
             @APIResponse(responseCode = "500", description = "Internal Server Error")
     })
     public Response checkUsername(@HeaderParam(AUTHORIZATION) String bearer, String username) {
@@ -102,7 +103,7 @@ public class UserController {
     @Operation(summary = "Saves a username for the current user")
     @APIResponses(value = {
             @APIResponse(responseCode = "204", description = "No Content"),
-            @APIResponse(responseCode = "401", description = "Unauthorized"),
+            @APIResponse(responseCode = "400", description = "Bad Request"),
             @APIResponse(responseCode = "500", description = "Internal Server Error")
     })
     public Response saveUsername(@HeaderParam(AUTHORIZATION) String bearer, Username username) {
@@ -127,7 +128,7 @@ public class UserController {
                 throw new RuntimeException("More than one record was updated, something went wrong");
 
         } catch (Exception e) {
-            throw new InternalServerErrorException(e);
+            throw new InternalServerErrorException(e.getMessage());
         }
     }
 }
