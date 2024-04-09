@@ -27,3 +27,4 @@ export const RepositoryType = process.env.REPOSITORY_TYPE as DbType ?? 'postgres
 export const tableUsers = 'users'
 export const tablePlayers = 'players'
 export const tableCampaigns = 'campaigns'
+export const tableGroups = 'groups'

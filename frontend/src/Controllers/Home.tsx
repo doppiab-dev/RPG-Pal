@@ -11,11 +11,12 @@ import {
   selectUsername,
   setErrorMessage
 } from '../Store/users'
-import { Stack, useTheme, lighten, CssBaseline, Box } from '@mui/material'
+import { Stack, useTheme, CssBaseline, Box } from '@mui/material'
 import { isEmpty } from 'lodash'
 import { clearPlayerState } from '../Store/player'
 import { clearMasterState } from '../Store/master'
 import { parseErrorMessage } from '../Utils/f'
+import { useNavigate } from 'react-router-dom'
 import useGoogleLoginWithRedux from '../Hooks/useGoogleLoginWithRedux'
 import InsertUsername from './InsertUsername'
 import Loader from '../Components/Loader'
@@ -29,6 +30,7 @@ const Home: FC = () => {
   const { logOut } = useGoogleLoginWithRedux()
   const theme = useTheme()
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
 
   const token = useAppSelector(selectToken)
   const userInfoStatus = useAppSelector(selectUserInfoStatus)
@@ -44,6 +46,10 @@ const Home: FC = () => {
     ls.del('rpgPal')
     logOut()
   }, [dispatch, logOut])
+
+  const toCampaigns = useCallback(() => {
+    navigate('/campaign')
+  }, [navigate])
 
   useEffect(() => {
     (async () => {
@@ -70,11 +76,11 @@ const Home: FC = () => {
     height='100vh'
     width='100vw'
     flexDirection='row'
-    sx={{ backgroundColor: lighten(theme.palette.secondary.light, 0.7) }}
+    sx={{ backgroundColor: theme.palette.secondary.main }}
   >
     <CssBaseline />
     <Box width='32.5%' />
-    <Component userInfo={userInfo} />
+    <Component userInfo={userInfo} toCampaigns={toCampaigns} />
     <HomeInfo handleLogOut={handleLogOut} />
   </Stack>
 }

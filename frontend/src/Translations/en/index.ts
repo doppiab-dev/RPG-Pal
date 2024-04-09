@@ -42,13 +42,16 @@ const username = {
   validationErrorInvalid: 'Username contain invalid characters',
   validationErrorUsername: 'Username is already used'
 }
-
+const campaign = {
+  title: 'Campaigns'
+}
 const en = {
   error,
   login,
   loader,
   home,
-  username
+  username,
+  campaign
 }
 
 export default en

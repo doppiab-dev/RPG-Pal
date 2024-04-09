@@ -6,9 +6,10 @@ import { faDiceD20, faDungeon } from '@fortawesome/free-solid-svg-icons'
 
 interface HomeProps {
   userInfo: UserInfo
+  toCampaigns: () => void
 }
 
-const Home: FC<HomeProps> = ({ userInfo }) => {
+const Home: FC<HomeProps> = ({ userInfo, toCampaigns }) => {
   const { t } = useTranslation()
   const theme = useTheme()
 
@@ -40,15 +41,17 @@ const Home: FC<HomeProps> = ({ userInfo }) => {
         <Button variant="contained" endIcon={<FontAwesomeIcon icon={faDiceD20} />} sx={{ boxShadow: 10 }}>
           {userInfo.player.characters === 0
             ? t('home.emptyPlayer')
-            : `${t('home.playerButton1')} ${userInfo.player.characters} ${t('home.playerButton2')}`}
+            : `${t('home.playerButton1')} ${userInfo.player.characters} ${t('home.playerButton2')}`
+          }
         </Button>
       </Box>
       <Box display='flex' flexDirection='column' gap='1vh'>
         <Typography alignSelf='center'>{userInfo.master.campaigns === 0 ? t('home.becomeMaster') : t('home.Master')}</Typography>
-        <Button variant="contained" endIcon={<FontAwesomeIcon icon={faDungeon} />} sx={{ boxShadow: 10 }}>
+        <Button variant="contained" endIcon={<FontAwesomeIcon icon={faDungeon} />} sx={{ boxShadow: 10 }} onClick={toCampaigns}>
           {userInfo.master.campaigns === 0
             ? t('home.emptyMaster')
-            : `${t('home.masterButton1')} ${userInfo.master.campaigns} ${t('home.masterButton2')}`}
+            : `${t('home.masterButton1')} ${userInfo.master.campaigns} ${t('home.masterButton2')}`
+          }
         </Button>
       </Box>
     </Box>

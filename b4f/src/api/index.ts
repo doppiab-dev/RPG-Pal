@@ -2,6 +2,7 @@ import express, { type Request, type Response } from 'express'
 import { ServerPort } from '../config'
 import { Logger } from '../logger'
 import { userRouter } from './routers/user'
+import { masterRouter } from './routers/master'
 
 export const apiRouter = express.Router()
 
@@ -37,3 +38,4 @@ apiRouter.use((req, _res, next) => {
 })
 
 apiRouter.use('/user', userRouter)
+apiRouter.use('/master', masterRouter)

@@ -9,11 +9,9 @@ export const retrieveMasterInfo = createAsyncThunk(
       const response = await campaigns(token)
       return response.data
     } catch (e) {
-      const error = formatThunkError(e)
+      const error = formatThunkError(e, 'retrieveMasterInfo error')
 
-      return thunkApi.rejectWithValue(
-        Boolean(error.message) ? error.message : 'retrieveMasterInfo error'
-      )
+      return thunkApi.rejectWithValue(error)
     }
   }
 )

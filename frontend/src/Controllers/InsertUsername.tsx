@@ -2,7 +2,7 @@ import { useCallback, type FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAppDispatch, useAppSelector } from '../Utils/store'
 import { selectToken, setErrorMessage, updateTheUsername } from '../Store/users'
-import { Stack, useTheme, lighten, CssBaseline, Box, Typography, Button, TextField, Paper, IconButton } from '@mui/material'
+import { Stack, useTheme, CssBaseline, Box, Typography, Button, TextField, Paper, IconButton } from '@mui/material'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGamepad, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -79,7 +79,7 @@ const InsertUsername: FC<InsertUsernameProps> = ({ handleLogOut }) => {
     flexDirection='row'
     justifyContent='center'
     sx={{
-      backgroundColor: lighten(theme.palette.secondary.light, 0.7)
+      backgroundColor: theme.palette.secondary.main
     }}
   >
     <CssBaseline />

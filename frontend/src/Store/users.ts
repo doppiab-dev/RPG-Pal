@@ -14,11 +14,9 @@ export const authenticateUser = createAsyncThunk(
         token: id
       }
     } catch (e) {
-      const error = formatThunkError(e)
+      const error = formatThunkError(e, 'authenticateUser error')
 
-      return thunkApi.rejectWithValue(
-        Boolean(error.message) ? error.message : 'authenticateUser error'
-      )
+      return thunkApi.rejectWithValue(error)
     }
   }
 )
@@ -30,11 +28,9 @@ export const retrieveUserInfo = createAsyncThunk(
       const response = await userInfo(token)
       return response.data
     } catch (e) {
-      const error = formatThunkError(e)
+      const error = formatThunkError(e, 'retrieveUserInfo error')
 
-      return thunkApi.rejectWithValue(
-        Boolean(error.message) ? error.message : 'retrieveUserInfo error'
-      )
+      return thunkApi.rejectWithValue(error)
     }
   }
 )
@@ -50,11 +46,9 @@ export const updateTheUsername = createAsyncThunk(
       await updateUsername(token, username)
       return { username }
     } catch (e) {
-      const error = formatThunkError(e)
+      const error = formatThunkError(e, 'updateTheUsername error')
 
-      return thunkApi.rejectWithValue(
-        Boolean(error.message) ? error.message : 'updateTheUsername error'
-      )
+      return thunkApi.rejectWithValue(error)
     }
   }
 )

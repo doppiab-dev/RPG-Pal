@@ -9,11 +9,9 @@ export const retrievePlayerInfo = createAsyncThunk(
       const response = await characters(token)
       return response.data
     } catch (e) {
-      const error = formatThunkError(e)
+      const error = formatThunkError(e, 'retrievePlayerInfo error')
 
-      return thunkApi.rejectWithValue(
-        Boolean(error.message) ? error.message : 'retrievePlayerInfo error'
-      )
+      return thunkApi.rejectWithValue(error)
     }
   }
 )
