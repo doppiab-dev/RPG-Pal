@@ -6,7 +6,6 @@ import {
   Button,
   Stack,
   Typography,
-  lighten,
   useTheme,
   Paper
 } from '@mui/material'
@@ -62,7 +61,7 @@ const Login: FC = () => {
     width='100vw'
     justifyContent='center'
     sx={{
-      backgroundColor: lighten(theme.palette.secondary.light, 0.7)
+      backgroundColor: theme.palette.secondary.main
     }}
   >
     <CssBaseline />

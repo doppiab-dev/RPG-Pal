@@ -1,4 +1,3 @@
-import { type AxiosError } from 'axios'
 import { type TypedUseSelectorHook, useSelector, useDispatch } from 'react-redux'
 import { type Dispatch, type ThunkDispatch, type UnknownAction } from '@reduxjs/toolkit'
 import type store from '../Store'
@@ -81,5 +80,18 @@ export const useAppDispatch = (): ThunkDispatch<{
   userInfo: UserStore
 }, undefined, UnknownAction> & Dispatch<UnknownAction> => useDispatch<typeof store.dispatch>()
 
-export const formatThunkError = (e: unknown): AxiosError =>
-  Boolean((e as any)?.response?.data) ? (e as any).response.data : e as AxiosError
+export const formatThunkError = (e: unknown, fallback: string): string =>
+  Boolean((e as any).response.data)
+    ? toString((e as any).response.data, fallback)
+    : toString(e, fallback)
+
+const toString = (data: unknown, fallback: string): string => {
+  if (typeof data === 'string') return data
+  if (typeof data === 'object') {
+    if (data !== null && 'message' in data) { return toString(data.message, fallback) }
+    return fallback
+  } else {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (data as unknown as any).toString()
+  }
+}

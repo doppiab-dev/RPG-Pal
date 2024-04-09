@@ -15,7 +15,7 @@ describe('<Home />', () => {
     cy.viewport(width, height).wait(500)
     cy.mount(
       <TestContainer>
-        <Home userInfo={userInfo} />
+        <Home userInfo={userInfo} toCampaigns={() => { }} />
       </TestContainer>
     )
   })

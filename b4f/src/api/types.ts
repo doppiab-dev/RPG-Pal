@@ -15,3 +15,14 @@ export interface UserInfoDTO {
 export interface UsernameBody {
   username: string
 }
+
+export type GetCampaignsDTO = GetCampaignDTO[]
+
+export interface GetCampaignDTO {
+  id: number
+  name: string
+  groups: number // numero di gruppi collegati a questa campagna
+  status: CampaignStatus
+}
+
+export type CampaignStatus = 'active' | 'on_hold' | 'ended'

@@ -7,6 +7,7 @@ import { mainColor, secondaryColor } from '../Utils/config'
 import ErrorBoundary from './Error'
 import Login from './Login'
 import Home from './Home'
+import Campaign from './Campaign'
 
 const theme = createTheme({
   palette: {
@@ -26,16 +27,9 @@ const Router: FC = () => {
     <ErrorBoundary>
       <ThemeProvider theme={theme}>
         <Routes>
-          <Route
-            path="/login"
-            element={
-              isUserLoggedIn ? <Navigate to="/" /> : <Login />
-            }
-          />
-          <Route
-            path="/"
-            element={isUserLoggedIn ? <Home /> : <Navigate to="/login" />}
-          />
+          <Route path="/login" element={isUserLoggedIn ? <Navigate to="/" /> : <Login />} />
+          <Route path="/" element={isUserLoggedIn ? <Home /> : <Navigate to="/login" />} />
+          <Route path="/campaign" element={isUserLoggedIn ? <Campaign /> : <Navigate to="/login" />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </ThemeProvider>

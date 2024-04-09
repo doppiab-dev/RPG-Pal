@@ -23,7 +23,7 @@ interface CampaignInfo {
   id: number
   name: string
   groups: number
-  status: string // migliora con enum
+  status: CampaignStatus
 }
 type CampaignsDTO = CampaignInfo[]
 interface CharacterInfo {
@@ -88,7 +88,7 @@ interface Campaign {
   id: number
   name: string
   groups: number
-  status: string // migliora con enum
+  status: CampaignStatus
 }
 type Campaigns = Campaign[]
 interface Character {
@@ -98,6 +98,7 @@ interface Character {
   img: string
 }
 type Characters = Character[]
+type CampaignStatus = 'active' | 'on_hold' | 'ended'
 /**
  * Utils
  */
