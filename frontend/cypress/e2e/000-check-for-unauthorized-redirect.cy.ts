@@ -12,4 +12,8 @@ describe('login-setUsername-logout', function () {
     cy.visit("http://localhost:3000/")
     checkIfWeAreInLoginComponent()
   })
+  it("check if we force to /campaign without token", () => {
+    cy.visit("http://localhost:3000/campaign")
+    checkIfWeAreInLoginComponent()
+  })
 })

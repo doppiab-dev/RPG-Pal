@@ -23,13 +23,11 @@ interface CustomTextModalProps {
   icon: JSX.Element
   control: Control<any>
   firstError: FieldError | undefined
-  secondError: FieldError | undefined
-  thirdError?: FieldError | undefined
+  secondError?: FieldError
   name: string
   firstLabel: string
-  secondLabel: string
-  options: Option[]
-  thirdLabel?: string
+  secondLabel?: string
+  options?: Option[]
   editText?: string
   title?: string
 }
@@ -46,8 +44,6 @@ const CustomTextModal: FC<CustomTextModalProps> = ({
   name,
   firstLabel,
   secondLabel,
-  thirdError,
-  thirdLabel,
   editText,
   options,
   title
@@ -77,23 +73,6 @@ const CustomTextModal: FC<CustomTextModalProps> = ({
         </Typography>
         {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
         <form onSubmit={handleSubmit(onSubmit)} id={name}>
-          {
-            (thirdLabel !== undefined) && <Controller
-              name={thirdLabel}
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label={capitalize(thirdLabel)}
-                  variant="outlined"
-                  margin="normal"
-                  fullWidth
-                  error={Boolean(thirdError)}
-                  helperText={thirdError?.message ?? ''}
-                />
-              )}
-            />
-          }
           <Controller
             name={firstLabel}
             control={control}
@@ -109,27 +88,29 @@ const CustomTextModal: FC<CustomTextModalProps> = ({
               />
             )}
           />
-          <Controller
-            name={secondLabel}
-            control={control}
-            render={({ field }) => <FormControl fullWidth variant="outlined" margin="normal">
-              <InputLabel id="select-label-2">{secondLabel}</InputLabel>
-              <Select
-                {...field}
-                labelId="select-label-2"
-                label={secondLabel}
-                error={Boolean(secondError)}
-              >
-                {options.map((option, index) => (
-                  <MenuItem key={index} value={String(option.id)}>{option.name}</MenuItem>
-                ))}
-              </Select>
-              {Boolean(secondError) && (
-                <FormHelperText error>{secondError?.message ?? ''}</FormHelperText>
-              )}
-            </FormControl>
-            }
-          />
+          {
+            (secondLabel !== undefined && options !== undefined) && <Controller
+              name={secondLabel}
+              control={control}
+              render={({ field }) => <FormControl fullWidth variant="outlined" margin="normal">
+                <InputLabel id="select-label-2">{secondLabel}</InputLabel>
+                <Select
+                  {...field}
+                  labelId="select-label-2"
+                  label={secondLabel}
+                  error={Boolean(secondError)}
+                >
+                  {options.map(option => (
+                    <MenuItem key={option.id} value={String(option.id)}>{option.name}</MenuItem>
+                  ))}
+                </Select>
+                {Boolean(secondError) && (
+                  <FormHelperText error>{secondError?.message ?? ''}</FormHelperText>
+                )}
+              </FormControl>
+              }
+            />
+          }
           <Button
             type="submit"
             fullWidth

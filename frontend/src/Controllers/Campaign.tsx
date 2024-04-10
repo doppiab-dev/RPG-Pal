@@ -28,7 +28,6 @@ import useGoogleLoginWithRedux from '../Hooks/useGoogleLoginWithRedux'
 import ImageLayout from '../Components/ImageLayout'
 import Loader from '../Components/Loader'
 import ErrorComponent from '../Components/Error'
-import CustomTextModal from '../Components/CustomTextModal'
 import CustomOptionsModal from '../Components/CustomOptionsModal'
 import bg from '../Images/rpg_pal.jpeg'
 import * as ls from '../Utils/ls'
@@ -43,7 +42,7 @@ const Campaign: FC = () => {
 
   const [createCampaign, setCreateCampaign] = useState<boolean>(false)
   const [editCampaign, setEditCampaign] = useState<number>(0)
-  const [activeCampaign, setCampaign] = useState<number>(0)
+  const [activeCampaign, setActiveCampaign] = useState<number>(0)
 
   const token = useAppSelector(selectToken)
   const campaignsStatus = useAppSelector(selectCampaignsInfoStatus)
@@ -115,9 +114,9 @@ const Campaign: FC = () => {
     setEditCampaign(0)
   }, [])
 
-  const setActiveCampaign = useCallback((id: number) => {
+  const setCampaign = useCallback((id: number) => {
     console.log('qui cambio di pagina', id)
-    setCampaign(id)
+    setActiveCampaign(id)
   }, [])
 
   const onSubmitCreate: SubmitHandler<CreateCampaignInputs> = useCallback(async (data) => {
@@ -163,17 +162,18 @@ const Campaign: FC = () => {
   if (campaignsStatus === 'error') return <ErrorComponent clearError={clearError} msg={errorMessage} />
 
   return <Stack display='flex' width='100vw' height='100vh' flexDirection='row' overflow='hidden'>
-    <CustomTextModal
+    <CustomOptionsModal
       onClose={closeCreateCampaign}
       handleSubmit={handleSubmitCreate}
       onSubmit={onSubmitCreate}
       open={createCampaign}
       control={controlCreate}
       icon={<FontAwesomeIcon icon={faDice} />}
-      errors={errorsCreate?.campaign}
+      firstError={errorsCreate?.campaign}
       title={t('campaign.create')}
       editText={t('campaign.createButton')}
-      name="campaign"
+      name="create_campaign"
+      firstLabel="campaign"
     />
     <CustomOptionsModal
       onClose={closeEditCampaign}
@@ -267,7 +267,7 @@ const Campaign: FC = () => {
                     activeCampaign={activeCampaign}
                     openEditCampaign={openEditCampaign}
                     setValue={setValue}
-                    setActiveCampaign={setActiveCampaign}
+                    setActiveCampaign={setCampaign}
                   />
                 )
             }
