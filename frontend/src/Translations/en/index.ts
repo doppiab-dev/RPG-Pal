@@ -52,8 +52,12 @@ const campaign = {
   validationErrorRequired: 'A name is required',
   validationErrorTooLong: 'Name should be 32 character maximum',
   validationErrorInvalid: 'Name contains invalid characters',
+  statusvalidationErrorRequired: 'A status is required',
+  validationErrorInvalidStatus: 'Status is invalid',
   createButton: "Let's Start!",
   create: 'Choose a name for your new Campaign',
+  editButton: 'Edit',
+  edit: 'Edit selected Campaign name',
   active: 'Active',
   on_hold: 'On Hold',
   ended: 'Ended'
