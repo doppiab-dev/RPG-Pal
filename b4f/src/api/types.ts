@@ -16,13 +16,17 @@ export interface UsernameBody {
   username: string
 }
 
-export type GetCampaignsDTO = GetCampaignDTO[]
+export type CampaignStatus = 'active' | 'on_hold' | 'ended'
 
-export interface GetCampaignDTO {
+export type GetCampaignsDTO = CampaignDTO[]
+
+export interface CampaignDTO {
   id: number
   name: string
-  groups: number // numero di gruppi collegati a questa campagna
+  groups: number
   status: CampaignStatus
 }
 
-export type CampaignStatus = 'active' | 'on_hold' | 'ended'
+export interface EditCampaignBody {
+  name: string
+}

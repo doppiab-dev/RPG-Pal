@@ -39,11 +39,24 @@ const username = {
   send: 'Select Username',
   validationErrorRequired: 'A username is required',
   validationErrorTooLong: 'Username should be 16 character maximum',
-  validationErrorInvalid: 'Username contain invalid characters',
+  validationErrorInvalid: 'Username contains invalid characters',
   validationErrorUsername: 'Username is already used'
 }
 const campaign = {
-  title: 'Campaigns'
+  title: 'Campaigns',
+  groups: 'group(s) in this campaign',
+  status: 'Campaign status: ',
+  home: 'Home',
+  logout: 'Log Out',
+  new: 'Create new Campaign',
+  validationErrorRequired: 'A name is required',
+  validationErrorTooLong: 'Name should be 32 character maximum',
+  validationErrorInvalid: 'Name contains invalid characters',
+  createButton: "Let's Start!",
+  create: 'Choose a name for your new Campaign',
+  active: 'Active',
+  on_hold: 'On Hold',
+  ended: 'Ended'
 }
 const en = {
   error,
