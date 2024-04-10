@@ -16,7 +16,12 @@ export interface UsernameBody {
   username: string
 }
 
-export type CampaignStatus = 'active' | 'on_hold' | 'ended'
+export type CampaignStatus = keyof typeof CampaignTypeEnum
+export enum CampaignTypeEnum {
+  'active' = 'active',
+  'on_hold' = 'on_hold',
+  'ended' = 'ended'
+}
 
 export type GetCampaignsDTO = CampaignDTO[]
 
@@ -27,6 +32,11 @@ export interface CampaignDTO {
   status: CampaignStatus
 }
 
+export interface CreateCampaignBody {
+  name: string
+}
+
 export interface EditCampaignBody {
   name: string
+  status: CampaignStatus
 }

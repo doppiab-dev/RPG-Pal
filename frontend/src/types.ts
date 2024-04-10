@@ -5,8 +5,12 @@
 interface FormDataUsername {
   username: string
 }
-interface CampaignInputs {
+interface CreateCampaignInputs {
   campaign: string
+}
+interface EditCampaignInputs {
+  campaign: string
+  status: string
 }
 /**
  * API
@@ -38,6 +42,10 @@ interface CharacterInfo {
 type CharactersDTO = CharacterInfo[]
 interface CreateCampaignBody {
   name: string
+}
+interface EditCampaignBody {
+  name: string
+  status: CampaignStatus
 }
 /**
  * Redux
@@ -113,5 +121,5 @@ interface WithChildren {
 }
 interface Option {
   name: string
-  id: number
+  id: string
 }
