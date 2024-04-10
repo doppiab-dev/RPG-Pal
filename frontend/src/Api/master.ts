@@ -7,3 +7,6 @@ export const campaigns = async (token: string): Promise<AxiosResponse<CampaignsD
 
 export const createCampaign = async (token: string, name: string): Promise<AxiosResponse<CampaignInfoDTO>> =>
   await axiosClient.post('/master/campaign', { name } satisfies CreateCampaignBody, createApiHeaders(token))
+
+export const editCampaign = async (token: string, name: string, status: CampaignStatus, id: number): Promise<AxiosResponse<void>> =>
+  await axiosClient.patch(`/master/campaign/${id}`, { name, status } satisfies EditCampaignBody, createApiHeaders(token))

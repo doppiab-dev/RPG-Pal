@@ -1,4 +1,4 @@
-import { type FC } from 'react'
+import { Fragment, type FC } from 'react'
 import { Controller, type Control, type FieldError, type UseFormHandleSubmit, type SubmitHandler } from 'react-hook-form'
 import { Modal, Box, Typography, TextField, Button, capitalize } from '@mui/material'
 import { useTranslation } from 'react-i18next'
@@ -57,7 +57,7 @@ const CustomTextModal: FC<CustomTextModalProps> = ({
             name={name}
             control={control}
             render={({ field }) => (
-              <>
+              <Fragment>
                 <TextField
                   {...field}
                   label={capitalize(name)}
@@ -76,7 +76,7 @@ const CustomTextModal: FC<CustomTextModalProps> = ({
                 >
                   {editText ?? t('editModal.edit')}
                 </Button>
-              </>
+              </Fragment>
             )}
           />
         </form>

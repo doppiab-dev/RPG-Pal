@@ -57,3 +57,9 @@ export const parseErrorMessage = (error: any): string => {
     return JSON.stringify(error)
   }
 }
+
+export enum CampaignTypeEnum {
+  'active' = 'active',
+  'on_hold' = 'on_hold',
+  'ended' = 'ended'
+}

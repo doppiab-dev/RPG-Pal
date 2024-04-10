@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { tableCampaigns, tableGroups } from '../../config'
 import { dbConfig } from '.'
-import { type CampaignDTO, type GetCampaignsDTO } from '../../api/types'
+import { type CampaignStatus, type CampaignDTO, type GetCampaignsDTO } from '../../api/types'
 import { type DBCampaigns, type DBCampaignsGroups } from '../types'
 
 export const getCampaigns = async (user_id: string): Promise<GetCampaignsDTO> => {
@@ -50,4 +50,19 @@ export const createCampaign = async (user_id: string, name: string): Promise<Cam
     name,
     status
   }
+}
+
+export const editCampaign = async (id: string, user_id: string, name: string, status: CampaignStatus): Promise<void> => {
+  const numeric_id = Number(id)
+  if (isNaN(numeric_id)) throw new Error('Edit failed, id not valid.')
+
+  const client = await dbConfig.connect()
+  const campaignsQuery = `
+  UPDATE ${tableCampaigns}
+  SET user_id = $1, name = $2, status = $3
+  WHERE id = $4
+  `
+  const campaignsValues = [user_id, name, status, id]
+  await client.query<DBCampaigns>(campaignsQuery, campaignsValues)
+  client.release()
 }

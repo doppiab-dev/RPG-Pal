@@ -1,4 +1,4 @@
-import { useCallback, type FC, useState, useEffect } from 'react'
+import { useCallback, type FC, useState, useEffect, Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { Box, Typography, Button } from '@mui/material'
@@ -72,7 +72,7 @@ const ErrorBoundary: FC<WithChildren> = ({ children }) => {
     )
   }
 
-  return <>{children}</>
+  return <Fragment>{children}</Fragment>
 }
 
 export default ErrorBoundary

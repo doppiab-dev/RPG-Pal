@@ -19,3 +19,5 @@ const decodeToken = (bearerToken: string): string => {
 
   return token
 }
+
+export const missingInBody = (el: unknown): boolean => el === undefined || el === null
