@@ -106,7 +106,6 @@ const formatMessageData = (data: DataMessage): string => {
       return (data as unknown as any).toString()
     }
   }
-
   if (data.includes('doctype')) { return getTextFromHTML(data, 'p') }
   if (data.includes('DOCTYPE')) { return getTextFromHTML(data, 'pre') }
   if (data.includes('html')) { return getTextFromHTML(data, 'html') }

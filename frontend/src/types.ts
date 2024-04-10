@@ -5,6 +5,9 @@
 interface FormDataUsername {
   username: string
 }
+interface CampaignInputs {
+  campaign: string
+}
 /**
  * API
 */
@@ -19,13 +22,13 @@ interface UsernameBody {
 interface UsernameDTO {
   username: string
 }
-interface CampaignInfo {
+interface CampaignInfoDTO {
   id: number
   name: string
   groups: number
   status: CampaignStatus
 }
-type CampaignsDTO = CampaignInfo[]
+type CampaignsDTO = CampaignInfoDTO[]
 interface CharacterInfo {
   name: string
   level: number
@@ -33,6 +36,9 @@ interface CharacterInfo {
   img: string
 }
 type CharactersDTO = CharacterInfo[]
+interface CreateCampaignBody {
+  name: string
+}
 /**
  * Redux
  */
@@ -104,4 +110,8 @@ type CampaignStatus = 'active' | 'on_hold' | 'ended'
  */
 interface WithChildren {
   children?: React.ReactNode
+}
+interface Option {
+  name: string
+  id: number
 }
