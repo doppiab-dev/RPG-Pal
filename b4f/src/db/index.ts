@@ -1,5 +1,6 @@
-import { type DbType } from '../config'
 import { dbConnectorPostgreDb } from './postgreDb'
+import { type DbType } from '../config'
+import { type UserInfoDTO } from '../api/types'
 
 export const dbFactory = (dbType: DbType): Connector => {
   if (dbType === 'postgres') return dbConnectorPostgreDb
@@ -9,4 +10,7 @@ export const dbFactory = (dbType: DbType): Connector => {
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Connector {
+  getUserInfo: (userId: string) => Promise<UserInfoDTO>
+  checkUsername: (username: string) => Promise<boolean>
+  setUsername: (username: string, userId: string) => Promise<void>
 }

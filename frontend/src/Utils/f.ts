@@ -36,9 +36,12 @@ export const createApiHeaders = (token: string): Headers => ({
   }
 })
 
-export const validateUsername = async (value: string, token: string): Promise<boolean> => {
+export const validateUsername = async (token: string, value: string): Promise<boolean> => {
   try {
-    const res = await usernameIsValid(value, token)
+    const val = value.trim()
+    if (val === '') return false
+
+    const res = await usernameIsValid(token, val)
     return res.data
   } catch {
     return false
