@@ -239,11 +239,15 @@ const Campaign: FC = () => {
       }}
       component={Paper}
       elevation={10}
+      data-testid="campaign-component"
     >
-      <List sx={{
-        width: '100%',
-        height: '100%'
-      }}>
+      <List
+        sx={{
+          width: '100%',
+          height: '100%'
+        }}
+        data-testid="campaign-list"
+      >
         <ListItem sx={{ paddingBottom: '16px', height: '66px' }}>
           <ListItemText
             sx={{ my: 0 }}
@@ -252,9 +256,10 @@ const Campaign: FC = () => {
               fontSize: '2rem',
               letterSpacing: 0
             }}
+            data-testid="campaign-list-title"
           />
           <ListItemIcon sx={{ fontSize: '1.5rem', color: theme.palette.primary.main }}>
-            <FontAwesomeIcon icon={faDragon} />
+            <FontAwesomeIcon icon={faDragon} data-testid="campaign-list-title-icon" />
           </ListItemIcon>
         </ListItem>
         <Divider />
@@ -277,8 +282,9 @@ const Campaign: FC = () => {
                       },
                       justifyContent: 'space-between'
                     }}
+                    data-testid="campaign-list-create"
                   >
-                    <ListItemText>{t('campaign.new')}</ListItemText>
+                    <ListItemText data-testid="campaign-list-create-text">{t('campaign.new')}</ListItemText>
                     <ListItemIcon
                       sx={{
                         minWidth: 0,
@@ -319,8 +325,9 @@ const Campaign: FC = () => {
                 justifyContent: 'space-between'
               }}
               onClick={goToHome}
+              data-testid="campaign-list-home"
             >
-              <ListItemText>{t('campaign.home')}</ListItemText>
+              <ListItemText data-testid="campaign-list-home-title">{t('campaign.home')}</ListItemText>
               <ListItemIcon
                 sx={{
                   minWidth: 0,
@@ -345,8 +352,9 @@ const Campaign: FC = () => {
                 justifyContent: 'space-between'
               }}
               onClick={handleLogOut}
+              data-testid="campaign-list-logout"
             >
-              <ListItemText>{t('campaign.logout')}</ListItemText>
+              <ListItemText data-testid="campaign-list-logout-text">{t('campaign.logout')}</ListItemText>
               <ListItemIcon
                 sx={{
                   minWidth: 0,
