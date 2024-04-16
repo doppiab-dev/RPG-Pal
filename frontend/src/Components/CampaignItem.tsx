@@ -6,7 +6,7 @@ import StatusIcon from './StatusIcon'
 import EditIcon from '@mui/icons-material/ModeEditOutlineOutlined'
 import DeleteIcon from '@mui/icons-material/DeleteForever'
 
-interface ItemProps {
+interface CampaignItemProps {
   campaign: Campaign
   activeCampaign: number
   openEditCampaign: (id: number) => void
@@ -15,7 +15,7 @@ interface ItemProps {
   setValue: UseFormSetValue<EditCampaignInputs>
 }
 
-const CampaignItem: FC<ItemProps> = ({ campaign, openEditCampaign, openDeleteCampaign, setValue, setActiveCampaign, activeCampaign }) => {
+const CampaignItem: FC<CampaignItemProps> = ({ campaign, openEditCampaign, openDeleteCampaign, setValue, setActiveCampaign, activeCampaign }) => {
   const { t } = useTranslation()
   const theme = useTheme()
 
@@ -41,6 +41,7 @@ const CampaignItem: FC<ItemProps> = ({ campaign, openEditCampaign, openDeleteCam
           }
         }
       }}
+      data-testid="campaign-item"
     >
       <ListItemText
         primary={campaign.name}
@@ -52,7 +53,9 @@ const CampaignItem: FC<ItemProps> = ({ campaign, openEditCampaign, openDeleteCam
               ? theme.palette.primary.contrastText
               : theme.palette.text.secondary
           }
-        }} />
+        }}
+        data-testid="campaign-text"
+      />
       <ListItemIcon sx={{ display: 'flex', minWidth: 0 }}>
         <StatusIcon status={campaign.status} />
       </ListItemIcon>
@@ -70,6 +73,7 @@ const CampaignItem: FC<ItemProps> = ({ campaign, openEditCampaign, openDeleteCam
           setValue('status', campaign.status)
           openEditCampaign(campaign.id)
         }}
+        data-testid="edit-campaign-button"
       >
         <EditIcon />
       </ListItemIcon>
@@ -85,6 +89,7 @@ const CampaignItem: FC<ItemProps> = ({ campaign, openEditCampaign, openDeleteCam
           e.stopPropagation()
           openDeleteCampaign(campaign.id)
         }}
+        data-testid="delete-campaign-button"
       >
         <DeleteIcon />
       </ListItemIcon>
