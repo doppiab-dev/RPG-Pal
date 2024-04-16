@@ -66,3 +66,17 @@ export const editCampaign = async (id: string, user_id: string, name: string, st
   await client.query<DBCampaigns>(campaignsQuery, campaignsValues)
   client.release()
 }
+
+export const deleteCampaign = async (id: string, user_id: string): Promise<void> => {
+  const numeric_id = Number(id)
+  if (isNaN(numeric_id)) throw new Error('Delete failed, id not valid.')
+
+  const client = await dbConfig.connect()
+  const campaignsQuery = `
+  DELETE FROM ${tableCampaigns}
+  WHERE user_id = $1 AND id = $2
+  `
+  const campaignsValues = [user_id, id]
+  await client.query<DBCampaigns>(campaignsQuery, campaignsValues)
+  client.release()
+}

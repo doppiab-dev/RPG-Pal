@@ -58,7 +58,6 @@ services:
       - "5005:5005"
     volumes:
       - ./backend/:/workspace/
-      - ${C_HOME}/.m2:/root/.m2
     links:
       - db
     depends_on:

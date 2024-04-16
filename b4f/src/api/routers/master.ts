@@ -76,3 +76,25 @@ masterRouter.patch('/campaign/:id', asyncErrWrapper(async (req, res) => {
     return res.status(status).json(error)
   }
 }))
+
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+masterRouter.delete('/campaign/:id', asyncErrWrapper(async (req, res) => {
+  try {
+    const token = verifyMissingToken(req.headers.authorization)
+    const { userId } = validateToken(token)
+    const { id } = req.params
+    if (missingInBody(id)) throw new Error('id is missing')
+
+    const deleteCampaignsTimestamp = performance.now()
+    const db = dbFactory(RepositoryType)
+    await db.deleteCampaign(id, userId)
+    const deleteTime = Math.round(performance.now() - deleteCampaignsTimestamp)
+    Logger.writeEvent(`Master: deleted campaing in ${deleteTime} ms`)
+
+    return res.status(204).json()
+  } catch (e) {
+    const { status, error } = formatError(e as Error, '009-RESPONSE', 'masterRouter /campaign/:id delete')
+
+    return res.status(status).json(error)
+  }
+}))

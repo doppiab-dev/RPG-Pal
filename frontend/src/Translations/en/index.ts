@@ -60,15 +60,25 @@ const campaign = {
   edit: 'Edit selected Campaign name',
   active: 'Active',
   on_hold: 'On Hold',
-  ended: 'Ended'
+  ended: 'Ended',
+  deleteTitle: 'Player Delete',
+  deleteText: 'Are you sure you want to delete this Player? Player id: '
 }
+const confirmationDialog = {
+  title: 'Confirm Action',
+  dialogText: 'Are you sure you want to perform this action?',
+  cancelButtonText: 'Cancel',
+  confirmButtonText: 'Confirm'
+}
+
 const en = {
   error,
   login,
   loader,
   home,
   username,
-  campaign
+  campaign,
+  confirmationDialog
 }
 
 export default en

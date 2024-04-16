@@ -15,4 +15,5 @@ export interface Connector {
   getCampaigns: (userId: string) => Promise<GetCampaignsDTO>
   createCampaign: (userId: string, name: string) => Promise<CampaignDTO>
   editCampaign: (id: string, userId: string, name: string, status: CampaignStatus) => Promise<void>
+  deleteCampaign: (id: string, userId: string) => Promise<void>
 }
