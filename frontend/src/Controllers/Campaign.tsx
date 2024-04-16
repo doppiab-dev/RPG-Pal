@@ -1,7 +1,7 @@
 import { type FC, useCallback, useEffect, Fragment, useState } from 'react'
 import { Box, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, Stack, useTheme } from '@mui/material'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faDragon, faPause, faCheck, faXmark, faDice } from '@fortawesome/free-solid-svg-icons'
+import { faDragon, faDice } from '@fortawesome/free-solid-svg-icons'
 import { useTranslation } from 'react-i18next'
 import { useAppDispatch, useAppSelector } from '../Utils/store'
 import {
@@ -19,11 +19,9 @@ import { clearUserState, selectToken } from '../Store/users'
 import { CampaignTypeEnum, parseErrorMessage } from '../Utils/f'
 import { clearPlayerState } from '../Store/player'
 import { useNavigate } from 'react-router-dom'
-import { type SubmitHandler, useForm, type UseFormSetValue } from 'react-hook-form'
+import { type SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import HomeIcon from '@mui/icons-material/Home'
-import EditIcon from '@mui/icons-material/ModeEditOutlineOutlined'
-import DeleteIcon from '@mui/icons-material/DeleteForever'
 import LogoutIcon from '@mui/icons-material/Logout'
 import NewIcon from '@mui/icons-material/FiberNew'
 import useGoogleLoginWithRedux from '../Hooks/useGoogleLoginWithRedux'
@@ -31,10 +29,11 @@ import ImageLayout from '../Components/ImageLayout'
 import Loader from '../Components/Loader'
 import ErrorComponent from '../Components/Error'
 import CustomOptionsModal from '../Components/CustomOptionsModal'
+import Item from '../Components/CampaignItem'
+import ConfirmationDialog from '../Components/ConfirmationDialog'
 import bg from '../Images/rpg_pal.jpeg'
 import * as ls from '../Utils/ls'
 import * as Yup from 'yup'
-import ConfirmationDialog from '../Components/ConfirmationDialog'
 
 const Campaign: FC = () => {
   const { t } = useTranslation()
@@ -372,109 +371,3 @@ const Campaign: FC = () => {
 }
 
 export default Campaign
-
-interface ItemProps {
-  campaign: Campaign
-  activeCampaign: number
-  openEditCampaign: (id: number) => void
-  openDeleteCampaign: (id: number) => void
-  setActiveCampaign: (id: number) => void
-  setValue: UseFormSetValue<EditCampaignInputs>
-}
-
-const Item: FC<ItemProps> = ({ campaign, openEditCampaign, openDeleteCampaign, setValue, setActiveCampaign, activeCampaign }) => {
-  const { t } = useTranslation()
-  const theme = useTheme()
-
-  return <Fragment>
-    <ListItemButton
-      onClick={() => { setActiveCampaign(campaign.id) }}
-      sx={{
-        gap: '1vw',
-        color: campaign.id === activeCampaign
-          ? theme.palette.primary.contrastText
-          : theme.palette.text.primary,
-        backgroundColor: campaign.id === activeCampaign
-          ? theme.palette.primary.main
-          : 'transparent',
-        '&:hover': {
-          backgroundColor: theme.palette.primary.light,
-          color: theme.palette.primary.contrastText,
-          '& .MuiListItemText-secondary': {
-            color: theme.palette.primary.contrastText
-          },
-          '& .MuiSvgIcon-root': {
-            color: theme.palette.primary.contrastText
-          }
-        }
-      }}
-    >
-      <ListItemText
-        primary={campaign.name}
-        secondary={`${campaign.groups} ${t('campaign.groups')}
-        ${t('campaign.status')} ${t(`campaign.${campaign.status}`)}`}
-        sx={{
-          '& .MuiListItemText-secondary': {
-            color: campaign.id === activeCampaign
-              ? theme.palette.primary.contrastText
-              : theme.palette.text.secondary
-          }
-        }}
-      />
-      <ListItemIcon sx={{ display: 'flex', minWidth: 0 }}>
-        <StatusIcon status={campaign.status} />
-      </ListItemIcon>
-      <ListItemIcon
-        sx={{
-          display: 'flex',
-          minWidth: 0,
-          color: campaign.id === activeCampaign
-            ? theme.palette.primary.contrastText
-            : theme.palette.text.primary
-        }}
-        onClick={(e) => {
-          e.stopPropagation()
-          setValue('campaign', campaign.name)
-          setValue('status', campaign.status)
-          openEditCampaign(campaign.id)
-        }}
-      >
-        <EditIcon />
-      </ListItemIcon>
-      <ListItemIcon
-        sx={{
-          display: 'flex',
-          minWidth: 0,
-          color: campaign.id === activeCampaign
-            ? theme.palette.primary.contrastText
-            : theme.palette.text.primary
-        }}
-        onClick={(e) => {
-          e.stopPropagation()
-          openDeleteCampaign(campaign.id)
-        }}
-      >
-        <DeleteIcon />
-      </ListItemIcon>
-    </ListItemButton>
-    <Divider />
-  </Fragment>
-}
-
-interface StatusIconProps {
-  status: CampaignStatus
-}
-
-const StatusIcon: FC<StatusIconProps> = ({ status }) => {
-  switch (status) {
-    case 'active': {
-      return <FontAwesomeIcon icon={faCheck} color='green' />
-    }
-    case 'ended': {
-      return <FontAwesomeIcon icon={faXmark} color='red' />
-    }
-    case 'on_hold': {
-      return <FontAwesomeIcon icon={faPause} color='goldenrod' />
-    }
-  }
-}
