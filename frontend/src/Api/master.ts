@@ -10,3 +10,6 @@ export const createCampaign = async (token: string, name: string): Promise<Axios
 
 export const editCampaign = async (token: string, name: string, status: CampaignStatus, id: number): Promise<AxiosResponse<void>> =>
   await axiosClient.patch(`/master/campaign/${id}`, { name, status } satisfies EditCampaignBody, createApiHeaders(token))
+
+export const deleteCampaign = async (token: string, id: number): Promise<AxiosResponse<void>> =>
+  await axiosClient.delete(`/master/campaign/${id}`, createApiHeaders(token))

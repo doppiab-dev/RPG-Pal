@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { formatThunkError, masterInitialState } from '../Utils/store'
-import { campaigns, createCampaign, editCampaign } from '../Api/master'
+import { campaigns, createCampaign, deleteCampaign, editCampaign } from '../Api/master'
 
 export const retrieveMasterInfo = createAsyncThunk(
   'retrieveMasterInfo',
@@ -48,6 +48,24 @@ export const editACampaign = createAsyncThunk(
       return { name, id, status }
     } catch (e) {
       const error = formatThunkError(e, 'editACampaign error')
+
+      return thunkApi.rejectWithValue(error)
+    }
+  }
+)
+
+type DeleteACampaign = Authenticated & {
+  id: number
+}
+
+export const deleteACampaign = createAsyncThunk(
+  'deleteACampaign',
+  async ({ token, id }: DeleteACampaign, thunkApi) => {
+    try {
+      await deleteCampaign(token, id)
+      return { id }
+    } catch (e) {
+      const error = formatThunkError(e, 'deleteACampaign error')
 
       return thunkApi.rejectWithValue(error)
     }
@@ -111,6 +129,21 @@ export const master = createSlice({
         name: id === campaign.id ? name : campaign.name,
         status: id === campaign.id ? status : campaign.status
       }))
+      state.campaignsInfoStatus = 'success'
+    })
+    builder.addCase(deleteACampaign.pending, (state) => {
+      state.campaignsInfoStatus = 'loading'
+    })
+    builder.addCase(deleteACampaign.rejected, (state, action) => {
+      state.errorMessage = Boolean(action.error) && typeof action.error === 'string'
+        ? action.error
+        : action.payload as string
+      state.campaignsInfoStatus = 'error'
+    })
+    builder.addCase(deleteACampaign.fulfilled, (state, action) => {
+      const { id } = action.payload
+      const campaigns = [...state.campaigns]
+      state.campaigns = campaigns.filter(campaign => campaign.id !== id)
       state.campaignsInfoStatus = 'success'
     })
   }

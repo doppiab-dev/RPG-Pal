@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '../Utils/store'
 import {
   clearMasterState,
   createACampaign,
+  deleteACampaign,
   editACampaign,
   retrieveMasterInfo,
   selectCampaigns,
@@ -22,6 +23,7 @@ import { type SubmitHandler, useForm, type UseFormSetValue } from 'react-hook-fo
 import { yupResolver } from '@hookform/resolvers/yup'
 import HomeIcon from '@mui/icons-material/Home'
 import EditIcon from '@mui/icons-material/ModeEditOutlineOutlined'
+import DeleteIcon from '@mui/icons-material/DeleteForever'
 import LogoutIcon from '@mui/icons-material/Logout'
 import NewIcon from '@mui/icons-material/FiberNew'
 import useGoogleLoginWithRedux from '../Hooks/useGoogleLoginWithRedux'
@@ -32,6 +34,7 @@ import CustomOptionsModal from '../Components/CustomOptionsModal'
 import bg from '../Images/rpg_pal.jpeg'
 import * as ls from '../Utils/ls'
 import * as Yup from 'yup'
+import ConfirmationDialog from '../Components/ConfirmationDialog'
 
 const Campaign: FC = () => {
   const { t } = useTranslation()
@@ -42,6 +45,7 @@ const Campaign: FC = () => {
 
   const [createCampaign, setCreateCampaign] = useState<boolean>(false)
   const [editCampaign, setEditCampaign] = useState<number>(0)
+  const [deleteCampaign, setDeleteCampaign] = useState<number>(0)
   const [activeCampaign, setActiveCampaign] = useState<number>(0)
 
   const token = useAppSelector(selectToken)
@@ -119,6 +123,25 @@ const Campaign: FC = () => {
     setActiveCampaign(id)
   }, [])
 
+  const openDeleteCampaign = useCallback((id: number) => {
+    setDeleteCampaign(id)
+  }, [])
+
+  const closeDeleteCampaign = useCallback(() => {
+    setDeleteCampaign(0)
+  }, [])
+
+  const handleDelete = useCallback(async () => {
+    if (deleteCampaign === 0) return
+    try {
+      await dispatch(deleteACampaign({ token, id: deleteCampaign }))
+      setDeleteCampaign(0)
+      setActiveCampaign(0)
+    } catch (e) {
+      dispatch(setErrorMessage(typeof e === 'string' ? e : String(e)))
+    }
+  }, [deleteCampaign, dispatch, token])
+
   const onSubmitCreate: SubmitHandler<CreateCampaignInputs> = useCallback(async (data) => {
     try {
       await dispatch(createACampaign({ name: data.campaign, token }))
@@ -162,6 +185,14 @@ const Campaign: FC = () => {
   if (campaignsStatus === 'error') return <ErrorComponent clearError={clearError} msg={errorMessage} />
 
   return <Stack display='flex' width='100vw' height='100vh' flexDirection='row' overflow='hidden'>
+    <ConfirmationDialog
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      confirm={handleDelete}
+      undo={closeDeleteCampaign}
+      open={Boolean(deleteCampaign)}
+      title={t('campaign.deleteTitle')}
+      dialogText={`${t('campaign.deleteText')}'${deleteCampaign}'`}
+    />
     <CustomOptionsModal
       onClose={closeCreateCampaign}
       handleSubmit={handleSubmitCreate}
@@ -266,6 +297,7 @@ const Campaign: FC = () => {
                     key={campaign.id}
                     activeCampaign={activeCampaign}
                     openEditCampaign={openEditCampaign}
+                    openDeleteCampaign={openDeleteCampaign}
                     setValue={setValue}
                     setActiveCampaign={setCampaign}
                   />
@@ -345,11 +377,12 @@ interface ItemProps {
   campaign: Campaign
   activeCampaign: number
   openEditCampaign: (id: number) => void
+  openDeleteCampaign: (id: number) => void
   setActiveCampaign: (id: number) => void
   setValue: UseFormSetValue<EditCampaignInputs>
 }
 
-const Item: FC<ItemProps> = ({ campaign, openEditCampaign, setValue, setActiveCampaign, activeCampaign }) => {
+const Item: FC<ItemProps> = ({ campaign, openEditCampaign, openDeleteCampaign, setValue, setActiveCampaign, activeCampaign }) => {
   const { t } = useTranslation()
   const theme = useTheme()
 
@@ -407,6 +440,21 @@ const Item: FC<ItemProps> = ({ campaign, openEditCampaign, setValue, setActiveCa
         }}
       >
         <EditIcon />
+      </ListItemIcon>
+      <ListItemIcon
+        sx={{
+          display: 'flex',
+          minWidth: 0,
+          color: campaign.id === activeCampaign
+            ? theme.palette.primary.contrastText
+            : theme.palette.text.primary
+        }}
+        onClick={(e) => {
+          e.stopPropagation()
+          openDeleteCampaign(campaign.id)
+        }}
+      >
+        <DeleteIcon />
       </ListItemIcon>
     </ListItemButton>
     <Divider />
