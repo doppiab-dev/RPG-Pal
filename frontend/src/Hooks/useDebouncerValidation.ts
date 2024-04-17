@@ -8,12 +8,17 @@ interface UseDebouncerValidation {
 const useDebouncerValidation = (
   token: string,
   validateFunction: (token: string, username: string) => Promise<boolean>,
-  setErrorMessage: () => void
+  setErrorMessage: (msg?: string) => void,
+  username: string
 ): UseDebouncerValidation => {
   const debouncedValidateUsername = debounce(async (value: string) => {
-    const isValid = await validateFunction(token, value.trim())
-    if (!isValid) {
-      setErrorMessage()
+    if (username !== '' && value.toLocaleLowerCase() === username.toLocaleLowerCase()) {
+      setErrorMessage("It's already your username")
+    } else {
+      const isValid = await validateFunction(token, value.trim())
+      if (!isValid) {
+        setErrorMessage()
+      }
     }
   }, 300)
 

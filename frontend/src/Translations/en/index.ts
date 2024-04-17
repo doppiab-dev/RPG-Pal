@@ -47,6 +47,7 @@ const campaign = {
   groups: 'group(s) in this campaign',
   status: 'Campaign status: ',
   home: 'Home',
+  user: 'User Info',
   logout: 'Log Out',
   new: 'Create new Campaign',
   validationErrorRequired: 'A name is required',
@@ -70,6 +71,11 @@ const confirmationDialog = {
   cancelButtonText: 'Cancel',
   confirmButtonText: 'Confirm'
 }
+const userInfo = {
+  title: 'User Info',
+  text: 'We do not store any sensible information (your email and/or your personal data) in our database.'
+
+}
 
 const en = {
   error,
@@ -78,7 +84,8 @@ const en = {
   home,
   username,
   campaign,
-  confirmationDialog
+  confirmationDialog,
+  userInfo
 }
 
 export default en

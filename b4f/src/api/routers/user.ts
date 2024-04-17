@@ -59,7 +59,7 @@ userRouter.post('/username', asyncErrWrapper(async (req, res) => {
 
     const setUsernameTimestamp = performance.now()
     const db = dbFactory(RepositoryType)
-    await db.setUsername(username, userId)
+    await db.upsetUsername(username, userId)
     const fetchTime = Math.round(performance.now() - setUsernameTimestamp)
     Logger.writeEvent(`User: set username in ${fetchTime} ms`)
 

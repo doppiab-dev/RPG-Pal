@@ -1,6 +1,6 @@
 import { DbName, DbPort, DbPass, DbUser, DbHost } from '../../config'
 import { Pool } from 'pg'
-import { getUserInfo, checkUsername, setUsername } from './user'
+import { getUserInfo, checkUsername, upsetUsername } from './user'
 import { getCampaigns, createCampaign, editCampaign, deleteCampaign } from './master'
 import { type Connector } from '..'
 
@@ -15,7 +15,7 @@ export const dbConfig = new Pool({
 export const dbConnectorPostgreDb: Connector = {
   getUserInfo,
   checkUsername,
-  setUsername,
+  upsetUsername,
   getCampaigns,
   createCampaign,
   editCampaign,
