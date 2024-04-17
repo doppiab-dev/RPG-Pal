@@ -10,3 +10,6 @@ export const usernameIsValid = async (token: string, username: string): Promise<
 
 export const updateUsername = async (token: string, username: string): Promise<AxiosResponse<UsernameDTO>> =>
   await axiosClient.post('/user/username', { username } satisfies UsernameBody, createApiHeaders(token))
+
+export const deleteUser = async (token: string): Promise<AxiosResponse<void>> =>
+  await axiosClient.delete('/user', createApiHeaders(token))

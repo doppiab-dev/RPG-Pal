@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { formatThunkError, userInitialState } from '../Utils/store'
 import { googleLogin } from '../Api/login'
-import { updateUsername, userInfo } from '../Api/user'
+import { deleteUser, updateUsername, userInfo } from '../Api/user'
 
 export const authenticateUser = createAsyncThunk(
   'authenticateUser',
@@ -47,6 +47,21 @@ export const updateTheUsername = createAsyncThunk(
       return { username }
     } catch (e) {
       const error = formatThunkError(e, 'updateTheUsername error')
+
+      return thunkApi.rejectWithValue(error)
+    }
+  }
+)
+
+type DeleteTheUser = Authenticated
+
+export const deleteTheUser = createAsyncThunk(
+  'deleteTheUser',
+  async ({ token }: DeleteTheUser, thunkApi) => {
+    try {
+      await deleteUser(token)
+    } catch (e) {
+      const error = formatThunkError(e, 'deleteTheUser error')
 
       return thunkApi.rejectWithValue(error)
     }
@@ -117,6 +132,18 @@ export const user = createSlice({
     builder.addCase(updateTheUsername.fulfilled, (state, action) => {
       const { username } = { ...action.payload }
       state.userInfo.username = username
+      state.usernameStatus = 'success'
+    })
+    builder.addCase(deleteTheUser.pending, (state) => {
+      state.userInfoStatus = 'loading'
+    })
+    builder.addCase(deleteTheUser.rejected, (state, action) => {
+      state.errorMessage = Boolean(action.error) && typeof action.error === 'string'
+        ? action.error
+        : action.payload as string
+      state.usernameStatus = 'error'
+    })
+    builder.addCase(deleteTheUser.fulfilled, (state) => {
       state.usernameStatus = 'success'
     })
   }
