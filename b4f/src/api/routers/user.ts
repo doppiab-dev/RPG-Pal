@@ -70,3 +70,23 @@ userRouter.post('/username', asyncErrWrapper(async (req, res) => {
     return res.status(status).json(error)
   }
 }))
+
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+userRouter.delete('/', asyncErrWrapper(async (req, res) => {
+  try {
+    const token = verifyMissingToken(req.headers.authorization)
+    const { userId } = validateToken(token)
+
+    const deleteUserTimestamp = performance.now()
+    const db = dbFactory(RepositoryType)
+    await db.deleteUser(userId)
+    const fetchTime = Math.round(performance.now() - deleteUserTimestamp)
+    Logger.writeEvent(`User: delete user in ${fetchTime} ms`)
+
+    return res.status(204).json()
+  } catch (e) {
+    const { status, error } = formatError(e as Error, '010-RESPONSE', 'userRouter / delete')
+
+    return res.status(status).json(error)
+  }
+}))
