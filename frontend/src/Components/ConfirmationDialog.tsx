@@ -25,15 +25,15 @@ const ConfirmationDialog: FC<ConfirmationDialogProps> = ({
 
   return (
     <Dialog open={open} onClose={undo}>
-      <DialogTitle>{title ?? t('confirmationDialog.title')}</DialogTitle>
+      <DialogTitle data-testid="confirmationDialog-title">{title ?? t('confirmationDialog.title')}</DialogTitle>
       <DialogContent>
-        <DialogContentText>{dialogText ?? t('confirmationDialog.dialogText')}</DialogContentText>
+        <DialogContentText data-testid="confirmationDialog-text">{dialogText ?? t('confirmationDialog.dialogText')}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={undo} color="primary">
+        <Button onClick={undo} color="primary" data-testid="confirmationDialog-cancel">
           {cancelButtonText ?? t('confirmationDialog.cancelButtonText')}
         </Button>
-        <Button onClick={confirm} color="primary">
+        <Button onClick={confirm} color="primary" data-testid="confirmationDialog-confirm">
           {confirmButtonText ?? t('confirmationDialog.confirmButtonText')}
         </Button>
       </DialogActions>

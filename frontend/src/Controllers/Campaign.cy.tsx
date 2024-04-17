@@ -23,12 +23,14 @@ describe('<Campaign />', () => {
     cy.get("[data-testid='campaign-list-create-text']").should('contain', en.campaign.new)
     cy.get("[data-testid='campaign-list-home-title']").should('contain', en.campaign.home)
     cy.get("[data-testid='campaign-list-logout-text']").should('contain', en.campaign.logout)
+    cy.get("[data-testid='campaign-list-user']").should('contain', en.campaign.user)
   })
 
   it('has correct button styles', () => {
     cy.get("[data-testid='campaign-list-create']").should('exist').and('be.visible')
     cy.get("[data-testid='campaign-list-home']").should('exist').and('be.visible')
     cy.get("[data-testid='campaign-list-logout']").should('exist').and('be.visible')
+    cy.get("[data-testid='campaign-list-user']").should('exist').and('be.visible')
   })
 
   it('has correct CSS styles', () => {
@@ -48,6 +50,8 @@ describe('<Campaign />', () => {
       .and('have.css', 'justify-content', 'space-between')
     cy.get("[data-testid='campaign-list-logout']").should('have.css', 'width', '250px')
       .and('have.css', 'justify-content', 'space-between')
+    cy.get("[data-testid='campaign-list-user']").should('have.css', 'width', '250px')
+      .and('have.css', 'justify-content', 'space-between')
   })
 
   it('displays correct icons', () => {
@@ -55,5 +59,6 @@ describe('<Campaign />', () => {
     cy.get("[data-testid='campaign-list-create'] svg").should('exist')
     cy.get("[data-testid='campaign-list-home'] svg").should('exist')
     cy.get("[data-testid='campaign-list-logout'] svg").should('exist')
+    cy.get("[data-testid='campaign-list-user'] svg").should('exist')
   })
 })

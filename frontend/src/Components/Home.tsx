@@ -47,7 +47,13 @@ const Home: FC<HomeProps> = ({ userInfo, toCampaigns }) => {
       </Box>
       <Box display='flex' flexDirection='column' gap='1vh'>
         <Typography alignSelf='center'>{userInfo.master.campaigns === 0 ? t('home.becomeMaster') : t('home.Master')}</Typography>
-        <Button variant="contained" endIcon={<FontAwesomeIcon icon={faDungeon} />} sx={{ boxShadow: 10 }} onClick={toCampaigns}>
+        <Button
+          variant="contained"
+          endIcon={<FontAwesomeIcon icon={faDungeon} />}
+          sx={{ boxShadow: 10 }}
+          onClick={toCampaigns}
+          data-testid="browse-campaigns"
+        >
           {userInfo.master.campaigns === 0
             ? t('home.emptyMaster')
             : `${t('home.masterButton1')} ${userInfo.master.campaigns} ${t('home.masterButton2')}`
