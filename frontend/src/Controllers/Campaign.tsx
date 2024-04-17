@@ -21,10 +21,12 @@ import { clearPlayerState } from '../Store/player'
 import { useNavigate } from 'react-router-dom'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { InfoOutlined } from '@mui/icons-material'
 import HomeIcon from '@mui/icons-material/Home'
 import LogoutIcon from '@mui/icons-material/Logout'
 import NewIcon from '@mui/icons-material/FiberNew'
 import useGoogleLoginWithRedux from '../Hooks/useGoogleLoginWithRedux'
+import UserInfo from './UserInfo'
 import ImageLayout from '../Components/ImageLayout'
 import Loader from '../Components/Loader'
 import ErrorComponent from '../Components/Error'
@@ -43,6 +45,7 @@ const Campaign: FC = () => {
   const navigate = useNavigate()
 
   const [createCampaign, setCreateCampaign] = useState<boolean>(false)
+  const [userInfo, setUserInfo] = useState<boolean>(false)
   const [editCampaign, setEditCampaign] = useState<number>(0)
   const [deleteCampaign, setDeleteCampaign] = useState<number>(0)
   const [activeCampaign, setActiveCampaign] = useState<number>(0)
@@ -90,6 +93,14 @@ const Campaign: FC = () => {
   const goToHome = useCallback(() => {
     navigate('/home')
   }, [navigate])
+
+  const openUserInfo = useCallback(() => {
+    setUserInfo(true)
+  }, [])
+
+  const closeUserInfo = useCallback(() => {
+    setUserInfo(false)
+  }, [])
 
   const handleLogOut = useCallback(() => {
     dispatch(clearUserState())
@@ -191,6 +202,10 @@ const Campaign: FC = () => {
       open={Boolean(deleteCampaign)}
       title={t('campaign.deleteTitle')}
       dialogText={`${t('campaign.deleteText')}'${deleteCampaign}'`}
+    />
+    <UserInfo
+      onClose={closeUserInfo}
+      open={userInfo}
     />
     <CustomOptionsModal
       onClose={closeCreateCampaign}
@@ -310,6 +325,33 @@ const Campaign: FC = () => {
             }
           </Box>
           <Box display='flex' flexDirection='column'>
+            <Divider />
+            <ListItemButton
+              sx={{
+                display: 'flex',
+                width: '100%',
+                '&:hover': {
+                  backgroundColor: theme.palette.primary.light,
+                  color: theme.palette.primary.contrastText,
+                  '& .MuiListItemIcon-root': {
+                    color: theme.palette.primary.contrastText
+                  }
+                },
+                justifyContent: 'space-between'
+              }}
+              onClick={openUserInfo}
+              data-testid="campaign-list-user"
+            >
+              <ListItemText data-testid="campaign-list-user-title">{t('campaign.user')}</ListItemText>
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  color: theme.palette.primary.main
+                }}
+              >
+                <InfoOutlined />
+              </ListItemIcon>
+            </ListItemButton>
             <Divider />
             <ListItemButton
               sx={{
