@@ -112,7 +112,7 @@ const UserInfo: FC<UserInfoProps> = ({
             onClick={openDelete}
             variant="contained"
             color="primary"
-            data-testid="update-username-button"
+            data-testid="delete-user-button"
             sx={{ mt: 3, fontWeight: 800, boxShadow: 10 }}
             endIcon={<FontAwesomeIcon icon={faUserXmark} />}
             size='large'

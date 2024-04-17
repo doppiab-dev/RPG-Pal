@@ -1,4 +1,4 @@
-import { checkIfThereIsError, checkIfWeAreInHomeComponent, checkIfWeAreInLoginComponent, checkIfWeAreInSetUsernameComponent, loginBeforeEach, logout, selectAValidUsername, selectAnInvalidUsername } from "./utils"
+import { checkIfThereIsError, checkIfWeAreInLoginComponent, checkIfWeAreInSetUsernameComponent, deleteUserAndLogout, goToCampaign, loginBeforeEach, selectAValidUsername, selectAnInvalidUsername } from "./utils"
 
 describe('login-setUsername-logout', function () {
   loginBeforeEach()
@@ -7,8 +7,8 @@ describe('login-setUsername-logout', function () {
     selectAnInvalidUsername()
     checkIfThereIsError()
     selectAValidUsername()
-    checkIfWeAreInHomeComponent()
-    logout()
+    goToCampaign()
+    deleteUserAndLogout()
     checkIfWeAreInLoginComponent()
   })
 })

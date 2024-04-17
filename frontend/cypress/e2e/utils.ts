@@ -22,8 +22,10 @@ export const setViewportAndStart = () => {
   cy.visit("http://localhost:3000")
 }
 
-const invalidUsername = 'pippo'
+const invalidUsername = 'Pippo'
 const validUsername = 'test'
+const invalidCampaign = '<>'
+const validcampaign = 'test'
 
 export const selectAnInvalidUsername = () => {
   cy.get("[data-testid='username-text']").should('exist').and('be.visible').type(invalidUsername).wait(100)
@@ -50,4 +52,43 @@ export const logout = () => {
 
 export const checkIfWeAreInLoginComponent = () => {
   cy.get("[data-testid='login-component']").should('exist').and('be.visible')
+}
+
+export const goToCampaign = () => {
+  cy.get("[data-testid='browse-campaigns']").should('exist').and('be.visible').click().wait(200)
+}
+
+export const deleteUserAndLogout = () => {
+  cy.get("[data-testid='campaign-list-user']").should('exist').and('be.visible').click().wait(200)
+  cy.get("[data-testid='delete-user-button']").should('exist').and('be.visible').click().wait(200)
+  cy.get("[data-testid='confirmationDialog-confirm']").should('exist').and('be.visible').click().wait(400)
+}
+
+export const openCampaign = () => {
+  cy.get("[data-testid='campaign-list-create']").should('exist').and('be.visible').click().wait(200)
+  cy.get('button[type="submit"]').click().wait(500)
+}
+
+export const checkInvalidCampaign = () => {
+  cy.get("[data-testid='first-text']").should('exist').and('be.visible').click().wait(200).type(invalidCampaign).wait(100)
+  cy.get('.MuiFormHelperText-root').should('exist')
+}
+export const createCampaign = () => {
+  cy.get("[data-testid='first-text']")
+    .type('{selectall}', { delay: 50 })
+    .type('{backspace}', { delay: 50 })
+    .type('{backspace}', { delay: 50 })
+    .wait(200).click().wait(200).type(validcampaign).wait(100)
+  cy.get('button[type="submit"]').click().wait(500)
+}
+
+export const editCampaign = () => {
+  cy.get("[data-testid='edit-campaign-button']").should('exist').and('be.visible').click().wait(200)
+  cy.get("[data-testid='first-text']").should('exist').and('be.visible').click().wait(200).type('a').wait(100)
+  cy.get('button[type="submit"]').click().wait(500)
+}
+
+export const deleteCampaign = () => {
+  cy.get("[data-testid='delete-campaign-button']").should('exist').and('be.visible').click().wait(200)
+  cy.get("[data-testid='confirmationDialog-confirm']").should('exist').and('be.visible').click().wait(200)
 }

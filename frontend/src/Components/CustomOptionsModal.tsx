@@ -85,6 +85,7 @@ const CustomTextModal: FC<CustomTextModalProps> = ({
                 fullWidth
                 error={Boolean(firstError)}
                 helperText={firstError?.message ?? ''}
+                data-testid='first-text'
               />
             )}
           />
