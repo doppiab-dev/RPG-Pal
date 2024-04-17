@@ -12,6 +12,7 @@ export interface Connector {
   getUserInfo: (userId: string) => Promise<UserInfoDTO>
   checkUsername: (username: string) => Promise<boolean>
   upsetUsername: (username: string, userId: string) => Promise<void>
+  deleteUser: (userId: string) => Promise<void>
   getCampaigns: (userId: string) => Promise<GetCampaignsDTO>
   createCampaign: (userId: string, name: string) => Promise<CampaignDTO>
   editCampaign: (id: string, userId: string, name: string, status: CampaignStatus) => Promise<void>

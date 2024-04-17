@@ -61,8 +61,19 @@ export const upsetUsername = async (username: string, google_id: string): Promis
   VALUES ($1, $2)
   ON CONFLICT (google_id) DO UPDATE
   SET username = EXCLUDED.username;
-`
+  `
   const upsertUsernameValues = [username.toLocaleLowerCase(), google_id]
   await client.query(upsertUsernameQuery, upsertUsernameValues)
+  client.release()
+}
+
+export const deleteUser = async (google_id: string): Promise<void> => {
+  const client = await dbConfig.connect()
+  const deleteUserQuery = `
+  DELETE FROM ${tableUsers}
+  WHERE google_id = $1;
+  `
+  const deleteUserValues = [google_id]
+  await client.query(deleteUserQuery, deleteUserValues)
   client.release()
 }
