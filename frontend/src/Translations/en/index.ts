@@ -73,8 +73,11 @@ const confirmationDialog = {
 }
 const userInfo = {
   title: 'User Info',
-  text: 'We do not store any sensible information (your email and/or your personal data) in our database.'
-
+  text: 'We do not store any sensible information (your email and/or your personal data) in our database.',
+  changeUsername: 'Do you want to change your Username?',
+  deleteTitle: 'Delete all your data',
+  delete: 'Delete',
+  deleteText: 'Do you want to delete your user? This will delete all your campaigns and their contents (PNG, story, etc.)'
 }
 
 const en = {
