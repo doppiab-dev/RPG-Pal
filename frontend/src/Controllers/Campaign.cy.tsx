@@ -5,6 +5,10 @@ import en from '../Translations/en'
 
 describe('<Campaign />', () => {
   const { height, width }: { height: number, width: number } = getViewport()
+  const checkCss = (id: string): Cypress.Chainable<JQuery<HTMLElement>> =>
+    cy.get(`[data-testid=${id}]`)
+      .should('have.css', 'width', '250px')
+      .and('have.css', 'justify-content', 'space-between')
 
   beforeEach(() => {
     cy.viewport(width, height).wait(500)
@@ -40,18 +44,12 @@ describe('<Campaign />', () => {
       .and('have.css', 'width', '250px')
       .and('have.css', 'color', hexToRgb(theme.palette.primary.main))
       .and('have.css', 'background-color', hexToRgb(theme.palette.background.paper))
-    cy.get("[data-testid='campaign-list']").should('have.css', 'width', '250px')
-      .and('have.css', 'height', '884px')
-    cy.get("[data-testid='campaign-list-title']").should('have.css', 'font-size', '14px')
-      .and('have.css', 'letter-spacing', '0')
-    cy.get("[data-testid='campaign-list-create']").should('have.css', 'width', '250px')
-      .and('have.css', 'justify-content', 'space-between')
-    cy.get("[data-testid='campaign-list-home']").should('have.css', 'width', '250px')
-      .and('have.css', 'justify-content', 'space-between')
-    cy.get("[data-testid='campaign-list-logout']").should('have.css', 'width', '250px')
-      .and('have.css', 'justify-content', 'space-between')
-    cy.get("[data-testid='campaign-list-user']").should('have.css', 'width', '250px')
-      .and('have.css', 'justify-content', 'space-between')
+    cy.get("[data-testid='campaign-list']").should('have.css', 'width', '250px').and('have.css', 'height', '884px')
+    cy.get("[data-testid='campaign-list-title']").should('have.css', 'font-size', '14px').and('have.css', 'letter-spacing', '0')
+    checkCss('campaign-list-create')
+    checkCss('campaign-list-home')
+    checkCss('campaign-list-logout')
+    checkCss('campaign-list-user')
   })
 
   it('displays correct icons', () => {

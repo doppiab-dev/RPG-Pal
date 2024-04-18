@@ -12,8 +12,6 @@ describe('<CampaignItem />', () => {
     status: 'active'
   } satisfies Campaign
 
-  console.log(`${en.campaign.status} ${en.campaign[campaign.status]}`)
-
   beforeEach(() => {
     cy.viewport(width, height).wait(500)
     cy.mount(

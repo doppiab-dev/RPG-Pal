@@ -129,7 +129,7 @@ const Campaign: FC = () => {
   }, [])
 
   const setCampaign = useCallback((id: number) => {
-    console.log('qui cambio di pagina', id)
+    // qui cambio di pagina
     setActiveCampaign(id)
   }, [])
 
