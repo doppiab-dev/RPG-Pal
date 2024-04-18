@@ -27,7 +27,7 @@ const useDebouncerValidation = (
         setErrorMessage()
       }
     }
-  }, 300), [token, validateFunction, setErrorMessage, username])
+  }, 500), [token, validateFunction, setErrorMessage, username])
 
   const handleTextChange = useCallback(async (value: string): Promise<void> => {
     await debouncedValidateUsername(value)
