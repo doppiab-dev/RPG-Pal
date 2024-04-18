@@ -62,8 +62,8 @@ const campaign = {
   active: 'Active',
   on_hold: 'On Hold',
   ended: 'Ended',
-  deleteTitle: 'Player Delete',
-  deleteText: 'Are you sure you want to delete this Player? Player id: '
+  deleteTitle: 'Campaign Delete',
+  deleteText: 'Are you sure you want to delete this Campaign? This action cannot be undone, Campaign id: '
 }
 const confirmationDialog = {
   title: 'Confirm Action',
