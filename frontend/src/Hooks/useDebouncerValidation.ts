@@ -11,7 +11,13 @@ const useDebouncerValidation = (
   setErrorMessage: (msg?: string) => void,
   username: string
 ): UseDebouncerValidation => {
-  const debouncedValidateUsername = debounce(async (value: string) => {
+  /**
+   * Disabling react-hooks/exhaustive-deps because of this eslint error:
+   * React Hook useCallback received a function whose dependencies are unknown. Pass an inline function instead.
+   * We can't pass debounce inline, because it's coming from lodash
+  */
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncedValidateUsername = useCallback(debounce(async (value: string) => {
     if (username !== '' && value.toLocaleLowerCase() === username.toLocaleLowerCase()) {
       setErrorMessage("It's already your username")
     } else {
@@ -20,7 +26,7 @@ const useDebouncerValidation = (
         setErrorMessage()
       }
     }
-  }, 300)
+  }, 300), [token, validateFunction, setErrorMessage, username])
 
   const handleTextChange = useCallback(async (value: string): Promise<void> => {
     await debouncedValidateUsername(value)
