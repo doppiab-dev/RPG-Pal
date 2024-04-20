@@ -19,6 +19,7 @@ export default defineConfig({
     setupNodeEvents(on, config) {
     },
     experimentalMemoryManagement: true,
+    experimentalStudio: true,
     numTestsKeptInMemory: 2,
   },
 });
