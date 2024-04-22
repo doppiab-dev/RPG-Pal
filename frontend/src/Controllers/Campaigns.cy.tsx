@@ -1,6 +1,6 @@
 import { getViewport, hexToRgb, theme } from '../Cypress/utils'
 import TestContainer from '../Cypress/TestContainer'
-import Campaign from './Campaign'
+import Campaigns from './Campaigns'
 import en from '../Translations/en'
 
 describe('<Campaign />', () => {
@@ -14,7 +14,7 @@ describe('<Campaign />', () => {
     cy.viewport(width, height).wait(500)
     cy.mount(
       <TestContainer>
-        <Campaign />
+        <Campaigns />
       </TestContainer>
     )
   })

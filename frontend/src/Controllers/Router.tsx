@@ -7,7 +7,7 @@ import { mainColor, secondaryColor } from '../Utils/config'
 import ErrorBoundary from './Error'
 import Login from './Login'
 import Home from './Home'
-import Campaign from './Campaign'
+import Campaigns from './Campaigns'
 
 const theme = createTheme({
   palette: {
@@ -29,7 +29,7 @@ const Router: FC = () => {
         <Routes>
           <Route path="/login" element={isUserLoggedIn ? <Navigate to="/" /> : <Login />} />
           <Route path="/" element={isUserLoggedIn ? <Home /> : <Navigate to="/login" />} />
-          <Route path="/campaign" element={isUserLoggedIn ? <Campaign /> : <Navigate to="/login" />} />
+          <Route path="/campaign" element={isUserLoggedIn ? <Campaigns /> : <Navigate to="/login" />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </ThemeProvider>
