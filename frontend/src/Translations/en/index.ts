@@ -79,6 +79,10 @@ const userInfo = {
   delete: 'Delete',
   deleteText: 'Do you want to delete your user? This will delete all your campaigns and their contents (PNG, story, etc.)'
 }
+const activeCampaign = {
+  description: 'Description con bottone',
+  body: 'body'
+}
 
 const en = {
   error,
@@ -88,7 +92,8 @@ const en = {
   username,
   campaign,
   confirmationDialog,
-  userInfo
+  userInfo,
+  activeCampaign
 }
 
 export default en
