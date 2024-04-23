@@ -15,14 +15,17 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       <Divider />
     </Box>
     <Box width='98%' alignSelf='center' flexDirection='column' sx={{ overflowY: 'auto', overflowX: 'hidden' }}>
-      <Box display='flex' width='100%' flexDirection='column' height='300px'>
+      <Box display='flex' width='100%' flexDirection='column' height='300px' sx={{ overflowY: 'auto', overflowX: 'hidden' }}>
         <Typography display='flex'>{t('activeCampaign.description')}</Typography>
       </Box>
-      <Box display='flex' flexDirection='column' height='300px'>
+      <Divider />
+      <Box display='flex' flexDirection='column' height='300px' sx={{ overflowY: 'auto', overflowX: 'hidden' }}>
         <Typography display='flex'>{t('activeCampaign.body')}</Typography>
       </Box>
-      <Box display='flex' flexDirection='column' height='1500px'>
-        <Typography display='flex'>{t('activeCampaign.body')}</Typography>
+      <Divider />
+      <Box display='flex' flexDirection='column' >
+        <Typography display='flex'>{t('lorem.ipsum')}</Typography>
+        <Typography display='flex'>{t('lorem.bonus')}</Typography>
       </Box>
     </Box>
   </Stack>
