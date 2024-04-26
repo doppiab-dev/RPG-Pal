@@ -3,8 +3,8 @@ exports.shorthands = undefined;
 exports.up = pgm => {
   pgm.createType('places_of_interest_types', ['world', 'continent', 'state', 'region', 'area', 'city', 'camp', 'neighborhood', 'point']),
   pgm.addColumn('campaigns', {
-    description: { type: 'text', notNull: true, default: 'to be updated' },
-    plot: { type: 'text', notNull: true, default: 'to be updated' }
+    description: { type: 'text' },
+    plot: { type: 'text' }
   })
   pgm.addColumn('groups', {
     name: { type: 'text', notNull: true, default: 'to be renamed' }

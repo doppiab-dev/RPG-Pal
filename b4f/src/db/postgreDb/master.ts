@@ -84,6 +84,7 @@ export const deleteCampaign = async (id: string, user_id: string): Promise<void>
 export const getCampaign = async (id: string, user_id: string): Promise<CampaignDTO> => {
   const numeric_id = Number(id)
   if (isNaN(numeric_id)) throw new Error('fetch failed, id not valid.')
+
   const client = await dbConfig.connect()
   const campaignQuery = `
   SELECT c.*, g.id AS group_id, g.name AS group_name
@@ -108,15 +109,15 @@ export const getCampaign = async (id: string, user_id: string): Promise<Campaign
     ? null
     : {
       id: poi.rows[0].id,
-      name: poi.rows[0].description,
+      name: poi.rows[0].name,
       place: poi.rows[0].place
     } satisfies CampaignPlaceOfInterestDTO
 
   return {
     id: row.id,
     name: row.name,
-    description: row.description,
-    plot: row.plot,
+    description: row.description ?? '',
+    plot: row.plot ?? '',
     firstPOI,
     groups: campaign.rows.map(row => ({ id: row.group_id, name: row.group_name }))
   }
