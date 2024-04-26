@@ -16,6 +16,7 @@ exports.up = pgm => {
     parent: { type: 'integer', notNull: false, references: 'places_of_interest(id)' },
     children: { type: 'integer[]', notNull: false },
     description: { type: 'text', notNull: false },
+    name: { type: 'text', notNull: true },
     place: {
       type: 'places_of_interest_types',
       notNull: true,
@@ -29,4 +30,5 @@ exports.down = pgm => {
   pgm.dropColumn('campaigns', 'plot')
   pgm.dropColumn('groups', 'name')
   pgm.dropTable('places_of_interest')
+  pgm.dropType('places_of_interest_types')
 }

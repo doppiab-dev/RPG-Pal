@@ -23,9 +23,9 @@ export enum CampaignTypeEnum {
   'ended' = 'ended'
 }
 
-export type GetCampaignsDTO = CampaignDTO[]
+export type GetCampaignsDTO = ListCampaignDTO[]
 
-export interface CampaignDTO {
+export interface ListCampaignDTO {
   id: number
   name: string
   groups: number
@@ -39,4 +39,37 @@ export interface CreateCampaignBody {
 export interface EditCampaignBody {
   name: string
   status: CampaignStatus
+}
+
+interface CampaignGroupDTO {
+  id: number
+  name: string
+}
+
+export interface CampaignDTO {
+  id: number
+  name: string
+  description: string
+  plot: string
+  firstPOI: CampaignPlaceOfInterestDTO | null
+  groups: CampaignGroupDTO[]
+}
+
+export type PlacesOfInterestType = keyof typeof PlacesOfInterestEnum
+export enum PlacesOfInterestEnum {
+  'world' = 'world',
+  'continent' = 'continent',
+  'state' = 'state',
+  'region' = 'region',
+  'area' = 'area',
+  'city' = 'city',
+  'camp' = 'camp',
+  'neighborhood' = 'neighborhood',
+  'point' = 'point'
+}
+
+export interface CampaignPlaceOfInterestDTO {
+  id: number
+  name: string
+  place: PlacesOfInterestType
 }
