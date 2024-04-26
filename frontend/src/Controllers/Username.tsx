@@ -68,7 +68,7 @@ const Username: FC<UsernameProps> = ({ children, username = '', style }) => {
   }, [dispatch, setError, token])
 
   const handleClearUsername = useCallback(() => {
-    setValue('username', username)
+    setValue('username', capitalize(username))
   }, [setValue, username])
 
   return <form
