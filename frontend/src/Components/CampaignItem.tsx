@@ -26,7 +26,7 @@ const CampaignItem: FC<CampaignItemProps> = ({ campaign, openEditCampaign, openD
         gap: '1vw',
         color: campaign.id === activeCampaign
           ? theme.palette.primary.contrastText
-          : theme.palette.text.primary,
+          : theme.palette.primary.main,
         backgroundColor: campaign.id === activeCampaign
           ? theme.palette.primary.main
           : 'transparent',
@@ -65,7 +65,7 @@ const CampaignItem: FC<CampaignItemProps> = ({ campaign, openEditCampaign, openD
           minWidth: 0,
           color: campaign.id === activeCampaign
             ? theme.palette.primary.contrastText
-            : theme.palette.text.primary
+            : theme.palette.primary.main
         }}
         onClick={(e) => {
           e.stopPropagation()
@@ -83,7 +83,7 @@ const CampaignItem: FC<CampaignItemProps> = ({ campaign, openEditCampaign, openD
           minWidth: 0,
           color: campaign.id === activeCampaign
             ? theme.palette.primary.contrastText
-            : theme.palette.text.primary
+            : theme.palette.primary.main
         }}
         onClick={(e) => {
           e.stopPropagation()
