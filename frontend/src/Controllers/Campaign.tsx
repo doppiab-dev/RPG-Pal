@@ -1,6 +1,11 @@
-import { type FC } from 'react'
+import { useEffect, type FC } from 'react'
 import { Box, Divider, Stack, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import { parseErrorMessage } from '../Utils/f'
+import { fetchACampaign, selectCampaignInfoStatus, setErrorMessage } from '../Store/master'
+import { useAppDispatch, useAppSelector } from '../Utils/store'
+import { selectToken } from '../Store/users'
+import Loader from '../Components/Loader'
 
 interface CampaignProps {
   activeCampaign: number
@@ -8,6 +13,27 @@ interface CampaignProps {
 
 const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
+
+  const token = useAppSelector(selectToken)
+  const campaignInfoStatus = useAppSelector(selectCampaignInfoStatus)
+
+  useEffect(() => {
+    (async () => {
+      try {
+        await dispatch(fetchACampaign({ token, id: activeCampaign }))
+      } catch (e) {
+        const msg = parseErrorMessage((e))
+        dispatch(setErrorMessage(msg))
+      }
+    })()
+      .catch(e => {
+        const msg = parseErrorMessage((e))
+        dispatch(setErrorMessage(msg))
+      })
+  }, [token, dispatch, activeCampaign])
+
+  if (campaignInfoStatus === 'loading') return <Loader />
 
   return <Stack display='flex' width='calc(100% - 250px)'>
     <Box display='flex' width='100%' flexDirection='column' boxShadow={1}>

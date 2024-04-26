@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { formatThunkError, masterInitialState } from '../Utils/store'
-import { campaigns, createCampaign, deleteCampaign, editCampaign } from '../Api/master'
+import { campaign, campaigns, createCampaign, deleteCampaign, editCampaign } from '../Api/master'
 
 export const retrieveMasterInfo = createAsyncThunk(
   'retrieveMasterInfo',
@@ -66,6 +66,24 @@ export const deleteACampaign = createAsyncThunk(
       return { id }
     } catch (e) {
       const error = formatThunkError(e, 'deleteACampaign error')
+
+      return thunkApi.rejectWithValue(error)
+    }
+  }
+)
+
+type FetchACampaign = Authenticated & {
+  id: number
+}
+
+export const fetchACampaign = createAsyncThunk(
+  'fetchACampaign',
+  async ({ token, id }: FetchACampaign, thunkApi) => {
+    try {
+      const response = await campaign(token, id)
+      return response.data
+    } catch (e) {
+      const error = formatThunkError(e, 'fetchACampaign error')
 
       return thunkApi.rejectWithValue(error)
     }
@@ -146,6 +164,19 @@ export const master = createSlice({
       state.campaigns = campaigns.filter(campaign => campaign.id !== id)
       state.campaignsInfoStatus = 'success'
     })
+    builder.addCase(fetchACampaign.pending, (state) => {
+      state.campaignInfoStatus = 'loading'
+    })
+    builder.addCase(fetchACampaign.rejected, (state, action) => {
+      state.errorMessage = Boolean(action.error) && typeof action.error === 'string'
+        ? action.error
+        : action.payload as string
+      state.campaignInfoStatus = 'error'
+    })
+    builder.addCase(fetchACampaign.fulfilled, (state, action) => {
+      state.campaign = action.payload
+      state.campaignInfoStatus = 'success'
+    })
   }
 })
 
@@ -157,4 +188,5 @@ export const {
 
 export const selectCampaigns = (state: State): State['masterInfo']['campaigns'] => state.masterInfo.campaigns
 export const selectCampaignsInfoStatus = (state: State): State['masterInfo']['campaignsInfoStatus'] => state.masterInfo.campaignsInfoStatus
+export const selectCampaignInfoStatus = (state: State): State['masterInfo']['campaignInfoStatus'] => state.masterInfo.campaignInfoStatus
 export const selectErrorMessage = (state: State): State['masterInfo']['errorMessage'] => state.masterInfo.errorMessage

@@ -47,6 +47,23 @@ interface EditCampaignBody {
   name: string
   status: CampaignStatus
 }
+interface CampaignGroupDTO {
+  id: number
+  name: string
+}
+interface CampaignPlaceOfInterestDTO {
+  id: number
+  name: string
+  place: PlacesOfInterestType
+}
+interface CampaignDTO {
+  id: number
+  name: string
+  description: string
+  plot: string
+  firstPOI: CampaignPlaceOfInterestDTO | null
+  groups: CampaignGroupDTO[]
+}
 /**
  * Redux
  */
@@ -84,8 +101,10 @@ interface PlayerStore {
 }
 interface MasterStore {
   campaigns: Campaigns
+  campaign: Campaign
   campaignsInfoStatus: Status
   errorMessage: string
+  campaignInfoStatus: Status
 }
 interface Authenticated {
   token: string
@@ -98,13 +117,13 @@ interface UserInfo {
 interface Username {
   username: string | null
 }
-interface Campaign {
+interface CampaignListItem {
   id: number
   name: string
   groups: number
   status: CampaignStatus
 }
-type Campaigns = Campaign[]
+type Campaigns = CampaignListItem[]
 interface Character {
   name: string
   level: number
@@ -113,6 +132,15 @@ interface Character {
 }
 type Characters = Character[]
 type CampaignStatus = 'active' | 'on_hold' | 'ended'
+type PlacesOfInterestType = 'world' | 'continent' | 'state' | 'region' | 'area' | 'city' | 'camp' | 'neighborhood' | 'point'
+interface Campaign {
+  id: number
+  name: string
+  description: string
+  plot: string
+  firstPOI: CampaignPlaceOfInterestDTO | null
+  groups: CampaignGroupDTO[]
+}
 /**
  * Utils
  */

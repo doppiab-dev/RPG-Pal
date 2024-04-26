@@ -7,7 +7,7 @@ import EditIcon from '@mui/icons-material/ModeEditOutlineOutlined'
 import DeleteIcon from '@mui/icons-material/DeleteForever'
 
 interface CampaignItemProps {
-  campaign: Campaign
+  campaign: CampaignListItem
   activeCampaign: number
   openEditCampaign: (id: number) => void
   openDeleteCampaign: (id: number) => void

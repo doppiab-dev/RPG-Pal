@@ -13,3 +13,6 @@ export const editCampaign = async (token: string, name: string, status: Campaign
 
 export const deleteCampaign = async (token: string, id: number): Promise<AxiosResponse<void>> =>
   await axiosClient.delete(`/master/campaign/${id}`, createApiHeaders(token))
+
+export const campaign = async (token: string, id: number): Promise<AxiosResponse<CampaignDTO>> =>
+  await axiosClient.get(`/master/campaign/${id}`, createApiHeaders(token))

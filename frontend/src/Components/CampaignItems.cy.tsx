@@ -10,7 +10,7 @@ describe('<CampaignItem />', () => {
     id: 13,
     name: 'sad',
     status: 'active'
-  } satisfies Campaign
+  } satisfies CampaignListItem
 
   beforeEach(() => {
     cy.viewport(width, height).wait(500)
