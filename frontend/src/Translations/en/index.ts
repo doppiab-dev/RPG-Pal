@@ -80,7 +80,7 @@ const userInfo = {
   deleteText: 'Do you want to delete your user? This will delete all your campaigns and their contents (PNG, story, etc.)'
 }
 const activeCampaign = {
-  description: 'Description con bottone',
+  description: 'Description Placeholder',
   campaignManagment: 'Manage your Campaign',
   campaignSetting: 'Manage Campaign Setting'
 }

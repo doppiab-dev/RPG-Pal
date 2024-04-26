@@ -27,7 +27,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
         <Typography display='flex'>{t('activeCampaign.campaignSetting')}</Typography>
       </Box>
       <Divider />
-      <Box display='flex' flexDirection='column' >
+      <Box display='flex' flexDirection='column'>
         <Typography display='flex'>{t('lorem.ipsum')}</Typography>
       </Box>
     </Box>

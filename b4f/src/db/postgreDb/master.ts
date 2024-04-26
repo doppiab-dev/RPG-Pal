@@ -22,7 +22,7 @@ export const getCampaigns = async (user_id: string): Promise<GetCampaignsDTO> =>
   }
 
   return campaigns.rows.map(campaign => ({
-    groups: campaign.groups,
+    groups: Number(campaign.groups),
     id: campaign.id,
     name: campaign.name,
     status: campaign.status

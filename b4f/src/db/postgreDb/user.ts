@@ -30,8 +30,8 @@ export const getUserInfo = async (user_id: string): Promise<UserInfoDTO> => {
 
   return {
     username: userInfo.username ?? null,
-    master: { campaigns: userInfo.campaigns ?? 0 },
-    player: { characters: userInfo.characters ?? 0 }
+    master: { campaigns: userInfo.campaigns != null ? Number(userInfo.campaigns) : 0 },
+    player: { characters: userInfo.characters != null ? Number(userInfo.characters) : 0 }
   }
 }
 
