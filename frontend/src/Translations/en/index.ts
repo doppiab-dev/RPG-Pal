@@ -80,9 +80,16 @@ const userInfo = {
   deleteText: 'Do you want to delete your user? This will delete all your campaigns and their contents (PNG, story, etc.)'
 }
 const activeCampaign = {
-  description: 'Description Placeholder',
-  campaignManagment: 'Manage your Campaign',
-  campaignSetting: 'Manage Campaign Setting'
+  description: 'Your campaign has no description',
+  descriptionButton: 'Add Description',
+  showMore: 'Read More',
+  plot: 'Your campaign has no plot',
+  plotButton: 'Add Plot',
+  firstPOI: 'Your campaign has no point of interest',
+  addLocationButton: 'Add Location',
+  noGroups: 'Your campaign has no group linked',
+  groups: "Explore your 'group related story' clicking buttons below",
+  addGroupButton: 'Add Group'
 }
 const lorem = {
   ipsum: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',

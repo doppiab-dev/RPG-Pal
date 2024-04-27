@@ -119,6 +119,6 @@ export const getCampaign = async (id: string, user_id: string): Promise<Campaign
     description: row.description ?? '',
     plot: row.plot ?? '',
     firstPOI,
-    groups: campaign.rows.map(row => ({ id: row.group_id, name: row.group_name }))
+    groups: row.group_id === null ? [] : campaign.rows.map(row => ({ id: row.group_id, name: row.group_name }))
   }
 }

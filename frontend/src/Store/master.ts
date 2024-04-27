@@ -190,3 +190,4 @@ export const selectCampaigns = (state: State): State['masterInfo']['campaigns'] 
 export const selectCampaignsInfoStatus = (state: State): State['masterInfo']['campaignsInfoStatus'] => state.masterInfo.campaignsInfoStatus
 export const selectCampaignInfoStatus = (state: State): State['masterInfo']['campaignInfoStatus'] => state.masterInfo.campaignInfoStatus
 export const selectErrorMessage = (state: State): State['masterInfo']['errorMessage'] => state.masterInfo.errorMessage
+export const selectCampaign = (state: State): State['masterInfo']['campaign'] => state.masterInfo.campaign

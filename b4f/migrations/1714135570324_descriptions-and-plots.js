@@ -1,7 +1,7 @@
 exports.shorthands = undefined;
 
 exports.up = pgm => {
-  pgm.createType('places_of_interest_types', ['world', 'continent', 'state', 'region', 'area', 'city', 'camp', 'neighborhood', 'point']),
+  pgm.createType('places_of_interest_types', ['world', 'continent', 'region', 'area', 'city', 'camp', 'neighborhood', 'point']),
   pgm.addColumn('campaigns', {
     description: { type: 'text' },
     plot: { type: 'text' }
@@ -20,7 +20,7 @@ exports.up = pgm => {
     place: {
       type: 'places_of_interest_types',
       notNull: true,
-      check: "place IN ('world', 'continent', 'state', 'region', 'area', 'city', 'camp', 'neighborhood', 'point')"
+      check: "place IN ('world', 'continent', 'region', 'area', 'city', 'camp', 'neighborhood', 'point')"
     }
   })
 }
