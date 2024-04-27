@@ -12,6 +12,9 @@ interface EditCampaignInputs {
   campaign: string
   status: string
 }
+interface FormDataText {
+  text: string
+}
 /**
  * API
 */

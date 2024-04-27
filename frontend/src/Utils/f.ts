@@ -63,3 +63,10 @@ export enum CampaignTypeEnum {
   'on_hold' = 'on_hold',
   'ended' = 'ended'
 }
+
+export const shrinkText = (text: string): string => {
+  const words = text.split(' ')
+  return words.length <= 200
+    ? text
+    : `${words.slice(0, 200).join(' ')}…`
+}

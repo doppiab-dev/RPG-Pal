@@ -88,7 +88,7 @@ const activeCampaign = {
   firstPOI: 'Your campaign has no point of interest',
   addLocationButton: 'Add Location',
   noGroups: 'Your campaign has no group linked',
-  groups: "Explore your 'group related story' clicking buttons below",
+  groups: 'Explore your "group related" story clicking buttons below',
   addGroupButton: 'Add Group'
 }
 const lorem = {
