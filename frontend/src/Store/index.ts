@@ -11,12 +11,8 @@ import { user } from './users'
 import { player } from './player'
 import { master } from './master'
 
-const setupStore = (state: State): EnhancedStore<{
-  userInfo: UserStore
-  masterInfo: MasterStore
-  playerInfo: PlayerStore
-}, UnknownAction, Tuple<[StoreEnhancer<{
-  dispatch: ThunkDispatch<{ userInfo: UserStore, masterInfo: MasterStore, playerInfo: PlayerStore }, undefined, UnknownAction>
+const setupStore = (state: State): EnhancedStore<State, UnknownAction, Tuple<[StoreEnhancer<{
+  dispatch: ThunkDispatch<State, undefined, UnknownAction>
 }>, StoreEnhancer]>> =>
   configureStore({
     reducer: {

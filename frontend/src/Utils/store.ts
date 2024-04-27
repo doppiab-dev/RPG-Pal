@@ -76,7 +76,7 @@ export const masterInitialState: MasterStore = {
     name: '',
     description: '',
     plot: '',
-    firstPOI: null,
+    placesOfInterest: [],
     groups: []
   },
   campaignsInfoStatus: 'idle',

@@ -85,7 +85,6 @@ const activeCampaign = {
   showMore: 'Read More',
   plot: 'Your campaign has no plot',
   plotButton: 'Add Plot',
-  firstPOI: 'Your campaign has no point of interest',
   addLocationButton: 'Add Location',
   noGroups: 'Your campaign has no group linked',
   groups: 'Explore your "group related" story clicking buttons below',

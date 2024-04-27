@@ -58,13 +58,16 @@ interface CampaignPlaceOfInterestDTO {
   id: number
   name: string
   place: PlacesOfInterestType
+  description: string
+  parent?: number
+  children?: number[]
 }
 interface CampaignDTO {
   id: number
   name: string
   description: string
   plot: string
-  firstPOI: CampaignPlaceOfInterestDTO | null
+  placesOfInterest: CampaignPlaceOfInterestDTO[]
   groups: CampaignGroupDTO[]
 }
 /**
@@ -135,13 +138,13 @@ interface Character {
 }
 type Characters = Character[]
 type CampaignStatus = 'active' | 'on_hold' | 'ended'
-type PlacesOfInterestType = 'world' | 'continent' | 'state' | 'region' | 'area' | 'city' | 'camp' | 'neighborhood' | 'point'
+type PlacesOfInterestType = 'world' | 'continent' | 'region' | 'area' | 'city' | 'camp' | 'neighborhood' | 'point'
 interface Campaign {
   id: number
   name: string
   description: string
   plot: string
-  firstPOI: CampaignPlaceOfInterestDTO | null
+  placesOfInterest: CampaignPlaceOfInterestDTO[]
   groups: CampaignGroupDTO[]
 }
 /**

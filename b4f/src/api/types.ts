@@ -51,7 +51,7 @@ export interface CampaignDTO {
   name: string
   description: string
   plot: string
-  firstPOI: CampaignPlaceOfInterestDTO | null
+  placesOfInterest: CampaignPlaceOfInterestDTO[]
   groups: CampaignGroupDTO[]
 }
 
@@ -59,7 +59,6 @@ export type PlacesOfInterestType = keyof typeof PlacesOfInterestEnum
 export enum PlacesOfInterestEnum {
   'world' = 'world',
   'continent' = 'continent',
-  'state' = 'state',
   'region' = 'region',
   'area' = 'area',
   'city' = 'city',
@@ -72,4 +71,7 @@ export interface CampaignPlaceOfInterestDTO {
   id: number
   name: string
   place: PlacesOfInterestType
+  description: string
+  parent?: number
+  children?: number[]
 }

@@ -119,30 +119,30 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       close={closePlot}
     />
     <Box display='flex' width='100%' flexDirection='column' boxShadow={1} height='67px'>
-      <Typography display='flex' fontSize='3rem' alignSelf='center'>{campaign.name}</Typography>
+      <Typography fontSize='3rem' alignSelf='center'>{campaign.name}</Typography>
     </Box>
     <Box width='98%' alignSelf='center' flexDirection='column' sx={{ overflowY: 'auto', overflowX: 'hidden' }}>
       <Box display='flex' width='100%' flexDirection='column' minHeight='80px' maxHeight='250px' sx={{ overflowY: 'auto', overflowX: 'hidden' }}>
         {
           campaign.description === ''
             ? <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
-              <Typography display='flex'>{t('activeCampaign.description')}</Typography>
+              <Typography>{t('activeCampaign.description')}</Typography>
               <Button
                 onClick={openDescription}
                 variant="contained"
                 endIcon={<DescriptionIcon />}
-                sx={{ boxShadow: 4, width: '25wv', maxWidth: '300px' }}
+                sx={{ boxShadow: 4, width: '25wv', maxWidth: '300px', alignSelf: 'flex-end' }}
               >
                 {t('activeCampaign.descriptionButton')}
               </Button>
             </Box>
             : <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
-              <Typography display='flex'>{chunkedDescription}</Typography>
+              <Typography>{chunkedDescription}</Typography>
               <Button
                 onClick={openDescription}
                 variant="contained"
                 endIcon={<ReadMoreIcon />}
-                sx={{ boxShadow: 4, width: '25wv', maxWidth: '300px' }}
+                sx={{ boxShadow: 4, width: '25wv', maxWidth: '300px', alignSelf: 'flex-end' }}
               >
                 {t('activeCampaign.showMore')}
               </Button>
@@ -154,23 +154,23 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
         {
           campaign.plot === ''
             ? <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
-              <Typography display='flex'>{t('activeCampaign.plot')}</Typography>
+              <Typography>{t('activeCampaign.plot')}</Typography>
               <Button
                 onClick={openPlot}
                 variant="contained"
                 endIcon={<DescriptionIcon />}
-                sx={{ boxShadow: 4, width: '25wv', maxWidth: '300px' }}
+                sx={{ boxShadow: 4, width: '25wv', maxWidth: '300px', alignSelf: 'flex-end' }}
               >
                 {t('activeCampaign.plotButton')}
               </Button>
             </Box>
             : <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
-              <Typography display='flex'>{chunkedPlot}</Typography>
+              <Typography>{chunkedPlot}</Typography>
               <Button
                 onClick={openPlot}
                 variant="contained"
                 endIcon={<ReadMoreIcon />}
-                sx={{ boxShadow: 4, width: '25wv', maxWidth: '300px' }}
+                sx={{ boxShadow: 4, width: '25wv', maxWidth: '300px', alignSelf: 'flex-end' }}
               >
                 {t('activeCampaign.showMore')}
               </Button>
@@ -182,18 +182,18 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
         {
           campaign.groups.length === 0
             ? <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
-              <Typography display='flex'>{t('activeCampaign.noGroups')}</Typography>
+              <Typography>{t('activeCampaign.noGroups')}</Typography>
               <Button
                 variant="contained"
                 endIcon={<GroupAddIcon />}
-                sx={{ boxShadow: 4, width: '25wv', maxWidth: '300px' }}
+                sx={{ boxShadow: 4, width: '25wv', maxWidth: '300px', alignSelf: 'flex-end' }}
               >
                 {t('activeCampaign.addGroupButton')}
               </Button>
             </Box>
             : <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
-              <Typography display='flex'>{t('activeCampaign.groups')}</Typography>
-              <Box display='flex' gap='3vw'>
+              <Typography>{t('activeCampaign.groups')}</Typography>
+              <Box display='flex' gap='3vw' justifyContent='flex-end'>
                 <Button
                   variant="contained"
                   endIcon={<GroupAddIcon />}
@@ -219,22 +219,20 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       </Box>
       <Divider />
       <Box display='flex' flexDirection='column'>
-        {
-          campaign.firstPOI === null
-            ? <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
-              <Typography display='flex'>{t('activeCampaign.firstPOI')}</Typography>
-              <Button
-                variant="contained"
-                endIcon={<FontAwesomeIcon icon={faMapLocationDot} />}
-                sx={{ boxShadow: 4, width: '25wv', maxWidth: '300px' }}
-              >
-                {t('activeCampaign.addLocationButton')}
-              </Button>
-            </Box>
-            : <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
-              <Typography display='flex'>{campaign.firstPOI.name}</Typography>
-            </Box>
-        }
+        <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
+          <Button
+            variant="contained"
+            endIcon={<FontAwesomeIcon icon={faMapLocationDot} />}
+            sx={{ boxShadow: 4, width: '25wv', maxWidth: '300px', alignSelf: 'flex-end' }}
+          >
+            {t('activeCampaign.addLocationButton')}
+          </Button>
+          {
+            campaign.placesOfInterest.map(point =>
+              <Typography key={point.id}>{point.name}</Typography>
+            )
+          }
+        </Box>
       </Box>
     </Box>
   </Stack >

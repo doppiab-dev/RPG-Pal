@@ -94,31 +94,34 @@ export const getCampaign = async (id: string, user_id: string): Promise<Campaign
   `
   const POIQuery = `
   SELECT * FROM ${tablePlacesOfInterest}
-  WHERE user_id = $1 AND campaign_id = $2 AND parent IS NULL
+  WHERE user_id = $1 AND campaign_id = $2
   `
   const values = [user_id, id]
   const campaign = await client.query<DBCampaignGroup>(campaignQuery, values)
-  const poi = await client.query<DBPlacesOfInterest>(POIQuery, values)
+  const pois = await client.query<DBPlacesOfInterest>(POIQuery, values)
 
   client.release()
   if (campaign.rowCount === null || campaign.rowCount === 0) throw new Error('fetch campaign failed')
-  if (poi.rowCount === null) throw new Error('fetch poi failed')
+  if (pois.rowCount === null) throw new Error('fetch poi failed')
 
   const row = campaign.rows[0]
-  const firstPOI = poi.rows.length === 0
-    ? null
-    : {
-      id: poi.rows[0].id,
-      name: poi.rows[0].name,
-      place: poi.rows[0].place
-    } satisfies CampaignPlaceOfInterestDTO
+  const placesOfInterest = pois.rows.length === 0
+    ? []
+    : pois.rows.map(row => ({
+      id: row.id,
+      name: row.name,
+      place: row.place,
+      description: row.description,
+      parent: row.parent ?? undefined,
+      children: row.children ?? []
+    })) satisfies CampaignPlaceOfInterestDTO[]
 
   return {
     id: row.id,
     name: row.name,
     description: row.description ?? '',
     plot: row.plot ?? '',
-    firstPOI,
+    placesOfInterest,
     groups: row.group_id === null ? [] : campaign.rows.map(row => ({ id: row.group_id, name: row.group_name }))
   }
 }
