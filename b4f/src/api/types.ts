@@ -75,3 +75,11 @@ export interface CampaignPlaceOfInterestDTO {
   parent?: number
   children?: number[]
 }
+
+export interface UpsertDescriptionBody {
+  description: string
+}
+
+export interface UpsertPlotBody {
+  plot: string
+}

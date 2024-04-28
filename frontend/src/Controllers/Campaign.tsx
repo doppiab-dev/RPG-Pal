@@ -2,18 +2,29 @@ import { useCallback, useEffect, useState, type FC } from 'react'
 import { Box, Button, Divider, Stack, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { parseErrorMessage, shrinkText } from '../Utils/f'
-import { fetchACampaign, selectCampaign, selectCampaignInfoStatus, setErrorMessage, upsertADescription, upsertAPlot } from '../Store/master'
+import {
+  clearMasterState,
+  fetchACampaign,
+  selectCampaign,
+  selectCampaignInfoStatus,
+  selectErrorMessage,
+  setErrorMessage,
+  upsertADescription,
+  upsertAPlot
+} from '../Store/master'
 import { useAppDispatch, useAppSelector } from '../Utils/store'
 import { selectToken } from '../Store/users'
 import { faMapLocationDot, faPeopleGroup } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useNavigate } from 'react-router-dom'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import GroupAddIcon from '@mui/icons-material/GroupAdd'
 import DescriptionIcon from '@mui/icons-material/Description'
 import ReadMoreIcon from '@mui/icons-material/ReadMore'
 import Loader from '../Components/Loader'
 import TextAreaDialog from '../Components/TextAreaDialog'
+import ErrorComponent from '../Components/Error'
 import * as yup from 'yup'
 
 interface CampaignProps {
@@ -23,6 +34,7 @@ interface CampaignProps {
 const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
 
   const schema = yup.object().shape({
     text: yup.string()
@@ -34,6 +46,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
   const token = useAppSelector(selectToken)
   const campaignInfoStatus = useAppSelector(selectCampaignInfoStatus)
   const campaign = useAppSelector(selectCampaign)
+  const errorMessage = useAppSelector(selectErrorMessage)
 
   const {
     handleSubmit: handleDescriptionSubmit,
@@ -67,23 +80,21 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       const description = data.text ?? ''
       await dispatch(upsertADescription({ token, description, id: activeCampaign }))
       setDescription(false)
-      resetDescription()
     } catch (e) {
       const msg = parseErrorMessage((e))
       setDescriptionError('text', { type: 'custom', message: msg ?? 'validation failed' }, { shouldFocus: true })
     }
-  }, [activeCampaign, dispatch, resetDescription, setDescriptionError, token])
+  }, [activeCampaign, dispatch, setDescriptionError, token])
   const onSubmitPlot: SubmitHandler<FormDataText> = useCallback(async (data) => {
     try {
       const plot = data.text ?? ''
       await dispatch(upsertAPlot({ token, plot, id: activeCampaign }))
       setPlot(false)
-      resetPlot()
     } catch (e) {
       const msg = parseErrorMessage((e))
       setPlotError('text', { type: 'custom', message: msg ?? 'validation failed' }, { shouldFocus: true })
     }
-  }, [activeCampaign, dispatch, resetPlot, setPlotError, token])
+  }, [activeCampaign, dispatch, setPlotError, token])
 
   const closeDescription = useCallback(() => {
     setDescription(false)
@@ -107,6 +118,11 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
     resetPlot()
   }, [resetPlot])
 
+  const clearError = useCallback(() => {
+    dispatch(clearMasterState())
+    navigate('/home')
+  }, [dispatch, navigate])
+
   useEffect(() => {
     (async () => {
       try {
@@ -123,6 +139,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
   }, [token, dispatch, activeCampaign])
 
   if (campaignInfoStatus === 'loading') return <Loader />
+  if (campaignInfoStatus === 'error') return <ErrorComponent clearError={clearError} msg={errorMessage} />
 
   const chunkedDescription = shrinkText(campaign.description)
   const chunkedPlot = shrinkText(campaign.plot)

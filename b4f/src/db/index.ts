@@ -18,4 +18,6 @@ export interface Connector {
   editCampaign: (id: string, userId: string, name: string, status: CampaignStatus) => Promise<void>
   deleteCampaign: (id: string, userId: string) => Promise<void>
   getCampaign: (id: string, userId: string) => Promise<CampaignDTO>
+  upsertDescription: (id: string, userId: string, description: string) => Promise<void>
+  upsertPlot: (id: string, userId: string, plot: string) => Promise<void>
 }

@@ -154,6 +154,7 @@ export const master = createSlice({
     builder.addCase(retrieveMasterInfo.fulfilled, (state, action) => {
       state.campaigns = [...action.payload]
       state.campaignsInfoStatus = 'success'
+      state.errorMessage = ''
     })
     builder.addCase(createACampaign.pending, (state) => {
       state.campaignsInfoStatus = 'loading'
@@ -167,6 +168,7 @@ export const master = createSlice({
     builder.addCase(createACampaign.fulfilled, (state, action) => {
       state.campaigns = [...state.campaigns, action.payload]
       state.campaignsInfoStatus = 'success'
+      state.errorMessage = ''
     })
     builder.addCase(editACampaign.pending, (state) => {
       state.campaignsInfoStatus = 'loading'
@@ -186,6 +188,7 @@ export const master = createSlice({
         status: id === campaign.id ? status : campaign.status
       }))
       state.campaignsInfoStatus = 'success'
+      state.errorMessage = ''
     })
     builder.addCase(deleteACampaign.pending, (state) => {
       state.campaignsInfoStatus = 'loading'
@@ -201,6 +204,7 @@ export const master = createSlice({
       const campaigns = [...state.campaigns]
       state.campaigns = campaigns.filter(campaign => campaign.id !== id)
       state.campaignsInfoStatus = 'success'
+      state.errorMessage = ''
     })
     builder.addCase(fetchACampaign.pending, (state) => {
       state.campaignInfoStatus = 'loading'
@@ -214,6 +218,7 @@ export const master = createSlice({
     builder.addCase(fetchACampaign.fulfilled, (state, action) => {
       state.campaign = action.payload
       state.campaignInfoStatus = 'success'
+      state.errorMessage = ''
     })
     builder.addCase(upsertADescription.pending, (state) => {
       state.campaignInfoStatus = 'loading'
@@ -228,6 +233,7 @@ export const master = createSlice({
       const { description } = action.payload
       state.campaign.description = description
       state.campaignInfoStatus = 'success'
+      state.errorMessage = ''
     })
     builder.addCase(upsertAPlot.pending, (state) => {
       state.campaignInfoStatus = 'loading'
@@ -242,6 +248,7 @@ export const master = createSlice({
       const { plot } = action.payload
       state.campaign.plot = plot
       state.campaignInfoStatus = 'success'
+      state.errorMessage = ''
     })
   }
 })

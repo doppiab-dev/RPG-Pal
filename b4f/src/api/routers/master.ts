@@ -3,7 +3,7 @@ import { missingInBody, validateToken, verifyMissingToken } from './utils'
 import { RepositoryType } from '../../config'
 import { dbFactory } from '../../db'
 import { Logger } from '../../logger'
-import { type CreateCampaignBody, type EditCampaignBody } from '../types'
+import { type UpsertDescriptionBody, type UpsertPlotBody, type CreateCampaignBody, type EditCampaignBody } from '../types'
 import express from 'express'
 
 export const masterRouter = express.Router()
@@ -116,6 +116,56 @@ masterRouter.get('/campaign/:id', asyncErrWrapper(async (req, res) => {
     return res.status(200).json(data)
   } catch (e) {
     const { status, error } = formatError(e as Error, '011-RESPONSE', 'masterRouter /campaign/:id get')
+
+    return res.status(status).json(error)
+  }
+}))
+
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+masterRouter.put('/campaign/:id/description', asyncErrWrapper(async (req, res) => {
+  try {
+    const token = verifyMissingToken(req.headers.authorization)
+    const { userId } = validateToken(token)
+    const body: UpsertDescriptionBody = req.body
+    const { description } = body
+    const { id } = req.params
+    if (missingInBody(description)) throw new Error('description is missing in body')
+    if (missingInBody(id)) throw new Error('id is missing in body')
+
+    const putDescriptionTimestamp = performance.now()
+    const db = dbFactory(RepositoryType)
+    await db.upsertDescription(id, userId, description)
+    const upsertTime = Math.round(performance.now() - putDescriptionTimestamp)
+    Logger.writeEvent(`Master: upsert description in ${upsertTime} ms`)
+
+    return res.status(204).json()
+  } catch (e) {
+    const { status, error } = formatError(e as Error, '012-RESPONSE', 'masterRouter /campaign/:id/description put')
+
+    return res.status(status).json(error)
+  }
+}))
+
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+masterRouter.put('/campaign/:id/plot', asyncErrWrapper(async (req, res) => {
+  try {
+    const token = verifyMissingToken(req.headers.authorization)
+    const { userId } = validateToken(token)
+    const body: UpsertPlotBody = req.body
+    const { plot } = body
+    const { id } = req.params
+    if (missingInBody(plot)) throw new Error('plot is missing in body')
+    if (missingInBody(id)) throw new Error('id is missing in body')
+
+    const putPlotTimestamp = performance.now()
+    const db = dbFactory(RepositoryType)
+    await db.upsertPlot(id, userId, plot)
+    const upsertTime = Math.round(performance.now() - putPlotTimestamp)
+    Logger.writeEvent(`Master: upsert plot in ${upsertTime} ms`)
+
+    return res.status(204).json()
+  } catch (e) {
+    const { status, error } = formatError(e as Error, '013-RESPONSE', 'masterRouter /campaign/:id/plot put')
 
     return res.status(status).json(error)
   }

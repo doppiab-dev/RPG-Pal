@@ -104,6 +104,7 @@ export const user = createSlice({
       state.token = token
       state.isUserLogged = true
       state.authStatus = 'success'
+      state.errorMessage = ''
     })
     builder.addCase(retrieveUserInfo.pending, (state) => {
       state.userInfoStatus = 'loading'
@@ -118,6 +119,7 @@ export const user = createSlice({
     builder.addCase(retrieveUserInfo.fulfilled, (state, action) => {
       state.userInfo = { ...action.payload }
       state.userInfoStatus = 'success'
+      state.errorMessage = ''
     })
     builder.addCase(updateTheUsername.pending, (state) => {
       state.usernameStatus = 'loading'
@@ -133,6 +135,7 @@ export const user = createSlice({
       const { username } = { ...action.payload }
       state.userInfo.username = username
       state.usernameStatus = 'success'
+      state.errorMessage = ''
     })
     builder.addCase(deleteTheUser.pending, (state) => {
       state.userInfoStatus = 'loading'
@@ -145,6 +148,7 @@ export const user = createSlice({
     })
     builder.addCase(deleteTheUser.fulfilled, (state) => {
       state.usernameStatus = 'success'
+      state.errorMessage = ''
     })
   }
 })

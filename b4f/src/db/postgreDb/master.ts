@@ -125,3 +125,27 @@ export const getCampaign = async (id: string, user_id: string): Promise<Campaign
     groups: row.group_id === null ? [] : campaign.rows.map(row => ({ id: row.group_id, name: row.group_name }))
   }
 }
+
+export const upsertDescription = async (id: string, user_id: string, description: string): Promise<void> => {
+  const client = await dbConfig.connect()
+  const upsertDescriptionQuery = `
+  UPDATE ${tableCampaigns}
+  SET description = $1
+  WHERE id = $2 AND user_id = $3
+  `
+  const upsertDescriptionValues = [description, id, user_id]
+  await client.query(upsertDescriptionQuery, upsertDescriptionValues)
+  client.release()
+}
+
+export const upsertPlot = async (id: string, user_id: string, plot: string): Promise<void> => {
+  const client = await dbConfig.connect()
+  const upsertPlotQuery = `
+  UPDATE ${tableCampaigns}
+  SET plot = $1
+  WHERE id = $2 AND user_id = $3
+  `
+  const upsertPlotValues = [plot, id, user_id]
+  await client.query(upsertPlotQuery, upsertPlotValues)
+  client.release()
+}
