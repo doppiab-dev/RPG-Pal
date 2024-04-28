@@ -1,8 +1,9 @@
 import { type FC } from 'react'
-import { TextField, Button, Typography, Divider, Box, Dialog, DialogContent, DialogTitle } from '@mui/material'
+import { TextField, Button, Typography, Divider, Box, Dialog, DialogContent, DialogTitle, DialogActions } from '@mui/material'
 import { type Control, Controller, type FieldErrors, type SubmitHandler, type UseFormHandleSubmit } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import SendIcon from '@mui/icons-material/Send'
+import CancelIcon from '@mui/icons-material/Cancel'
 
 interface TextAreaDialogProps {
   open: boolean
@@ -11,12 +12,26 @@ interface TextAreaDialogProps {
   title?: string
   body?: string
   button?: string
+  cancelText?: string
   close: () => void
+  cancel: () => void
   handleSubmit: UseFormHandleSubmit<FormDataText>
   onSubmit: SubmitHandler<FormDataText>
 }
 
-const TextAreaDialog: FC<TextAreaDialogProps> = ({ open, control, errors, body, button, title, handleSubmit, close, onSubmit }) => {
+const TextAreaDialog: FC<TextAreaDialogProps> = ({
+  open,
+  control,
+  errors,
+  body,
+  button,
+  title,
+  cancelText,
+  cancel,
+  handleSubmit,
+  close,
+  onSubmit
+}) => {
   const { t } = useTranslation()
 
   return <Dialog open={open} onClose={close} fullWidth>
@@ -24,12 +39,12 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({ open, control, errors, body, 
       {title ?? t('textArea.title')}
     </DialogTitle>
     <Divider />
-    <DialogContent>
-      <Typography>
-        {body ?? t('textArea.body')}
-      </Typography>
-      {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-      <form onSubmit={handleSubmit(onSubmit)}>
+    {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+    <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', height: '100%', width: '100%', flexDirection: 'column' }}>
+      <DialogContent>
+        <Typography>
+          {body ?? t('textArea.body')}
+        </Typography>
         <Box sx={{ mt: 3 }}>
           <Controller
             name='text'
@@ -48,20 +63,29 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({ open, control, errors, body, 
             )}
           />
         </Box>
-        <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
-          <Button
-            variant="contained"
-            color="primary"
-            size="large"
-            endIcon={<SendIcon />}
-            type="submit"
-          >
-            {button ?? t('textArea.button')}
-          </Button>
-        </Box>
-      </form>
-    </DialogContent>
-  </Dialog>
+      </DialogContent>
+      <DialogActions sx={{ p: 2, justifyContent: 'space-between' }}>
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          endIcon={<CancelIcon />}
+          onClick={cancel}
+        >
+          {cancelText ?? t('textArea.cancel')}
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          endIcon={<SendIcon />}
+          type="submit"
+        >
+          {button ?? t('textArea.button')}
+        </Button>
+      </DialogActions>
+    </form>
+  </Dialog >
 }
 
 export default TextAreaDialog

@@ -16,3 +16,9 @@ export const deleteCampaign = async (token: string, id: number): Promise<AxiosRe
 
 export const campaign = async (token: string, id: number): Promise<AxiosResponse<CampaignDTO>> =>
   await axiosClient.get(`/master/campaign/${id}`, createApiHeaders(token))
+
+export const upsertDescription = async (token: string, id: number, description: string): Promise<AxiosResponse<void>> =>
+  await axiosClient.put(`/master/campaign/${id}/description`, { description } satisfies UpsertDescriptionBody, createApiHeaders(token))
+
+export const upsertPlot = async (token: string, id: number, plot: string): Promise<AxiosResponse<void>> =>
+  await axiosClient.put(`/master/campaign/${id}/plot`, { plot } satisfies UpsertPlotBody, createApiHeaders(token))

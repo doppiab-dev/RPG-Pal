@@ -13,7 +13,7 @@ interface EditCampaignInputs {
   status: string
 }
 interface FormDataText {
-  text: string
+  text?: string
 }
 /**
  * API
@@ -69,6 +69,12 @@ interface CampaignDTO {
   plot: string
   placesOfInterest: CampaignPlaceOfInterestDTO[]
   groups: CampaignGroupDTO[]
+}
+interface UpsertDescriptionBody {
+  description: string
+}
+interface UpsertPlotBody {
+  plot: string
 }
 /**
  * Redux

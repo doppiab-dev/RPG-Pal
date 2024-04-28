@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState, type FC } from 'react'
 import { Box, Button, Divider, Stack, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { parseErrorMessage, shrinkText } from '../Utils/f'
-import { fetchACampaign, selectCampaign, selectCampaignInfoStatus, setErrorMessage } from '../Store/master'
+import { fetchACampaign, selectCampaign, selectCampaignInfoStatus, setErrorMessage, upsertADescription, upsertAPlot } from '../Store/master'
 import { useAppDispatch, useAppSelector } from '../Utils/store'
 import { selectToken } from '../Store/users'
 import { faMapLocationDot, faPeopleGroup } from '@fortawesome/free-solid-svg-icons'
@@ -25,7 +25,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
   const dispatch = useAppDispatch()
 
   const schema = yup.object().shape({
-    text: yup.string().required(t('textArea.required'))
+    text: yup.string()
   })
 
   const [description, setDescription] = useState<boolean>(false)
@@ -39,6 +39,8 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
     handleSubmit: handleDescriptionSubmit,
     control: controlDescription,
     setValue: setDescriptionValue,
+    reset: resetDescription,
+    setError: setDescriptionError,
     formState: { errors: descriptionErrors }
   } = useForm({
     resolver: yupResolver(schema),
@@ -50,6 +52,8 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
     handleSubmit: handlePlotSubmit,
     control: controlPlot,
     setValue: setPlotValue,
+    reset: resetPlot,
+    setError: setPlotError,
     formState: { errors: plotErrors }
   } = useForm({
     resolver: yupResolver(schema),
@@ -59,11 +63,27 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
   })
 
   const onSubmitDescription: SubmitHandler<FormDataText> = useCallback(async (data) => {
-    console.log(data)
-  }, [])
+    try {
+      const description = data.text ?? ''
+      await dispatch(upsertADescription({ token, description, id: activeCampaign }))
+      setDescription(false)
+      resetDescription()
+    } catch (e) {
+      const msg = parseErrorMessage((e))
+      setDescriptionError('text', { type: 'custom', message: msg ?? 'validation failed' }, { shouldFocus: true })
+    }
+  }, [activeCampaign, dispatch, resetDescription, setDescriptionError, token])
   const onSubmitPlot: SubmitHandler<FormDataText> = useCallback(async (data) => {
-    console.log(data)
-  }, [])
+    try {
+      const plot = data.text ?? ''
+      await dispatch(upsertAPlot({ token, plot, id: activeCampaign }))
+      setPlot(false)
+      resetPlot()
+    } catch (e) {
+      const msg = parseErrorMessage((e))
+      setPlotError('text', { type: 'custom', message: msg ?? 'validation failed' }, { shouldFocus: true })
+    }
+  }, [activeCampaign, dispatch, resetPlot, setPlotError, token])
 
   const closeDescription = useCallback(() => {
     setDescription(false)
@@ -72,6 +92,9 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
     setDescriptionValue('text', campaign.description)
     setDescription(true)
   }, [campaign.description, setDescriptionValue])
+  const cancelDescription = useCallback(() => {
+    resetDescription()
+  }, [resetDescription])
 
   const closePlot = useCallback(() => {
     setPlot(false)
@@ -80,6 +103,9 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
     setPlotValue('text', campaign.plot)
     setPlot(true)
   }, [campaign.plot, setPlotValue])
+  const cancelPlot = useCallback(() => {
+    resetPlot()
+  }, [resetPlot])
 
   useEffect(() => {
     (async () => {
@@ -109,6 +135,9 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       onSubmit={onSubmitDescription}
       handleSubmit={handleDescriptionSubmit}
       close={closeDescription}
+      cancel={cancelDescription}
+      body={t('activeCampaign.descriptionBody')}
+      title={t('activeCampaign.descriptionTitle')}
     />
     <TextAreaDialog
       open={plot}
@@ -117,6 +146,9 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       onSubmit={onSubmitPlot}
       handleSubmit={handlePlotSubmit}
       close={closePlot}
+      cancel={cancelPlot}
+      body={t('activeCampaign.plotBody')}
+      title={t('activeCampaign.plotTitle')}
     />
     <Box display='flex' width='100%' flexDirection='column' boxShadow={1} height='67px'>
       <Typography fontSize='3rem' alignSelf='center'>{campaign.name}</Typography>
@@ -126,7 +158,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
         {
           campaign.description === ''
             ? <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
-              <Typography>{t('activeCampaign.description')}</Typography>
+              <Typography>{t('activeCampaign.noDescription')}</Typography>
               <Button
                 onClick={openDescription}
                 variant="contained"
@@ -170,7 +202,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
         {
           campaign.plot === ''
             ? <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
-              <Typography>{t('activeCampaign.plot')}</Typography>
+              <Typography>{t('activeCampaign.noPlot')}</Typography>
               <Button
                 onClick={openPlot}
                 variant="contained"

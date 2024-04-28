@@ -80,19 +80,29 @@ const userInfo = {
   deleteText: 'Do you want to delete your user? This will delete all your campaigns and their contents (PNG, story, etc.)'
 }
 const activeCampaign = {
-  description: 'Your campaign has no description',
+  noDescription: 'Your campaign has no description',
   descriptionButton: 'Add Description',
   showMore: 'Read More',
-  plot: 'Your campaign has no plot',
+  noPlot: 'Your campaign has no plot',
   plotButton: 'Add Plot',
   addLocationButton: 'Add Location',
   noGroups: 'Your campaign has no group linked',
   groups: 'Explore your "group related" story clicking buttons below',
-  addGroupButton: 'Add Group'
+  addGroupButton: 'Add Group',
+  descriptionTitle: 'Description',
+  descriptionBody: 'Create/Modify your Campaign description',
+  plotTitle: 'Plot',
+  plotBody: 'Create/Modify your Campaign plot'
 }
 const lorem = {
   ipsum: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
   bonus: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?'
+}
+const textArea = {
+  title: 'Your text',
+  body: 'Create your text',
+  cancel: 'Clear text',
+  button: 'Save text'
 }
 
 const en = {
@@ -105,7 +115,8 @@ const en = {
   confirmationDialog,
   userInfo,
   activeCampaign,
-  lorem
+  lorem,
+  textArea
 }
 
 export default en

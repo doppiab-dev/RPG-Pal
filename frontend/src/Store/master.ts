@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { formatThunkError, masterInitialState } from '../Utils/store'
-import { campaign, campaigns, createCampaign, deleteCampaign, editCampaign } from '../Api/master'
+import { campaign, campaigns, createCampaign, deleteCampaign, editCampaign, upsertDescription, upsertPlot } from '../Api/master'
 
 export const retrieveMasterInfo = createAsyncThunk(
   'retrieveMasterInfo',
@@ -84,6 +84,44 @@ export const fetchACampaign = createAsyncThunk(
       return response.data
     } catch (e) {
       const error = formatThunkError(e, 'fetchACampaign error')
+
+      return thunkApi.rejectWithValue(error)
+    }
+  }
+)
+
+type UpsertADescription = Authenticated & {
+  id: number
+  description: string
+}
+
+export const upsertADescription = createAsyncThunk(
+  'upsertADescription',
+  async ({ token, id, description }: UpsertADescription, thunkApi) => {
+    try {
+      await upsertDescription(token, id, description)
+      return { description }
+    } catch (e) {
+      const error = formatThunkError(e, 'upsertADescription error')
+
+      return thunkApi.rejectWithValue(error)
+    }
+  }
+)
+
+type UpsertAPlot = Authenticated & {
+  id: number
+  plot: string
+}
+
+export const upsertAPlot = createAsyncThunk(
+  'upsertAPlot',
+  async ({ token, id, plot }: UpsertAPlot, thunkApi) => {
+    try {
+      await upsertPlot(token, id, plot)
+      return { plot }
+    } catch (e) {
+      const error = formatThunkError(e, 'upsertAPlot error')
 
       return thunkApi.rejectWithValue(error)
     }
@@ -175,6 +213,34 @@ export const master = createSlice({
     })
     builder.addCase(fetchACampaign.fulfilled, (state, action) => {
       state.campaign = action.payload
+      state.campaignInfoStatus = 'success'
+    })
+    builder.addCase(upsertADescription.pending, (state) => {
+      state.campaignInfoStatus = 'loading'
+    })
+    builder.addCase(upsertADescription.rejected, (state, action) => {
+      state.errorMessage = Boolean(action.error) && typeof action.error === 'string'
+        ? action.error
+        : action.payload as string
+      state.campaignInfoStatus = 'error'
+    })
+    builder.addCase(upsertADescription.fulfilled, (state, action) => {
+      const { description } = action.payload
+      state.campaign.description = description
+      state.campaignInfoStatus = 'success'
+    })
+    builder.addCase(upsertAPlot.pending, (state) => {
+      state.campaignInfoStatus = 'loading'
+    })
+    builder.addCase(upsertAPlot.rejected, (state, action) => {
+      state.errorMessage = Boolean(action.error) && typeof action.error === 'string'
+        ? action.error
+        : action.payload as string
+      state.campaignInfoStatus = 'error'
+    })
+    builder.addCase(upsertAPlot.fulfilled, (state, action) => {
+      const { plot } = action.payload
+      state.campaign.plot = plot
       state.campaignInfoStatus = 'success'
     })
   }
