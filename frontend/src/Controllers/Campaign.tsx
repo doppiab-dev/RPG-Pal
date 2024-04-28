@@ -131,7 +131,15 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
                 onClick={openDescription}
                 variant="contained"
                 endIcon={<DescriptionIcon />}
-                sx={{ boxShadow: 4, width: '25wv', maxWidth: '300px', alignSelf: 'flex-end' }}
+                sx={{
+                  boxShadow: 4,
+                  width: '15vw',
+                  maxWidth: '180px',
+                  textOverflow: 'ellipsis',
+                  overflow: 'hidden',
+                  height: '5vh',
+                  alignSelf: 'flex-end'
+                }}
               >
                 {t('activeCampaign.descriptionButton')}
               </Button>
@@ -142,7 +150,15 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
                 onClick={openDescription}
                 variant="contained"
                 endIcon={<ReadMoreIcon />}
-                sx={{ boxShadow: 4, width: '25wv', maxWidth: '300px', alignSelf: 'flex-end' }}
+                sx={{
+                  boxShadow: 4,
+                  width: '15vw',
+                  maxWidth: '180px',
+                  textOverflow: 'ellipsis',
+                  overflow: 'hidden',
+                  height: '5vh',
+                  alignSelf: 'flex-end'
+                }}
               >
                 {t('activeCampaign.showMore')}
               </Button>
@@ -159,7 +175,15 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
                 onClick={openPlot}
                 variant="contained"
                 endIcon={<DescriptionIcon />}
-                sx={{ boxShadow: 4, width: '25wv', maxWidth: '300px', alignSelf: 'flex-end' }}
+                sx={{
+                  boxShadow: 4,
+                  width: '15vw',
+                  maxWidth: '180px',
+                  textOverflow: 'ellipsis',
+                  overflow: 'hidden',
+                  height: '5vh',
+                  alignSelf: 'flex-end'
+                }}
               >
                 {t('activeCampaign.plotButton')}
               </Button>
@@ -170,7 +194,15 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
                 onClick={openPlot}
                 variant="contained"
                 endIcon={<ReadMoreIcon />}
-                sx={{ boxShadow: 4, width: '25wv', maxWidth: '300px', alignSelf: 'flex-end' }}
+                sx={{
+                  boxShadow: 4,
+                  width: '15vw',
+                  maxWidth: '180px',
+                  textOverflow: 'ellipsis',
+                  overflow: 'hidden',
+                  height: '5vh',
+                  alignSelf: 'flex-end'
+                }}
               >
                 {t('activeCampaign.showMore')}
               </Button>
@@ -186,33 +218,43 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
               <Button
                 variant="contained"
                 endIcon={<GroupAddIcon />}
-                sx={{ boxShadow: 4, width: '25wv', maxWidth: '300px', alignSelf: 'flex-end' }}
+                sx={{
+                  boxShadow: 4,
+                  width: '15vw',
+                  maxWidth: '180px',
+                  textOverflow: 'ellipsis',
+                  overflow: 'hidden',
+                  height: '5vh',
+                  alignSelf: 'flex-end'
+                }}
               >
                 {t('activeCampaign.addGroupButton')}
               </Button>
             </Box>
             : <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
               <Typography>{t('activeCampaign.groups')}</Typography>
-              <Box display='flex' gap='3vw' justifyContent='flex-end'>
+              <Box display='flex' gap='3vw' justifyContent='space-between'>
+                <Box display='flex' gap='3vw' justifyContent='flex-end'>
+                  {
+                    campaign.groups.map(group =>
+                      <Button
+                        variant="contained"
+                        endIcon={<FontAwesomeIcon icon={faPeopleGroup} />}
+                        sx={{ boxShadow: 4, width: '15vw', maxWidth: '180px', textOverflow: 'ellipsis', overflow: 'hidden', height: '5vh' }}
+                        key={group.id}
+                      >
+                        {group.name}
+                      </Button>
+                    )
+                  }
+                </Box>
                 <Button
                   variant="contained"
                   endIcon={<GroupAddIcon />}
-                  sx={{ boxShadow: 4, width: '25wv', maxWidth: '300px' }}
+                  sx={{ boxShadow: 4, width: '15vw', maxWidth: '180px', textOverflow: 'ellipsis', overflow: 'hidden', height: '5vh' }}
                 >
                   {t('activeCampaign.addGroupButton')}
                 </Button>
-                {
-                  campaign.groups.map(group =>
-                    <Button
-                      variant="contained"
-                      endIcon={<FontAwesomeIcon icon={faPeopleGroup} />}
-                      sx={{ boxShadow: 4, width: '25wv', maxWidth: '300px' }}
-                      key={group.id}
-                    >
-                      {group.name}
-                    </Button>
-                  )
-                }
               </Box>
             </Box>
         }
@@ -223,7 +265,15 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
           <Button
             variant="contained"
             endIcon={<FontAwesomeIcon icon={faMapLocationDot} />}
-            sx={{ boxShadow: 4, width: '25wv', maxWidth: '300px', alignSelf: 'flex-end' }}
+            sx={{
+              boxShadow: 4,
+              width: '15vw',
+              maxWidth: '180px',
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
+              height: '5vh',
+              alignSelf: 'flex-end'
+            }}
           >
             {t('activeCampaign.addLocationButton')}
           </Button>
