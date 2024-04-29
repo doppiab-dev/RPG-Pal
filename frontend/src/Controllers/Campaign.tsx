@@ -1,5 +1,18 @@
-import { Fragment, useCallback, useEffect, useState, type FC } from 'react'
-import { Box, Button, Collapse, Divider, List, ListItemButton, ListItemIcon, ListItemText, Stack, Typography } from '@mui/material'
+import { useCallback, useEffect, useState, type FC } from 'react'
+import {
+  Box,
+  Button,
+  Collapse,
+  Divider,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Stack,
+  type SxProps,
+  type Theme,
+  Typography
+} from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { parseErrorMessage, shrinkText } from '../Utils/f'
 import {
@@ -18,12 +31,17 @@ import { faMapLocationDot, faPeopleGroup } from '@fortawesome/free-solid-svg-ico
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigate } from 'react-router-dom'
-import { ExpandLess, ExpandMore, InboxOutlined, StarBorder, ReadMore, Description, GroupAdd } from '@mui/icons-material'
+import { ExpandLess, ExpandMore, InboxOutlined, GroupAdd } from '@mui/icons-material'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import Loader from '../Components/Loader'
 import TextAreaDialog from '../Components/TextAreaDialog'
 import ErrorComponent from '../Components/Error'
+import Text from '../Components/Text'
 import * as yup from 'yup'
+
+const schema = yup.object().shape({
+  text: yup.string()
+})
 
 interface CampaignProps {
   activeCampaign: number
@@ -33,10 +51,6 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-
-  const schema = yup.object().shape({
-    text: yup.string()
-  })
 
   const [description, setDescription] = useState<boolean>(false)
   const [plot, setPlot] = useState<boolean>(false)
@@ -141,6 +155,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
 
   const chunkedDescription = shrinkText(campaign.description)
   const chunkedPlot = shrinkText(campaign.plot)
+  const { places, points, roots } = campaign.placesOfInterest
 
   return <Stack display='flex' width='calc(100% - 250px)'>
     <TextAreaDialog
@@ -170,91 +185,25 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
     </Box>
     <Box width='98%' alignSelf='center' flexDirection='column' sx={{ overflowY: 'auto', overflowX: 'hidden' }}>
       <Box display='flex' width='100%' flexDirection='column' minHeight='80px' maxHeight='250px' sx={{ overflowY: 'auto', overflowX: 'hidden' }}>
-        {
-          campaign.description === ''
-            ? <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
-              <Typography>{t('activeCampaign.noDescription')}</Typography>
-              <Button
-                onClick={openDescription}
-                variant="contained"
-                endIcon={<Description />}
-                sx={{
-                  boxShadow: 4,
-                  width: '15vw',
-                  maxWidth: '180px',
-                  textOverflow: 'ellipsis',
-                  overflow: 'hidden',
-                  height: '5vh',
-                  alignSelf: 'flex-end'
-                }}
-              >
-                {t('activeCampaign.descriptionButton')}
-              </Button>
-            </Box>
-            : <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
-              <Typography>{chunkedDescription}</Typography>
-              <Button
-                onClick={openDescription}
-                variant="contained"
-                endIcon={<ReadMore />}
-                sx={{
-                  boxShadow: 4,
-                  width: '15vw',
-                  maxWidth: '180px',
-                  textOverflow: 'ellipsis',
-                  overflow: 'hidden',
-                  height: '5vh',
-                  alignSelf: 'flex-end'
-                }}
-              >
-                {t('activeCampaign.showMore')}
-              </Button>
-            </Box>
-        }
+        <Text
+          emptyText={t('activeCampaign.noDescription')}
+          open={openDescription}
+          text={campaign.description}
+          chunked={chunkedDescription}
+          button={t('activeCampaign.descriptionButton')}
+          showMore={t('activeCampaign.showMore')}
+        />
       </Box>
       <Divider />
       <Box display='flex' flexDirection='column' minHeight='80px' maxHeight='250px' sx={{ overflowY: 'auto', overflowX: 'hidden' }}>
-        {
-          campaign.plot === ''
-            ? <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
-              <Typography>{t('activeCampaign.noPlot')}</Typography>
-              <Button
-                onClick={openPlot}
-                variant="contained"
-                endIcon={<Description />}
-                sx={{
-                  boxShadow: 4,
-                  width: '15vw',
-                  maxWidth: '180px',
-                  textOverflow: 'ellipsis',
-                  overflow: 'hidden',
-                  height: '5vh',
-                  alignSelf: 'flex-end'
-                }}
-              >
-                {t('activeCampaign.plotButton')}
-              </Button>
-            </Box>
-            : <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
-              <Typography>{chunkedPlot}</Typography>
-              <Button
-                onClick={openPlot}
-                variant="contained"
-                endIcon={<ReadMore />}
-                sx={{
-                  boxShadow: 4,
-                  width: '15vw',
-                  maxWidth: '180px',
-                  textOverflow: 'ellipsis',
-                  overflow: 'hidden',
-                  height: '5vh',
-                  alignSelf: 'flex-end'
-                }}
-              >
-                {t('activeCampaign.showMore')}
-              </Button>
-            </Box>
-        }
+        <Text
+          emptyText={t('activeCampaign.noPlot')}
+          open={openPlot}
+          text={campaign.plot}
+          chunked={chunkedPlot}
+          button={t('activeCampaign.plotButton')}
+          showMore={t('activeCampaign.showMore')}
+        />
       </Box>
       <Divider />
       <Box display='flex' flexDirection='column' minHeight='80px' maxHeight='150px' sx={{ overflowY: 'auto', overflowX: 'hidden' }}>
@@ -309,22 +258,27 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       <Divider />
       <Box display='flex' flexDirection='column'>
         <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
-          <Button
-            variant="contained"
-            endIcon={<FontAwesomeIcon icon={faMapLocationDot} />}
-            sx={{
-              boxShadow: 4,
-              width: '15vw',
-              maxWidth: '180px',
-              textOverflow: 'ellipsis',
-              overflow: 'hidden',
-              height: '5vh',
-              alignSelf: 'flex-end'
-            }}
-          >
-            {t('activeCampaign.addLocationButton')}
-          </Button>
-          <PointOfInterest />
+          <Box display='flex' flexDirection='row' justifyContent='space-between'>
+            <Typography id="edit-modal" variant="h6" component="h2">{t('activeCampaign.location')}</Typography>
+            <Button
+              variant="contained"
+              endIcon={<FontAwesomeIcon icon={faMapLocationDot} />}
+              sx={{
+                boxShadow: 4,
+                width: '15vw',
+                maxWidth: '180px',
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+                height: '5vh',
+                alignSelf: 'flex-end'
+              }}
+            >
+              {t('activeCampaign.addLocationButton')}
+            </Button>
+          </Box>
+          <List>
+            {roots.map(point => <PointOfInterest key={point} point={point} points={points} places={places} />)}
+          </List>
         </Box>
       </Box>
     </Box>
@@ -333,36 +287,94 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
 
 export default Campaign
 
-const PointOfInterest: FC = () => {
-  const campaign = useAppSelector(selectCampaign)
+interface PointOfInterestProps {
+  point: number
+  points: Record<number, PlaceOfInterestPoint>
+  places: Record<PlacesOfInterestType, number[]>
+  style?: SxProps<Theme>
+}
 
-  const { points, roots } = campaign.placesOfInterest
+const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, places, style }) => {
+  const { t } = useTranslation()
 
-  const [open, setOpen] = useState<boolean>(true)
+  const {
+    handleSubmit,
+    control,
+    setValue,
+    reset,
+    setError,
+    formState: { errors }
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      text: ''
+    }
+  })
+
+  const [open, setOpen] = useState<boolean>(false)
+  const [openDescriptionEdit, setOpenDescriptionEdit] = useState<boolean>(false)
+
   const handleClick = useCallback(() => {
     setOpen(!open)
   }, [open])
+  const closeDescription = useCallback(() => {
+    setOpenDescriptionEdit(false)
+  }, [])
+  const openDescription = useCallback(() => {
+    setValue('text', points[point].description)
+    setOpenDescriptionEdit(true)
+  }, [point, points, setValue])
+  const cancelDescription = useCallback(() => {
+    reset()
+  }, [reset])
 
-  return <List>
-    {roots.map(point => <Fragment key={point}>
-      <ListItemButton onClick={handleClick}>
-        <ListItemIcon>
-          <InboxOutlined />
-        </ListItemIcon>
-        <ListItemText primary={points[point].name} />
-        {open ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }}>
-            <ListItemIcon>
-              <StarBorder />
-            </ListItemIcon>
-            <ListItemText primary="Starred" />
-          </ListItemButton>
-        </List>
-      </Collapse>
-    </Fragment>
-    )}
-  </List>
+  const onSubmit: SubmitHandler<FormDataText> = useCallback(async (data) => {
+    try {
+      const description = data.text ?? ''
+      console.log('update poi description', description)
+      setOpenDescriptionEdit(false)
+    } catch (e) {
+      const msg = parseErrorMessage((e))
+      setError('text', { type: 'custom', message: msg ?? 'validation failed' }, { shouldFocus: true })
+    }
+  }, [setError])
+
+  const pointOfInterest = points[point]
+
+  return <Box display='flex' flexDirection='column' sx={{ ...style }}>
+    <TextAreaDialog
+      open={openDescriptionEdit}
+      control={control}
+      errors={errors}
+      onSubmit={onSubmit}
+      handleSubmit={handleSubmit}
+      close={closeDescription}
+      cancel={cancelDescription}
+      body={t('activeCampaign.plotBody')}
+      title={t('activeCampaign.plotTitle')}
+    />
+    <ListItemButton onClick={handleClick}>
+      <ListItemIcon>
+        <InboxOutlined />
+      </ListItemIcon>
+      <ListItemText primary={pointOfInterest.name} />
+      {open ? <ExpandLess /> : <ExpandMore />}
+    </ListItemButton>
+    <Text
+      open={openDescription}
+      chunked={pointOfInterest.description}
+      text={pointOfInterest.description}
+      emptyText={t('activeCampaign.POInoDescription')}
+      button={t('activeCampaign.descriptionButton')}
+      showMore={t('activeCampaign.editDescription')}
+    />
+    <Divider />
+    {
+      pointOfInterest.children.length !== 0 && pointOfInterest.children.map(child =>
+        <Collapse in={open} timeout="auto" unmountOnExit key={child}>
+          <PointOfInterest point={child} points={points} places={places} style={{ pl: 2 }} />
+        </Collapse>
+      )
+    }
+  </Box>
 }

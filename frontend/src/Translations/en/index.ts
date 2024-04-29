@@ -81,18 +81,23 @@ const userInfo = {
 }
 const activeCampaign = {
   noDescription: 'Your campaign has no description',
+  POInoDescription: 'Your Point of Interest has no description',
   descriptionButton: 'Add Description',
   showMore: 'Read More',
   noPlot: 'Your campaign has no plot',
   plotButton: 'Add Plot',
+  location: 'Point of Interest',
   addLocationButton: 'Add Location',
   noGroups: 'Your campaign has no group linked',
   groups: 'Explore your "group related" story clicking buttons below',
   addGroupButton: 'Add Group',
   descriptionTitle: 'Description',
   descriptionBody: 'Create/Modify your Campaign description',
+  editDescription: 'Edit Description',
   plotTitle: 'Plot',
-  plotBody: 'Create/Modify your Campaign plot'
+  plotBody: 'Create/Modify your Campaign plot',
+  poiTitle: 'Point of Interest',
+  poiBody: 'Create/Modify your Point of Interest description'
 }
 const lorem = {
   ipsum: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
