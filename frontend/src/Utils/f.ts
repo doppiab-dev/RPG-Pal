@@ -66,7 +66,29 @@ export enum CampaignTypeEnum {
 
 export const shrinkText = (text: string): string => {
   const words = text.split(' ')
+
   return words.length <= 200
     ? text
     : `${words.slice(0, 200).join(' ')}…`
+}
+
+export const formatPOI = (poi: PlacesOfInterestDTO): PlacesOfInterest => {
+  const { places, points: pois, roots } = poi
+  const points = pois.reduce((acc, curr) => {
+    acc[curr.id] = {
+      name: curr.name,
+      place: curr.place,
+      description: curr.description,
+      parent: curr.parent,
+      children: curr.children
+    }
+    return acc
+    // eslint-disable-next-line @typescript-eslint/prefer-reduce-type-parameter
+  }, {} as unknown as Record<number, PlaceOfInterestPoint>)
+
+  return {
+    points,
+    places,
+    roots
+  } satisfies PlacesOfInterest
 }

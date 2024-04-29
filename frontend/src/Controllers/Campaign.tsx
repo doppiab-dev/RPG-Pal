@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState, type FC } from 'react'
-import { Box, Button, Divider, Stack, Typography } from '@mui/material'
+import { Fragment, useCallback, useEffect, useState, type FC } from 'react'
+import { Box, Button, Collapse, Divider, List, ListItemButton, ListItemIcon, ListItemText, Stack, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { parseErrorMessage, shrinkText } from '../Utils/f'
 import {
@@ -18,10 +18,8 @@ import { faMapLocationDot, faPeopleGroup } from '@fortawesome/free-solid-svg-ico
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigate } from 'react-router-dom'
+import { ExpandLess, ExpandMore, InboxOutlined, StarBorder, ReadMore, Description, GroupAdd } from '@mui/icons-material'
 import { type SubmitHandler, useForm } from 'react-hook-form'
-import GroupAddIcon from '@mui/icons-material/GroupAdd'
-import DescriptionIcon from '@mui/icons-material/Description'
-import ReadMoreIcon from '@mui/icons-material/ReadMore'
 import Loader from '../Components/Loader'
 import TextAreaDialog from '../Components/TextAreaDialog'
 import ErrorComponent from '../Components/Error'
@@ -179,7 +177,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
               <Button
                 onClick={openDescription}
                 variant="contained"
-                endIcon={<DescriptionIcon />}
+                endIcon={<Description />}
                 sx={{
                   boxShadow: 4,
                   width: '15vw',
@@ -198,7 +196,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
               <Button
                 onClick={openDescription}
                 variant="contained"
-                endIcon={<ReadMoreIcon />}
+                endIcon={<ReadMore />}
                 sx={{
                   boxShadow: 4,
                   width: '15vw',
@@ -223,7 +221,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
               <Button
                 onClick={openPlot}
                 variant="contained"
-                endIcon={<DescriptionIcon />}
+                endIcon={<Description />}
                 sx={{
                   boxShadow: 4,
                   width: '15vw',
@@ -242,7 +240,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
               <Button
                 onClick={openPlot}
                 variant="contained"
-                endIcon={<ReadMoreIcon />}
+                endIcon={<ReadMore />}
                 sx={{
                   boxShadow: 4,
                   width: '15vw',
@@ -266,7 +264,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
               <Typography>{t('activeCampaign.noGroups')}</Typography>
               <Button
                 variant="contained"
-                endIcon={<GroupAddIcon />}
+                endIcon={<GroupAdd />}
                 sx={{
                   boxShadow: 4,
                   width: '15vw',
@@ -299,7 +297,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
                 </Box>
                 <Button
                   variant="contained"
-                  endIcon={<GroupAddIcon />}
+                  endIcon={<GroupAdd />}
                   sx={{ boxShadow: 4, width: '15vw', maxWidth: '180px', textOverflow: 'ellipsis', overflow: 'hidden', height: '5vh' }}
                 >
                   {t('activeCampaign.addGroupButton')}
@@ -326,15 +324,45 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
           >
             {t('activeCampaign.addLocationButton')}
           </Button>
-          {
-            campaign.placesOfInterest.map(point =>
-              <Typography key={point.id}>{point.name}</Typography>
-            )
-          }
+          <PointOfInterest />
         </Box>
       </Box>
     </Box>
-  </Stack >
+  </Stack>
 }
 
 export default Campaign
+
+const PointOfInterest: FC = () => {
+  const campaign = useAppSelector(selectCampaign)
+
+  const { points, roots } = campaign.placesOfInterest
+
+  const [open, setOpen] = useState<boolean>(true)
+  const handleClick = useCallback(() => {
+    setOpen(!open)
+  }, [open])
+
+  return <List>
+    {roots.map(point => <Fragment key={point}>
+      <ListItemButton onClick={handleClick}>
+        <ListItemIcon>
+          <InboxOutlined />
+        </ListItemIcon>
+        <ListItemText primary={points[point].name} />
+        {open ? <ExpandLess /> : <ExpandMore />}
+      </ListItemButton>
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          <ListItemButton sx={{ pl: 4 }}>
+            <ListItemIcon>
+              <StarBorder />
+            </ListItemIcon>
+            <ListItemText primary="Starred" />
+          </ListItemButton>
+        </List>
+      </Collapse>
+    </Fragment>
+    )}
+  </List>
+}

@@ -59,15 +59,15 @@ interface CampaignPlaceOfInterestDTO {
   name: string
   place: PlacesOfInterestType
   description: string
-  parent?: number
-  children?: number[]
+  parent: number | null
+  children: number[]
 }
 interface CampaignDTO {
   id: number
   name: string
   description: string
   plot: string
-  placesOfInterest: CampaignPlaceOfInterestDTO[]
+  placesOfInterest: PlacesOfInterestDTO
   groups: CampaignGroupDTO[]
 }
 interface UpsertDescriptionBody {
@@ -75,6 +75,11 @@ interface UpsertDescriptionBody {
 }
 interface UpsertPlotBody {
   plot: string
+}
+interface PlacesOfInterestDTO {
+  points: CampaignPlaceOfInterestDTO[]
+  places: Record<PlacesOfInterestType, number[]>
+  roots: number[]
 }
 /**
  * Redux
@@ -150,8 +155,20 @@ interface Campaign {
   name: string
   description: string
   plot: string
-  placesOfInterest: CampaignPlaceOfInterestDTO[]
+  placesOfInterest: PlacesOfInterest
   groups: CampaignGroupDTO[]
+}
+interface PlacesOfInterest {
+  points: Record<number, PlaceOfInterestPoint>
+  places: Record<PlacesOfInterestType, number[]>
+  roots: number[]
+}
+interface PlaceOfInterestPoint {
+  name: string
+  place: PlacesOfInterestType
+  description: string
+  parent: number | null
+  children: number[]
 }
 /**
  * Utils

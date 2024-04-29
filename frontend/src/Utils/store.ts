@@ -76,7 +76,20 @@ export const masterInitialState: MasterStore = {
     name: '',
     description: '',
     plot: '',
-    placesOfInterest: [],
+    placesOfInterest: {
+      points: {},
+      places: {
+        world: [],
+        continent: [],
+        region: [],
+        area: [],
+        city: [],
+        camp: [],
+        neighborhood: [],
+        point: []
+      },
+      roots: []
+    },
     groups: []
   },
   campaignsInfoStatus: 'idle',

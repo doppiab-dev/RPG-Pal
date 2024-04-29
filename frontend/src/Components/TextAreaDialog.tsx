@@ -2,8 +2,7 @@ import { type FC } from 'react'
 import { TextField, Button, Typography, Divider, Box, Dialog, DialogContent, DialogTitle, DialogActions } from '@mui/material'
 import { type Control, Controller, type FieldErrors, type SubmitHandler, type UseFormHandleSubmit } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import SendIcon from '@mui/icons-material/Send'
-import CancelIcon from '@mui/icons-material/Cancel'
+import { Send, Cancel } from '@mui/icons-material'
 
 interface TextAreaDialogProps {
   open: boolean
@@ -69,7 +68,7 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
           variant="contained"
           color="primary"
           size="large"
-          endIcon={<CancelIcon />}
+          endIcon={<Cancel />}
           onClick={cancel}
         >
           {cancelText ?? t('textArea.cancel')}
@@ -78,7 +77,7 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
           variant="contained"
           color="primary"
           size="large"
-          endIcon={<SendIcon />}
+          endIcon={<Send />}
           type="submit"
         >
           {button ?? t('textArea.button')}

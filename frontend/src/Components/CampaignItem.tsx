@@ -1,10 +1,9 @@
 import { type FC, Fragment } from 'react'
 import { Divider, ListItemButton, ListItemIcon, ListItemText, useTheme } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import { ModeEditOutlineOutlined, DeleteForever } from '@mui/icons-material'
 import { type UseFormSetValue } from 'react-hook-form'
 import StatusIcon from './StatusIcon'
-import EditIcon from '@mui/icons-material/ModeEditOutlineOutlined'
-import DeleteIcon from '@mui/icons-material/DeleteForever'
 
 interface CampaignItemProps {
   campaign: CampaignListItem
@@ -75,7 +74,7 @@ const CampaignItem: FC<CampaignItemProps> = ({ campaign, openEditCampaign, openD
         }}
         data-testid="edit-campaign-button"
       >
-        <EditIcon />
+        <ModeEditOutlineOutlined />
       </ListItemIcon>
       <ListItemIcon
         sx={{
@@ -91,7 +90,7 @@ const CampaignItem: FC<CampaignItemProps> = ({ campaign, openEditCampaign, openD
         }}
         data-testid="delete-campaign-button"
       >
-        <DeleteIcon />
+        <DeleteForever />
       </ListItemIcon>
     </ListItemButton>
     <Divider />

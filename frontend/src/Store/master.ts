@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { formatThunkError, masterInitialState } from '../Utils/store'
 import { campaign, campaigns, createCampaign, deleteCampaign, editCampaign, upsertDescription, upsertPlot } from '../Api/master'
+import { formatPOI } from '../Utils/f'
 
 export const retrieveMasterInfo = createAsyncThunk(
   'retrieveMasterInfo',
@@ -216,7 +217,16 @@ export const master = createSlice({
       state.campaignInfoStatus = 'error'
     })
     builder.addCase(fetchACampaign.fulfilled, (state, action) => {
-      state.campaign = action.payload
+      const { description, groups, id, name, plot, placesOfInterest: poi } = action.payload
+      const placesOfInterest = formatPOI(poi)
+      state.campaign = {
+        description,
+        groups,
+        id,
+        name,
+        plot,
+        placesOfInterest
+      }
       state.campaignInfoStatus = 'success'
       state.errorMessage = ''
     })

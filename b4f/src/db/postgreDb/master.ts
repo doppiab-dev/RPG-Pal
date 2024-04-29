@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { tableCampaigns, tableGroups, tablePlacesOfInterest } from '../../config'
 import { dbConfig } from '.'
-import { type CampaignStatus, type ListCampaignDTO, type GetCampaignsDTO, type CampaignDTO, type CampaignPlaceOfInterestDTO } from '../../api/types'
+import { type CampaignStatus, type ListCampaignDTO, type GetCampaignsDTO, type CampaignDTO } from '../../api/types'
 import { type DBCampaignGroup, type DBPlacesOfInterest, type DBCampaigns, type DBCampaignsGroups } from '../types'
+import { composePoi } from './utils'
 
 export const getCampaigns = async (user_id: string): Promise<GetCampaignsDTO> => {
   const client = await dbConfig.connect()
@@ -95,6 +96,7 @@ export const getCampaign = async (id: string, user_id: string): Promise<Campaign
   const POIQuery = `
   SELECT * FROM ${tablePlacesOfInterest}
   WHERE user_id = $1 AND campaign_id = $2
+  ORDER by parent ASC
   `
   const values = [user_id, id]
   const campaign = await client.query<DBCampaignGroup>(campaignQuery, values)
@@ -105,23 +107,14 @@ export const getCampaign = async (id: string, user_id: string): Promise<Campaign
   if (pois.rowCount === null) throw new Error('fetch poi failed')
 
   const row = campaign.rows[0]
-  const placesOfInterest = pois.rows.length === 0
-    ? []
-    : pois.rows.map(row => ({
-      id: row.id,
-      name: row.name,
-      place: row.place,
-      description: row.description,
-      parent: row.parent ?? undefined,
-      children: row.children ?? []
-    })) satisfies CampaignPlaceOfInterestDTO[]
+  const { places, roots } = composePoi(pois.rows)
 
   return {
     id: row.id,
     name: row.name,
     description: row.description ?? '',
     plot: row.plot ?? '',
-    placesOfInterest,
+    placesOfInterest: { places, roots, points: pois.rows.map(row => ({ ...row, description: row.description ?? '' })) },
     groups: row.group_id === null ? [] : campaign.rows.map(row => ({ id: row.group_id, name: row.group_name }))
   }
 }

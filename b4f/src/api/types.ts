@@ -51,8 +51,13 @@ export interface CampaignDTO {
   name: string
   description: string
   plot: string
-  placesOfInterest: CampaignPlaceOfInterestDTO[]
+  placesOfInterest: PlacesOfInterestDTO
   groups: CampaignGroupDTO[]
+}
+interface PlacesOfInterestDTO {
+  points: CampaignPlaceOfInterestDTO[]
+  places: Record<PlacesOfInterestType, number[]>
+  roots: number[]
 }
 
 export type PlacesOfInterestType = keyof typeof PlacesOfInterestEnum
@@ -72,8 +77,8 @@ export interface CampaignPlaceOfInterestDTO {
   name: string
   place: PlacesOfInterestType
   description: string
-  parent?: number
-  children?: number[]
+  parent: number | null
+  children: number[]
 }
 
 export interface UpsertDescriptionBody {

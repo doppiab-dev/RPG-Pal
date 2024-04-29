@@ -14,8 +14,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../Utils/store'
 import { clearErrorMessage, clearUserAuthStatus, selectErrorMessage, selectAuthStatus, setErrorMessage } from '../Store/users'
 import { parseErrorMessage } from '../Utils/f'
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import GoogleIcon from '@mui/icons-material/Google'
+import { LockOutlined, Google } from '@mui/icons-material'
 import useGoogleLoginWithRedux from '../Hooks/useGoogleLoginWithRedux'
 import ErrorComponent from '../Components/Error'
 import LanguageSelector from '../Components/LanguageSelector'
@@ -87,7 +86,7 @@ const Login: FC = () => {
       <LanguageSelector style={{ width: '40%', maxWidth: '220px' }} />
       <Box display='flex' flexDirection='column' alignItems='center' height='65%' data-testid="login-box2" width='100%'>
         <Avatar sx={{ bgcolor: 'secondary.main', marginTop: '2vh' }} component={Paper} elevation={5} data-testid="login-avatar">
-          <LockOutlinedIcon />
+          <LockOutlined />
         </Avatar>
         <Typography variant="h5" data-testid="login-text"> {t('login.signin')} </Typography>
         <Button
@@ -98,7 +97,7 @@ const Login: FC = () => {
           onClick={handleLoginClick}
           sx={{ margin: '3vh 0', fontWeight: 800, boxShadow: 10, width: '40%', maxWidth: '220px' }}
           data-testid="login-button"
-          startIcon={<GoogleIcon />}
+          startIcon={<Google />}
         >
           {t('login.signin')}
         </Button>

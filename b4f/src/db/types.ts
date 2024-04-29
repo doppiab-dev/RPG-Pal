@@ -41,7 +41,7 @@ export interface DBPlacesOfInterest {
   user_id: string
   parent: number | null
   children: number[]
-  description: string
+  description: string | null
   name: string
   place: PlacesOfInterestType
 }

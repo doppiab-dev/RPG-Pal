@@ -3,11 +3,8 @@ import { Box, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemTex
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDragon } from '@fortawesome/free-solid-svg-icons'
 import { useTranslation } from 'react-i18next'
-import { InfoOutlined } from '@mui/icons-material'
+import { InfoOutlined, Logout, Home, FiberNew } from '@mui/icons-material'
 import { type UseFormSetValue } from 'react-hook-form'
-import HomeIcon from '@mui/icons-material/Home'
-import LogoutIcon from '@mui/icons-material/Logout'
-import NewIcon from '@mui/icons-material/FiberNew'
 import Item from './CampaignItem'
 
 interface MenuListProps {
@@ -91,7 +88,7 @@ const MenuList: FC<MenuListProps> = ({
                     color: theme.palette.primary.main
                   }}
                 >
-                  <NewIcon />
+                  <FiberNew />
                 </ListItemIcon>
               </ListItemButton>
               <Divider />
@@ -158,7 +155,7 @@ const MenuList: FC<MenuListProps> = ({
                 color: theme.palette.primary.main
               }}
             >
-              <HomeIcon />
+              <Home />
             </ListItemIcon>
           </ListItemButton>
           <Divider />
@@ -185,7 +182,7 @@ const MenuList: FC<MenuListProps> = ({
                 color: theme.palette.primary.main
               }}
             >
-              <LogoutIcon />
+              <Logout />
             </ListItemIcon>
           </ListItemButton>
         </Box>
