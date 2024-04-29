@@ -13,7 +13,7 @@ exports.up = pgm => {
     id: { type: 'serial', primaryKey: true },
     user_id: { type: 'text', notNull: true, references: 'users(google_id)', onDelete: 'cascade' },
     campaign_id: { type: 'integer', references: 'campaigns(id)', notNull: true, onDelete: 'cascade' },
-    parent: { type: 'integer', notNull: false, references: 'places_of_interest(id)' },
+    parent: { type: 'integer', notNull: false, references: 'places_of_interest(id)', onDelete: 'cascade' },
     children: { type: 'integer[]', notNull: false },
     description: { type: 'text', notNull: false },
     name: { type: 'text', notNull: true },

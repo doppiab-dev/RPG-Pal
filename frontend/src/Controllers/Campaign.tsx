@@ -350,8 +350,8 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, places, styl
       handleSubmit={handleSubmit}
       close={closeDescription}
       cancel={cancelDescription}
-      body={t('activeCampaign.plotBody')}
-      title={t('activeCampaign.plotTitle')}
+      body={t('activeCampaign.poiBody')}
+      title={t('activeCampaign.poiTitle')}
     />
     <ListItemButton onClick={handleClick}>
       <ListItemIcon>
