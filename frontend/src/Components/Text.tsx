@@ -1,6 +1,8 @@
 import { type FC } from 'react'
 import { Box, Button, Typography } from '@mui/material'
 import { ReadMore, Description as DescriptionIcon } from '@mui/icons-material'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 interface TextProps {
   open: () => void
@@ -17,11 +19,12 @@ const Text: FC<TextProps> = ({ open, chunked, text, emptyText, button, showMore 
     <Button
       onClick={open}
       variant="contained"
+      startIcon={<FontAwesomeIcon icon={faPlus} />}
       endIcon={<DescriptionIcon />}
       sx={{
         boxShadow: 4,
         width: '15vw',
-        maxWidth: '180px',
+        maxWidth: '200px',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
         height: '5vh',
@@ -40,7 +43,7 @@ const Text: FC<TextProps> = ({ open, chunked, text, emptyText, button, showMore 
       sx={{
         boxShadow: 4,
         width: '15vw',
-        maxWidth: '180px',
+        maxWidth: '200px',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
         height: '5vh',

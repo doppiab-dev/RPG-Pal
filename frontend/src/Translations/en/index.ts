@@ -84,7 +84,8 @@ const activeCampaign = {
   plot: 'Plot',
   group: 'Groups',
   noDescription: 'Your campaign has no description',
-  POInoDescription: 'Your Point of Interest has no description',
+  POInoDescription: 'Your ',
+  POInoDescription2: ' has no description',
   descriptionButton: 'Add Description',
   showMore: 'Read More',
   noPlot: 'Your campaign has no plot',
@@ -112,6 +113,16 @@ const textArea = {
   cancel: 'Clear text',
   button: 'Save text'
 }
+const placesOfInterest = {
+  world: 'World',
+  continent: 'Continent',
+  region: 'Region',
+  area: 'Geographical area',
+  city: 'City',
+  camp: 'Settlement',
+  neighborhood: 'District',
+  point: 'Shop / Inn / More…'
+}
 
 const en = {
   error,
@@ -124,7 +135,8 @@ const en = {
   userInfo,
   activeCampaign,
   lorem,
-  textArea
+  textArea,
+  placesOfInterest
 }
 
 export default en

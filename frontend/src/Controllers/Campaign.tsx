@@ -21,7 +21,7 @@ import {
 } from '../Store/master'
 import { useAppDispatch, useAppSelector } from '../Utils/store'
 import { selectToken } from '../Store/users'
-import { faMapLocationDot, faPeopleGroup } from '@fortawesome/free-solid-svg-icons'
+import { faMapLocationDot, faPeopleGroup, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigate } from 'react-router-dom'
@@ -206,11 +206,12 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
               <Typography>{t('activeCampaign.noGroups')}</Typography>
               <Button
                 variant="contained"
+                startIcon={<FontAwesomeIcon icon={faPlus} />}
                 endIcon={<GroupAdd />}
                 sx={{
                   boxShadow: 4,
                   width: '15vw',
-                  maxWidth: '180px',
+                  maxWidth: '200px',
                   textOverflow: 'ellipsis',
                   overflow: 'hidden',
                   height: '5vh',
@@ -229,7 +230,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
                       <Button
                         variant="contained"
                         endIcon={<FontAwesomeIcon icon={faPeopleGroup} />}
-                        sx={{ boxShadow: 4, width: '15vw', maxWidth: '180px', textOverflow: 'ellipsis', overflow: 'hidden', height: '5vh' }}
+                        sx={{ boxShadow: 4, width: '15vw', maxWidth: '200px', textOverflow: 'ellipsis', overflow: 'hidden', height: '5vh' }}
                         key={group.id}
                       >
                         {group.name}
@@ -240,7 +241,8 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
                 <Button
                   variant="contained"
                   endIcon={<GroupAdd />}
-                  sx={{ boxShadow: 4, width: '15vw', maxWidth: '180px', textOverflow: 'ellipsis', overflow: 'hidden', height: '5vh' }}
+                  startIcon={<FontAwesomeIcon icon={faPlus} />}
+                  sx={{ boxShadow: 4, width: '15vw', maxWidth: '200px', textOverflow: 'ellipsis', overflow: 'hidden', height: '5vh' }}
                 >
                   {t('activeCampaign.addGroupButton')}
                 </Button>
@@ -256,10 +258,11 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
             <Button
               variant="contained"
               endIcon={<FontAwesomeIcon icon={faMapLocationDot} />}
+              startIcon={<FontAwesomeIcon icon={faPlus} />}
               sx={{
                 boxShadow: 4,
                 width: '15vw',
-                maxWidth: '180px',
+                maxWidth: '200px',
                 textOverflow: 'ellipsis',
                 overflow: 'hidden',
                 height: '5vh',
@@ -270,7 +273,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
             </Button>
           </Box>
           <List>
-            {roots.map(point => <PointOfInterest key={point} point={point} points={points} places={places} />)}
+            {roots.map(point => <PointOfInterest key={point} point={point} points={points} places={places} defaultOpen />)}
           </List>
         </Box>
       </Box>

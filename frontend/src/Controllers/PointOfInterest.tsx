@@ -1,28 +1,36 @@
 import { useCallback, useState, type FC } from 'react'
 import {
-  Box, Collapse,
-  Divider, ListItemButton,
+  Box,
+  Button,
+  ButtonGroup,
+  Collapse,
+  Divider,
+  ListItemButton,
   ListItemIcon,
-  ListItemText, type SxProps,
+  ListItemText,
+  type SxProps,
   type Theme
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { parseErrorMessage, schema } from '../Utils/f'
+import { PlacesOfInterestValues, parseErrorMessage, schema } from '../Utils/f'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import TextAreaDialog from '../Components/TextAreaDialog'
 import Text from '../Components/Text'
 import POIIcon from '../Components/POIIcon'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 interface PointOfInterestProps {
   point: number
   points: Record<number, PlaceOfInterestPoint>
   places: Record<PlacesOfInterestType, number[]>
   style?: SxProps<Theme>
+  defaultOpen?: boolean
 }
 
-const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, places, style }) => {
+const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, places, style, defaultOpen = false }) => {
   const { t } = useTranslation()
 
   const {
@@ -34,7 +42,7 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, places, styl
     }
   })
 
-  const [open, setOpen] = useState<boolean>(false)
+  const [open, setOpen] = useState<boolean>(defaultOpen)
   const [openDescriptionEdit, setOpenDescriptionEdit] = useState<boolean>(false)
 
   const handleClick = useCallback(() => {
@@ -80,14 +88,36 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, places, styl
       <ListItemIcon>
         <POIIcon place={pointOfInterest.place} />
       </ListItemIcon>
-      <ListItemText primary={pointOfInterest.name} />
+      <ListItemText primary={pointOfInterest.name} secondary={t(`placesOfInterest.${pointOfInterest.place}`)} />
       <ExpandIcon size={pointOfInterest.children.length} open={open} />
     </ListItemButton>
+    {
+      <Box display='flex' flexDirection='row' justifyContent='flex-end'>
+        {
+          pointOfInterest.place !== 'point' &&
+          <ButtonGroup variant="text">
+            {
+              Object.keys(PlacesOfInterestValues).map(key =>
+                PlacesOfInterestValues[pointOfInterest.place] < PlacesOfInterestValues[key as PlaceOfInterestPoint['place']]
+                  ? <Button
+                    sx={{ fontSize: '0.8rem' }}
+                    startIcon={<FontAwesomeIcon icon={faPlus} style={{ fontSize: '0.8rem' }} />}
+                    key={key}
+                  >
+                    {t(`placesOfInterest.${key}`)}
+                  </Button>
+                  : null
+              )
+            }
+          </ButtonGroup>
+        }
+      </Box>
+    }
     <Text
       open={openDescription}
       chunked={pointOfInterest.description}
       text={pointOfInterest.description}
-      emptyText={t('activeCampaign.POInoDescription')}
+      emptyText={t('activeCampaign.POInoDescription') + t(`placesOfInterest.${pointOfInterest.place}`) + t('activeCampaign.POInoDescription2')}
       button={t('activeCampaign.descriptionButton')}
       showMore={t('activeCampaign.editDescription')}
     />

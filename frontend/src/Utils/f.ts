@@ -1,5 +1,5 @@
 import { usernameIsValid } from '../Api/user'
-import { authorization } from './config'
+import { maxWords, authorization } from './config'
 import * as yup from 'yup'
 
 export const apply = <T>(x: T, f: (x: T) => T): T => f(x)
@@ -68,9 +68,9 @@ export enum CampaignTypeEnum {
 export const shrinkText = (text: string): string => {
   const words = text.split(' ')
 
-  return words.length <= 200
+  return words.length <= maxWords
     ? text
-    : `${words.slice(0, 200).join(' ')}…`
+    : `${words.slice(0, maxWords).join(' ')}…`
 }
 
 export const formatPOI = (poi: PlacesOfInterestDTO): PlacesOfInterest => {
@@ -97,3 +97,14 @@ export const formatPOI = (poi: PlacesOfInterestDTO): PlacesOfInterest => {
 export const schema = yup.object().shape({
   text: yup.string()
 })
+
+export enum PlacesOfInterestValues {
+  'world' = 0,
+  'continent' = 1,
+  'region' = 2,
+  'area' = 3,
+  'city' = 3,
+  'camp' = 3,
+  'neighborhood' = 4,
+  'point' = 5
+}
