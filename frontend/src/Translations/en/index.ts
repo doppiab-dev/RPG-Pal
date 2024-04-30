@@ -45,7 +45,7 @@ const username = {
 const campaign = {
   title: 'Campaigns',
   groups: 'group(s) in this campaign',
-  status: 'Campaign status: ',
+  status: 'status: ',
   home: 'Home',
   user: 'User Info',
   logout: 'Log Out',
@@ -80,13 +80,16 @@ const userInfo = {
   deleteText: 'Do you want to delete your user? This will delete all your campaigns and their contents (PNG, story, etc.)'
 }
 const activeCampaign = {
+  description: 'Description',
+  plot: 'Plot',
+  group: 'Groups',
   noDescription: 'Your campaign has no description',
   POInoDescription: 'Your Point of Interest has no description',
   descriptionButton: 'Add Description',
   showMore: 'Read More',
   noPlot: 'Your campaign has no plot',
   plotButton: 'Add Plot',
-  location: 'Point of Interest',
+  location: 'Points of Interest',
   addLocationButton: 'Add Location',
   noGroups: 'Your campaign has no group linked',
   groups: 'Explore your "group related" story clicking buttons below',

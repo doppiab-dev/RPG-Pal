@@ -44,7 +44,7 @@ const CampaignItem: FC<CampaignItemProps> = ({ campaign, openEditCampaign, openD
     >
       <ListItemText
         primary={campaign.name}
-        secondary={`${campaign.groups} ${t('campaign.groups')}
+        secondary={`${campaign.groups} ${t('campaign.groups')},
         ${t('campaign.status')} ${t(`campaign.${campaign.status}`)}`}
         sx={{
           '& .MuiListItemText-secondary': {

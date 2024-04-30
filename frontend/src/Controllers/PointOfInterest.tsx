@@ -81,7 +81,7 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, places, styl
         <POIIcon place={pointOfInterest.place} />
       </ListItemIcon>
       <ListItemText primary={pointOfInterest.name} />
-      {open ? <ExpandLess /> : <ExpandMore />}
+      <ExpandIcon size={pointOfInterest.children.length} open={open} />
     </ListItemButton>
     <Text
       open={openDescription}
@@ -93,7 +93,7 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, places, styl
     />
     <Divider />
     {
-      pointOfInterest.children.length !== 0 && pointOfInterest.children.map(child =>
+      pointOfInterest.children.map(child =>
         <Collapse in={open} timeout="auto" unmountOnExit key={child}>
           <PointOfInterest point={child} points={points} places={places} style={{ pl: 2 }} />
         </Collapse>
@@ -103,3 +103,19 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, places, styl
 }
 
 export default PointOfInterest
+
+interface ExpandIconProps {
+  size: number
+  open: boolean
+}
+
+const ExpandIcon: FC<ExpandIconProps> = ({ size, open }) =>
+  size > 0
+    ? <Expand open={open} />
+    : null
+
+interface ExpandProps {
+  open: boolean
+}
+
+const Expand: FC<ExpandProps> = ({ open }) => open ? <ExpandLess /> : <ExpandMore />

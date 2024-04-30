@@ -175,6 +175,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
     </Box>
     <Box width='98%' alignSelf='center' flexDirection='column' sx={{ overflowY: 'auto', overflowX: 'hidden' }}>
       <Box display='flex' width='100%' flexDirection='column' minHeight='80px' maxHeight='250px' sx={{ overflowY: 'auto', overflowX: 'hidden' }}>
+        <Typography variant="h6" component="h2">{t('activeCampaign.description')}</Typography>
         <Text
           emptyText={t('activeCampaign.noDescription')}
           open={openDescription}
@@ -186,6 +187,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       </Box>
       <Divider />
       <Box display='flex' flexDirection='column' minHeight='80px' maxHeight='250px' sx={{ overflowY: 'auto', overflowX: 'hidden' }}>
+        <Typography variant="h6" component="h2">{t('activeCampaign.plot')}</Typography>
         <Text
           emptyText={t('activeCampaign.noPlot')}
           open={openPlot}
@@ -197,6 +199,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       </Box>
       <Divider />
       <Box display='flex' flexDirection='column' minHeight='80px' maxHeight='150px' sx={{ overflowY: 'auto', overflowX: 'hidden' }}>
+        <Typography variant="h6" component="h2">{t('activeCampaign.group')}</Typography>
         {
           campaign.groups.length === 0
             ? <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
@@ -249,7 +252,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       <Box display='flex' flexDirection='column'>
         <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
           <Box display='flex' flexDirection='row' justifyContent='space-between'>
-            <Typography id="edit-modal" variant="h6" component="h2">{t('activeCampaign.location')}</Typography>
+            <Typography variant="h6" component="h2">{t('activeCampaign.location')}</Typography>
             <Button
               variant="contained"
               endIcon={<FontAwesomeIcon icon={faMapLocationDot} />}
