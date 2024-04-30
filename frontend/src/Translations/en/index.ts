@@ -123,7 +123,10 @@ const placesOfInterest = {
   camp: 'Settlement',
   neighborhood: 'District',
   point: 'Shop / Inn / More…',
-  edit: 'Edit '
+  edit: 'Edit ',
+  deleteTitle: 'Delete ',
+  deleteText1: 'Are you sure you want to delete this Point of Interest: "',
+  deleteText2: '"? All its children will be deleted too.'
 }
 
 const en = {

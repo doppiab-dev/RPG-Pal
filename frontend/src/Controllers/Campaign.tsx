@@ -278,7 +278,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
             </Button>
           </Box>
           <List>
-            {roots.map(point => <PointOfInterest key={point} point={point} points={points} defaultOpen />)}
+            {roots.map(point => <PointOfInterest key={point} point={point} points={points} defaultOpen activeCampaign={activeCampaign} />)}
           </List>
         </Box>
       </Box>

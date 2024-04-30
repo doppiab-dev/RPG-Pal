@@ -22,3 +22,6 @@ export const upsertDescription = async (token: string, id: number, description: 
 
 export const upsertPlot = async (token: string, id: number, plot: string): Promise<AxiosResponse<void>> =>
   await axiosClient.put(`/master/campaign/${id}/plot`, { plot } satisfies UpsertPlotBody, createApiHeaders(token))
+
+export const deletePoi = async (token: string, id: number, poi: number): Promise<AxiosResponse<void>> =>
+  await axiosClient.delete(`/master/campaign/${id}/poi/${poi}`, createApiHeaders(token))

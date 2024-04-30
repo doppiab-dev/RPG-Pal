@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { formatThunkError, masterInitialState } from '../Utils/store'
-import { campaign, campaigns, createCampaign, deleteCampaign, editCampaign, upsertDescription, upsertPlot } from '../Api/master'
+import { campaign, campaigns, createCampaign, deleteCampaign, deletePoi, editCampaign, upsertDescription, upsertPlot } from '../Api/master'
 import { formatPOI } from '../Utils/f'
 
 export const retrieveMasterInfo = createAsyncThunk(
@@ -123,6 +123,25 @@ export const upsertAPlot = createAsyncThunk(
       return { plot }
     } catch (e) {
       const error = formatThunkError(e, 'upsertAPlot error')
+
+      return thunkApi.rejectWithValue(error)
+    }
+  }
+)
+
+type DeleteAPoi = Authenticated & {
+  id: number
+  poi: number
+}
+
+export const deleteAPoi = createAsyncThunk(
+  'deleteAPoi',
+  async ({ token, id, poi }: DeleteAPoi, thunkApi) => {
+    try {
+      await deletePoi(token, id, poi)
+      return { poi }
+    } catch (e) {
+      const error = formatThunkError(e, 'deleteAPoi error')
 
       return thunkApi.rejectWithValue(error)
     }

@@ -19,7 +19,7 @@ import {
 import { useTranslation } from 'react-i18next'
 import { PlacesOfInterestEnum, PlacesOfInterestValues, parseErrorMessage } from '../Utils/f'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { ExpandLess, ExpandMore } from '@mui/icons-material'
+import { DeleteForever, ExpandLess, ExpandMore, ModeEditOutlineOutlined } from '@mui/icons-material'
 import { type SubmitHandler, useForm, Controller } from 'react-hook-form'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -27,16 +27,24 @@ import TextAreaDialog from '../Components/TextAreaDialog'
 import Text from '../Components/Text'
 import POIIcon from '../Components/POIIcon'
 import * as yup from 'yup'
+import { useAppDispatch, useAppSelector } from '../Utils/store'
+import { deleteAPoi, setErrorMessage } from '../Store/master'
+import { selectToken } from '../Store/users'
+import ConfirmationDialog from '../Components/ConfirmationDialog'
 
 interface PointOfInterestProps {
   point: number
+  activeCampaign: number
   points: Record<number, PlaceOfInterestPoint>
   style?: SxProps<Theme>
   defaultOpen?: boolean
 }
 
-const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defaultOpen = false }) => {
+const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defaultOpen = false, activeCampaign }) => {
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
+
+  const token = useAppSelector(selectToken)
 
   const schema = yup.object().shape({
     text: yup.string()
@@ -54,6 +62,7 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
 
   const [open, setOpen] = useState<boolean>(defaultOpen)
   const [openDescriptionEdit, setOpenDescriptionEdit] = useState<boolean>(false)
+  const [deletePoi, setDeletePoi] = useState<boolean>(false)
 
   const handleClick = useCallback(() => {
     setOpen(!open)
@@ -70,6 +79,25 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
   const cancelDescription = useCallback(() => {
     reset()
   }, [reset])
+
+  const openEditPoiName = useCallback(() => {
+
+  }, [])
+
+  const openDeletePoi = useCallback(() => {
+    setDeletePoi(true)
+  }, [])
+  const closeDeletePoi = useCallback(() => {
+    setDeletePoi(false)
+  }, [])
+  const handleDelete = useCallback(async () => {
+    try {
+      await dispatch(deleteAPoi({ token, id: activeCampaign, poi: point }))
+      setDeletePoi(false)
+    } catch (e) {
+      dispatch(setErrorMessage(typeof e === 'string' ? e : String(e)))
+    }
+  }, [activeCampaign, dispatch, point, token])
 
   const onSubmit: SubmitHandler<PointOfInterestInputs> = useCallback(async (data) => {
     try {
@@ -94,6 +122,14 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
   }
 
   return <Box display='flex' flexDirection='column' sx={{ ...style }}>
+    <ConfirmationDialog
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      confirm={handleDelete}
+      undo={closeDeletePoi}
+      open={Boolean(deletePoi)}
+      title={t('placesOfInterest.deleteTitle') + t(`placesOfInterest.${points[point].place}`)}
+      dialogText={t('placesOfInterest.deleteText1') + points[point].name + t('placesOfInterest.deleteText2')}
+    />
     <TextAreaDialog
       open={openDescriptionEdit}
       control={control}
@@ -132,11 +168,32 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
         />
       }
     </TextAreaDialog>
-    <ListItemButton onClick={handleClick}>
-      <ListItemIcon>
-        <POIIcon place={points[point].place} />
-      </ListItemIcon>
-      <ListItemText primary={points[point].name} secondary={t(`placesOfInterest.${points[point].place}`)} />
+    <ListItemButton onClick={handleClick} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+      <Box display='flex' flexDirection='row' alignItems='center' gap='2vw'>
+        <ListItemIcon>
+          <POIIcon place={points[point].place} />
+        </ListItemIcon>
+        <ListItemText primary={points[point].name} secondary={t(`placesOfInterest.${points[point].place}`)} />
+        <ListItemIcon
+          sx={{ display: 'flex', minWidth: 0 }}
+          onClick={(e) => {
+            e.stopPropagation()
+            setValue('text', points[point].name)
+            openEditPoiName()
+          }}
+        >
+          <ModeEditOutlineOutlined />
+        </ListItemIcon>
+        <ListItemIcon
+          sx={{ display: 'flex', minWidth: 0 }}
+          onClick={(e) => {
+            e.stopPropagation()
+            openDeletePoi()
+          }}
+        >
+          <DeleteForever />
+        </ListItemIcon>
+      </Box>
       <ExpandIcon size={points[point].children.length} open={open} />
     </ListItemButton>
     {
@@ -172,7 +229,7 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
     {
       points[point].children.map(child =>
         <Collapse in={open} timeout="auto" unmountOnExit key={child}>
-          <PointOfInterest point={child} points={points} style={{ pl: 2 }} />
+          <PointOfInterest point={child} points={points} style={{ pl: 2 }} activeCampaign={activeCampaign} />
         </Collapse>
       )
     }

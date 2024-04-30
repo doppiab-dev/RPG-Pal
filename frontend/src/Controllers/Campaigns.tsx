@@ -123,7 +123,6 @@ const Campaigns: FC = () => {
   }, [])
 
   const setCampaign = useCallback((id: number) => {
-    // qui fetch
     setActiveCampaign(id)
   }, [])
 
