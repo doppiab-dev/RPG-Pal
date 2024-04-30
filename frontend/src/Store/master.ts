@@ -1,6 +1,16 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { formatThunkError, masterInitialState } from '../Utils/store'
-import { campaign, campaigns, createCampaign, deleteCampaign, deletePoi, editCampaign, upsertDescription, upsertPlot } from '../Api/master'
+import {
+  campaign,
+  campaigns,
+  createCampaign,
+  deleteCampaign,
+  deletePoi,
+  editCampaign,
+  editPoiName,
+  upsertDescription,
+  upsertPlot
+} from '../Api/master'
 import { formatPOI } from '../Utils/f'
 
 export const retrieveMasterInfo = createAsyncThunk(
@@ -148,6 +158,26 @@ export const deleteAPoi = createAsyncThunk(
   }
 )
 
+type EditAPoiName = Authenticated & {
+  id: number
+  poi: number
+  name: string
+}
+
+export const editAPoiName = createAsyncThunk(
+  'editAPoiName',
+  async ({ token, id, poi, name }: EditAPoiName, thunkApi) => {
+    try {
+      await editPoiName(token, id, poi, name)
+      return { poi, name }
+    } catch (e) {
+      const error = formatThunkError(e, 'editAPoiName error')
+
+      return thunkApi.rejectWithValue(error)
+    }
+  }
+)
+
 export const master = createSlice({
   name: 'master',
   initialState: masterInitialState,
@@ -277,6 +307,45 @@ export const master = createSlice({
       const { plot } = action.payload
       state.campaign.plot = plot
       state.campaignInfoStatus = 'success'
+      state.errorMessage = ''
+    })
+    builder.addCase(editAPoiName.pending, (state) => {
+      state.campaignInfoStatus = 'loading'
+    })
+    builder.addCase(editAPoiName.rejected, (state, action) => {
+      state.errorMessage = Boolean(action.error) && typeof action.error === 'string'
+        ? action.error
+        : action.payload as string
+      state.campaignInfoStatus = 'error'
+    })
+    builder.addCase(editAPoiName.fulfilled, (state, action) => {
+      const { name, poi } = action.payload
+      state.campaign.placesOfInterest.points = {
+        ...state.campaign.placesOfInterest.points,
+        [poi]: {
+          ...state.campaign.placesOfInterest.points[poi],
+          name
+        }
+      }
+      state.campaignInfoStatus = 'success'
+      state.errorMessage = ''
+    })
+    builder.addCase(deleteAPoi.pending, (state) => {
+      state.campaignsInfoStatus = 'loading'
+    })
+    builder.addCase(deleteAPoi.rejected, (state, action) => {
+      state.errorMessage = Boolean(action.error) && typeof action.error === 'string'
+        ? action.error
+        : action.payload as string
+      state.campaignsInfoStatus = 'error'
+    })
+    builder.addCase(deleteAPoi.fulfilled, (state, action) => {
+      const { poi } = action.payload
+      const pointsOfInterest = { ...state.campaign.placesOfInterest.points }
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete pointsOfInterest[poi]
+      state.campaign.placesOfInterest.points = { ...pointsOfInterest }
+      state.campaignsInfoStatus = 'success'
       state.errorMessage = ''
     })
   }

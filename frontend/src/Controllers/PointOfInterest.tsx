@@ -21,16 +21,17 @@ import { PlacesOfInterestEnum, PlacesOfInterestValues, parseErrorMessage } from 
 import { yupResolver } from '@hookform/resolvers/yup'
 import { DeleteForever, ExpandLess, ExpandMore, ModeEditOutlineOutlined } from '@mui/icons-material'
 import { type SubmitHandler, useForm, Controller } from 'react-hook-form'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faMapLocationDot, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useAppDispatch, useAppSelector } from '../Utils/store'
+import { deleteAPoi, editAPoiName, setErrorMessage } from '../Store/master'
+import { selectToken } from '../Store/users'
 import TextAreaDialog from '../Components/TextAreaDialog'
 import Text from '../Components/Text'
 import POIIcon from '../Components/POIIcon'
-import * as yup from 'yup'
-import { useAppDispatch, useAppSelector } from '../Utils/store'
-import { deleteAPoi, setErrorMessage } from '../Store/master'
-import { selectToken } from '../Store/users'
 import ConfirmationDialog from '../Components/ConfirmationDialog'
+import * as yup from 'yup'
+import CustomOptionsModal from '../Components/CustomOptionsModal'
 
 interface PointOfInterestProps {
   point: number
@@ -60,9 +61,17 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
     }
   })
 
+  const {
+    control: controlEdit, handleSubmit: handleSubmitEdit, formState: { errors: errorsEdit }, setValue: setEditValue
+  } = useForm<FormDataText>({
+    resolver: yupResolver(schema),
+    defaultValues: { text: '' }
+  })
+
   const [open, setOpen] = useState<boolean>(defaultOpen)
   const [openDescriptionEdit, setOpenDescriptionEdit] = useState<boolean>(false)
   const [deletePoi, setDeletePoi] = useState<boolean>(false)
+  const [editPoiName, setEditPoiName] = useState<boolean>(false)
 
   const handleClick = useCallback(() => {
     setOpen(!open)
@@ -80,10 +89,6 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
     reset()
   }, [reset])
 
-  const openEditPoiName = useCallback(() => {
-
-  }, [])
-
   const openDeletePoi = useCallback(() => {
     setDeletePoi(true)
   }, [])
@@ -99,12 +104,30 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
     }
   }, [activeCampaign, dispatch, point, token])
 
+  const openEditPoiName = useCallback(() => {
+    setEditPoiName(true)
+    setEditValue('text', points[point].name)
+  }, [point, points, setEditValue])
+  const closeEditPoiName = useCallback(() => {
+    setEditPoiName(false)
+  }, [])
+  const onSubmitEdit: SubmitHandler<FormDataText> = useCallback(async (data) => {
+    try {
+      const name = data.text ?? ''
+      await dispatch(editAPoiName({ name, token, id: activeCampaign, poi: point }))
+      setEditPoiName(false)
+    } catch (e) {
+      const msg = parseErrorMessage((e))
+      dispatch(setErrorMessage(msg))
+    }
+  }, [activeCampaign, dispatch, point, token])
+
   const onSubmit: SubmitHandler<PointOfInterestInputs> = useCallback(async (data) => {
     try {
       const description = data.text ?? ''
       const parent = Boolean(data.parent) ? data.parent : null
-      console.log(`update poi description: '${description}'`)
-      console.log(`update poi parent: '${parent}'`)
+      console.log(`upsert poi description: '${description}'`)
+      console.log(`upsert poi parent: '${parent}'`)
       setOpenDescriptionEdit(false)
     } catch (e) {
       const msg = parseErrorMessage((e))
@@ -129,6 +152,19 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
       open={Boolean(deletePoi)}
       title={t('placesOfInterest.deleteTitle') + t(`placesOfInterest.${points[point].place}`)}
       dialogText={t('placesOfInterest.deleteText1') + points[point].name + t('placesOfInterest.deleteText2')}
+    />
+    <CustomOptionsModal
+      onClose={closeEditPoiName}
+      handleSubmit={handleSubmitEdit}
+      onSubmit={onSubmitEdit}
+      open={editPoiName}
+      control={controlEdit}
+      icon={<FontAwesomeIcon icon={faMapLocationDot} />}
+      firstError={errorsEdit?.text}
+      title={t('placesOfInterest.editName')}
+      editText={t('placesOfInterest.edit')}
+      name="text"
+      firstLabel="Name"
     />
     <TextAreaDialog
       open={openDescriptionEdit}

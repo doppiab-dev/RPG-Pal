@@ -126,7 +126,8 @@ const placesOfInterest = {
   edit: 'Edit ',
   deleteTitle: 'Delete ',
   deleteText1: 'Are you sure you want to delete this Point of Interest: "',
-  deleteText2: '"? All its children will be deleted too.'
+  deleteText2: '"? All its children will be deleted too.',
+  editName: 'Edit your Point of Interest name'
 }
 
 const en = {

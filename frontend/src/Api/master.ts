@@ -25,3 +25,6 @@ export const upsertPlot = async (token: string, id: number, plot: string): Promi
 
 export const deletePoi = async (token: string, id: number, poi: number): Promise<AxiosResponse<void>> =>
   await axiosClient.delete(`/master/campaign/${id}/poi/${poi}`, createApiHeaders(token))
+
+export const editPoiName = async (token: string, id: number, poi: number, name: string): Promise<AxiosResponse<void>> =>
+  await axiosClient.patch(`/master/campaign/${id}/poi/${poi}`, { name } satisfies UpdatePoiNameBody, createApiHeaders(token))

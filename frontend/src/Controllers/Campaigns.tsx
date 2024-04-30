@@ -210,7 +210,7 @@ const Campaigns: FC = () => {
       firstError={errorsCreate?.campaign}
       title={t('campaign.create')}
       editText={t('campaign.createButton')}
-      name="create_campaign"
+      name="campaign"
       firstLabel="campaign"
     />
     <CustomOptionsModal
@@ -230,7 +230,7 @@ const Campaigns: FC = () => {
           }))
       }
       icon={<FontAwesomeIcon icon={faDice} />}
-      name="edit_campaign"
+      name="campaign"
       firstLabel="campaign"
       secondLabel="status"
       title={t('campaign.edit')}

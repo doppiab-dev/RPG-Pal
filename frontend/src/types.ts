@@ -83,6 +83,9 @@ interface PlacesOfInterestDTO {
   points: CampaignPlaceOfInterestDTO[]
   roots: number[]
 }
+interface UpdatePoiNameBody {
+  name: string
+}
 /**
  * Redux
  */

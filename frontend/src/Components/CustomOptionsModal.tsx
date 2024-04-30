@@ -74,7 +74,7 @@ const CustomTextModal: FC<CustomTextModalProps> = ({
         {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
         <form onSubmit={handleSubmit(onSubmit)} id={name}>
           <Controller
-            name={firstLabel}
+            name={name}
             control={control}
             render={({ field }) => (
               <TextField
