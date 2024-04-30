@@ -16,21 +16,20 @@ import { PlacesOfInterestValues, parseErrorMessage, schema } from '../Utils/f'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import { type SubmitHandler, useForm } from 'react-hook-form'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import TextAreaDialog from '../Components/TextAreaDialog'
 import Text from '../Components/Text'
 import POIIcon from '../Components/POIIcon'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 interface PointOfInterestProps {
   point: number
   points: Record<number, PlaceOfInterestPoint>
-  places: Record<PlacesOfInterestType, number[]>
   style?: SxProps<Theme>
   defaultOpen?: boolean
 }
 
-const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, places, style, defaultOpen = false }) => {
+const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defaultOpen = false }) => {
   const { t } = useTranslation()
 
   const {
@@ -125,7 +124,7 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, places, styl
     {
       pointOfInterest.children.map(child =>
         <Collapse in={open} timeout="auto" unmountOnExit key={child}>
-          <PointOfInterest point={child} points={points} places={places} style={{ pl: 2 }} />
+          <PointOfInterest point={child} points={points} style={{ pl: 2 }} />
         </Collapse>
       )
     }

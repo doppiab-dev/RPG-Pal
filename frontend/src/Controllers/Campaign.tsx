@@ -145,7 +145,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
 
   const chunkedDescription = shrinkText(campaign.description)
   const chunkedPlot = shrinkText(campaign.plot)
-  const { places, points, roots } = campaign.placesOfInterest
+  const { points, roots } = campaign.placesOfInterest
 
   return <Stack display='flex' width='calc(100% - 250px)'>
     <TextAreaDialog
@@ -273,7 +273,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
             </Button>
           </Box>
           <List>
-            {roots.map(point => <PointOfInterest key={point} point={point} points={points} places={places} defaultOpen />)}
+            {roots.map(point => <PointOfInterest key={point} point={point} points={points} defaultOpen />)}
           </List>
         </Box>
       </Box>

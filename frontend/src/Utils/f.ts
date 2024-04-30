@@ -74,7 +74,7 @@ export const shrinkText = (text: string): string => {
 }
 
 export const formatPOI = (poi: PlacesOfInterestDTO): PlacesOfInterest => {
-  const { places, points: pois, roots } = poi
+  const { points: pois, roots } = poi
   const points = pois.reduce((acc, curr) => {
     acc[curr.id] = {
       name: curr.name,
@@ -89,7 +89,6 @@ export const formatPOI = (poi: PlacesOfInterestDTO): PlacesOfInterest => {
 
   return {
     points,
-    places,
     roots
   } satisfies PlacesOfInterest
 }

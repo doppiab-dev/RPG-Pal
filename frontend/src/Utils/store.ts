@@ -78,16 +78,6 @@ export const masterInitialState: MasterStore = {
     plot: '',
     placesOfInterest: {
       points: {},
-      places: {
-        world: [],
-        continent: [],
-        region: [],
-        area: [],
-        city: [],
-        camp: [],
-        neighborhood: [],
-        point: []
-      },
       roots: []
     },
     groups: []

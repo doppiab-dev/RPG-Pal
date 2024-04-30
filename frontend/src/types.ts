@@ -78,7 +78,6 @@ interface UpsertPlotBody {
 }
 interface PlacesOfInterestDTO {
   points: CampaignPlaceOfInterestDTO[]
-  places: Record<PlacesOfInterestType, number[]>
   roots: number[]
 }
 /**
@@ -160,7 +159,6 @@ interface Campaign {
 }
 interface PlacesOfInterest {
   points: Record<number, PlaceOfInterestPoint>
-  places: Record<PlacesOfInterestType, number[]>
   roots: number[]
 }
 interface PlaceOfInterestPoint {

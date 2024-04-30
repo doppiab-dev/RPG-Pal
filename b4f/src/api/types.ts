@@ -56,7 +56,6 @@ export interface CampaignDTO {
 }
 interface PlacesOfInterestDTO {
   points: CampaignPlaceOfInterestDTO[]
-  places: Record<PlacesOfInterestType, number[]>
   roots: number[]
 }
 

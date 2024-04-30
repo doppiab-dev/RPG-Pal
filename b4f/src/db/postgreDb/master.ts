@@ -107,14 +107,14 @@ export const getCampaign = async (id: string, user_id: string): Promise<Campaign
   if (pois.rowCount === null) throw new Error('fetch poi failed')
 
   const row = campaign.rows[0]
-  const { places, roots } = composePoi(pois.rows)
+  const { roots } = composePoi(pois.rows)
 
   return {
     id: row.id,
     name: row.name,
     description: row.description ?? '',
     plot: row.plot ?? '',
-    placesOfInterest: { places, roots, points: pois.rows.map(row => ({ ...row, description: row.description ?? '' })) },
+    placesOfInterest: { roots, points: pois.rows.map(row => ({ ...row, description: row.description ?? '' })) },
     groups: row.group_id === null ? [] : campaign.rows.map(row => ({ id: row.group_id, name: row.group_name }))
   }
 }
