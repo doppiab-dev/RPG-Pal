@@ -24,7 +24,7 @@ const Text: FC<TextProps> = ({ open, chunked, text, emptyText, button, showMore 
       sx={{
         boxShadow: 4,
         width: '15vw',
-        maxWidth: '200px',
+        maxWidth: '250px',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
         height: '5vh',
@@ -43,10 +43,11 @@ const Text: FC<TextProps> = ({ open, chunked, text, emptyText, button, showMore 
       sx={{
         boxShadow: 4,
         width: '15vw',
-        maxWidth: '200px',
+        maxWidth: '250px',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
         height: '5vh',
+        maxHeight: '40px',
         alignSelf: 'flex-end'
       }}
     >

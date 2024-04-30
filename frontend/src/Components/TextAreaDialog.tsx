@@ -1,17 +1,18 @@
 import { type FC } from 'react'
-import { TextField, Button, Typography, Divider, Box, Dialog, DialogContent, DialogTitle, DialogActions } from '@mui/material'
+import { TextField, Button, Typography, Divider, Box, Dialog, DialogContent, DialogTitle, DialogActions, IconButton } from '@mui/material'
 import { type Control, Controller, type FieldErrors, type SubmitHandler, type UseFormHandleSubmit } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { Send, Cancel } from '@mui/icons-material'
+import { Send, Close } from '@mui/icons-material'
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-interface TextAreaDialogProps {
+type TextAreaDialogProps = WithChildren & {
   open: boolean
   control: Control<FormDataText>
   errors: FieldErrors<FormDataText>
   title?: string
   body?: string
   button?: string
-  cancelText?: string
   close: () => void
   cancel: () => void
   handleSubmit: UseFormHandleSubmit<FormDataText>
@@ -25,7 +26,7 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
   body,
   button,
   title,
-  cancelText,
+  children,
   cancel,
   handleSubmit,
   close,
@@ -33,13 +34,29 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
 }) => {
   const { t } = useTranslation()
 
-  return <Dialog open={open} onClose={close} fullWidth>
+  return <Dialog
+    open={open}
+    onClose={close}
+    data-testid="textArea-dialog"
+    fullScreen
+  >
     <DialogTitle data-testid="textArea-title" variant="h4" gutterBottom align="center" padding='16px 24px 0 16px'>
       {title ?? t('textArea.title')}
     </DialogTitle>
+    <IconButton
+      aria-label="close"
+      onClick={close}
+      sx={{
+        position: 'absolute',
+        right: 8,
+        top: 8
+      }}
+    >
+      <Close />
+    </IconButton>
     <Divider />
     {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-    <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', height: '100%', width: '100%', flexDirection: 'column' }}>
+    <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%' }}>
       <DialogContent>
         <Typography>
           {body ?? t('textArea.body')}
@@ -54,25 +71,24 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
                 fullWidth
                 variant="outlined"
                 multiline
-                rows={6}
-                margin="normal"
+                rows={Boolean(children) ? 20 : 25}
+                margin="dense"
                 error={Boolean(errors.text)}
                 helperText={errors.text?.message}
+                InputProps={{
+                  ...field,
+                  endAdornment:
+                    <IconButton onClick={cancel} edge="end">
+                      <FontAwesomeIcon icon={faTimes} data-testid="clear-username" />
+                    </IconButton>
+                }}
               />
             )}
           />
         </Box>
+        {children}
       </DialogContent>
-      <DialogActions sx={{ p: 2, justifyContent: 'space-between' }}>
-        <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          endIcon={<Cancel />}
-          onClick={cancel}
-        >
-          {cancelText ?? t('textArea.cancel')}
-        </Button>
+      <DialogActions sx={{ p: 2, justifyContent: 'flex-end' }}>
         <Button
           variant="contained"
           color="primary"
@@ -84,7 +100,7 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
         </Button>
       </DialogActions>
     </form>
-  </Dialog >
+  </Dialog>
 }
 
 export default TextAreaDialog

@@ -123,7 +123,7 @@ const CustomTextModal: FC<CustomTextModalProps> = ({
           </Button>
         </form>
       </Box>
-    </Modal >
+    </Modal>
   )
 }
 

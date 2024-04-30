@@ -62,7 +62,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
     reset: resetDescription,
     setError: setDescriptionError,
     formState: { errors: descriptionErrors }
-  } = useForm({
+  } = useForm<FormDataText>({
     resolver: yupResolver(schema),
     defaultValues: {
       text: ''
@@ -75,7 +75,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
     reset: resetPlot,
     setError: setPlotError,
     formState: { errors: plotErrors }
-  } = useForm({
+  } = useForm<FormDataText>({
     resolver: yupResolver(schema),
     defaultValues: {
       text: ''
@@ -216,7 +216,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
                 sx={{
                   boxShadow: 4,
                   width: '15vw',
-                  maxWidth: '200px',
+                  maxWidth: '250px',
                   textOverflow: 'ellipsis',
                   overflow: 'hidden',
                   height: '5vh',
@@ -235,7 +235,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
                       <Button
                         variant="contained"
                         endIcon={<FontAwesomeIcon icon={faPeopleGroup} />}
-                        sx={{ boxShadow: 4, width: '15vw', maxWidth: '200px', textOverflow: 'ellipsis', overflow: 'hidden', height: '5vh' }}
+                        sx={{ boxShadow: 4, width: '15vw', maxWidth: '250px', textOverflow: 'ellipsis', overflow: 'hidden', height: '5vh' }}
                         key={group.id}
                       >
                         {group.name}
@@ -247,7 +247,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
                   variant="contained"
                   endIcon={<GroupAdd />}
                   startIcon={<FontAwesomeIcon icon={faPlus} />}
-                  sx={{ boxShadow: 4, width: '15vw', maxWidth: '200px', textOverflow: 'ellipsis', overflow: 'hidden', height: '5vh' }}
+                  sx={{ boxShadow: 4, width: '15vw', maxWidth: '250px', textOverflow: 'ellipsis', overflow: 'hidden', height: '5vh' }}
                 >
                   {t('activeCampaign.addGroupButton')}
                 </Button>
@@ -267,7 +267,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
               sx={{
                 boxShadow: 4,
                 width: '15vw',
-                maxWidth: '200px',
+                maxWidth: '250px',
                 textOverflow: 'ellipsis',
                 overflow: 'hidden',
                 height: '5vh',

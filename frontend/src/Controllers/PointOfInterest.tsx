@@ -5,17 +5,22 @@ import {
   ButtonGroup,
   Collapse,
   Divider,
+  FormControl,
+  FormHelperText,
+  InputLabel,
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  MenuItem,
+  Select,
   type SxProps,
   type Theme
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { PlacesOfInterestValues, parseErrorMessage } from '../Utils/f'
+import { PlacesOfInterestEnum, PlacesOfInterestValues, parseErrorMessage } from '../Utils/f'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
-import { type SubmitHandler, useForm } from 'react-hook-form'
+import { type SubmitHandler, useForm, Controller } from 'react-hook-form'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import TextAreaDialog from '../Components/TextAreaDialog'
@@ -39,10 +44,11 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
 
   const {
     handleSubmit, control, setValue, reset, setError, formState: { errors }
-  } = useForm({
+  } = useForm<PointOfInterestInputs>({
     resolver: yupResolver(schema),
     defaultValues: {
-      text: ''
+      text: '',
+      parent: ''
     }
   })
 
@@ -56,17 +62,21 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
     setOpenDescriptionEdit(false)
   }, [])
   const openDescription = useCallback(() => {
-    setValue('text', points[point].description)
+    const location = points[point]
+    setValue('text', location.description)
+    setValue('parent', location.parent === null ? '' : String(location.parent))
     setOpenDescriptionEdit(true)
   }, [point, points, setValue])
   const cancelDescription = useCallback(() => {
     reset()
   }, [reset])
 
-  const onSubmit: SubmitHandler<FormDataText> = useCallback(async (data) => {
+  const onSubmit: SubmitHandler<PointOfInterestInputs> = useCallback(async (data) => {
     try {
       const description = data.text ?? ''
-      console.log('update poi description', description)
+      const parent = Boolean(data.parent) ? data.parent : null
+      console.log(`update poi description: '${description}'`)
+      console.log(`update poi parent: '${parent}'`)
       setOpenDescriptionEdit(false)
     } catch (e) {
       const msg = parseErrorMessage((e))
@@ -74,7 +84,14 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
     }
   }, [setError])
 
-  const pointOfInterest = points[point]
+  const options: Option[] = []
+  for (const key in points) {
+    options.push({
+      id: String(key),
+      name: points[key].name,
+      disabled: PlacesOfInterestValues[points[point].place] <= PlacesOfInterestValues[points[key].place]
+    })
+  }
 
   return <Box display='flex' flexDirection='column' sx={{ ...style }}>
     <TextAreaDialog
@@ -87,30 +104,56 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
       cancel={cancelDescription}
       body={t('activeCampaign.poiBody')}
       title={t('activeCampaign.poiTitle')}
-    />
+    >
+      {
+        points[point].place !== 'world' &&
+        <Controller
+          name='parent'
+          control={control}
+          render={({ field }) =>
+            <FormControl fullWidth variant="outlined" margin="normal">
+              <InputLabel>{t('activeCampaign.parentLabel')}</InputLabel>
+              <Select
+                {...field}
+                label={t('activeCampaign.parentLabel')}
+                error={Boolean(errors.parent)}
+              >
+                {options.map(option => (
+                  <MenuItem key={option.id} value={String(option.id)} disabled={option.disabled ?? false}>
+                    {option.name}
+                  </MenuItem>
+                ))}
+              </Select>
+              {Boolean(errors.parent) && (
+                <FormHelperText error>{errors.parent?.message ?? ''}</FormHelperText>
+              )}
+            </FormControl>
+          }
+        />
+      }
+    </TextAreaDialog>
     <ListItemButton onClick={handleClick}>
       <ListItemIcon>
-        <POIIcon place={pointOfInterest.place} />
+        <POIIcon place={points[point].place} />
       </ListItemIcon>
-      <ListItemText primary={pointOfInterest.name} secondary={t(`placesOfInterest.${pointOfInterest.place}`)} />
-      <ExpandIcon size={pointOfInterest.children.length} open={open} />
+      <ListItemText primary={points[point].name} secondary={t(`placesOfInterest.${points[point].place}`)} />
+      <ExpandIcon size={points[point].children.length} open={open} />
     </ListItemButton>
     {
       <Box display='flex' flexDirection='row' justifyContent='flex-end'>
         {
-          pointOfInterest.place !== 'point' &&
+          points[point].place !== 'point' &&
           <ButtonGroup variant="text">
             {
-              Object.keys(PlacesOfInterestValues).map(key =>
-                PlacesOfInterestValues[pointOfInterest.place] < PlacesOfInterestValues[key as PlaceOfInterestPoint['place']]
-                  ? <Button
-                    sx={{ fontSize: '0.8rem' }}
-                    startIcon={<FontAwesomeIcon icon={faPlus} style={{ fontSize: '0.8rem' }} />}
-                    key={key}
-                  >
-                    {t(`placesOfInterest.${key}`)}
-                  </Button>
-                  : null
+              (Object.keys(PlacesOfInterestEnum)).map(location =>
+                PlacesOfInterestValues[points[point].place] < PlacesOfInterestValues[location as PlaceOfInterestPoint['place']] &&
+                <Button
+                  sx={{ fontSize: '0.8rem' }}
+                  startIcon={<FontAwesomeIcon icon={faPlus} style={{ fontSize: '0.8rem' }} />}
+                  key={location}
+                >
+                  {t(`placesOfInterest.${location}`)}
+                </Button>
               )
             }
           </ButtonGroup>
@@ -119,15 +162,15 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
     }
     <Text
       open={openDescription}
-      chunked={pointOfInterest.description}
-      text={pointOfInterest.description}
-      emptyText={t('activeCampaign.POInoDescription') + t(`placesOfInterest.${pointOfInterest.place}`) + t('activeCampaign.POInoDescription2')}
-      button={t('activeCampaign.descriptionButton')}
-      showMore={t('activeCampaign.editDescription')}
+      chunked={points[point].description}
+      text={points[point].description}
+      emptyText={t('activeCampaign.POInoDescription') + t(`placesOfInterest.${points[point].place}`) + t('activeCampaign.POInoDescription2')}
+      button={t('placesOfInterest.edit') + t(`placesOfInterest.${points[point].place}`)}
+      showMore={t('placesOfInterest.edit') + t(`placesOfInterest.${points[point].place}`)}
     />
     <Divider />
     {
-      pointOfInterest.children.map(child =>
+      points[point].children.map(child =>
         <Collapse in={open} timeout="auto" unmountOnExit key={child}>
           <PointOfInterest point={child} points={points} style={{ pl: 2 }} />
         </Collapse>

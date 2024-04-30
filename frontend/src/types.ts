@@ -15,6 +15,9 @@ interface EditCampaignInputs {
 interface FormDataText {
   text?: string
 }
+type PointOfInterestInputs = FormDataText & {
+  parent?: string
+}
 /**
  * API
 */
@@ -177,4 +180,5 @@ interface WithChildren {
 interface Option {
   name: string
   id: string
+  disabled?: boolean
 }

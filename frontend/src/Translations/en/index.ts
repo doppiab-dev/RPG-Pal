@@ -101,7 +101,8 @@ const activeCampaign = {
   plotTitle: 'Plot',
   plotBody: 'Create/Modify your Campaign plot',
   poiTitle: 'Point of Interest',
-  poiBody: 'Create/Modify your Point of Interest description'
+  poiBody: 'Create/Modify your Point of Interest description',
+  parentLabel: 'Attach, as a child, to another Point of Interest'
 }
 const lorem = {
   ipsum: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
@@ -121,7 +122,8 @@ const placesOfInterest = {
   city: 'City',
   camp: 'Settlement',
   neighborhood: 'District',
-  point: 'Shop / Inn / More…'
+  point: 'Shop / Inn / More…',
+  edit: 'Edit '
 }
 
 const en = {

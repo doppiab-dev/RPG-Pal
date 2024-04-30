@@ -102,3 +102,14 @@ export enum PlacesOfInterestValues {
   'neighborhood' = 4,
   'point' = 5
 }
+
+export enum PlacesOfInterestEnum {
+  'world' = 'world',
+  'continent' = 'continent',
+  'region' = 'region',
+  'area' = 'area',
+  'city' = 'city',
+  'camp' = 'camp',
+  'neighborhood' = 'neighborhood',
+  'point' = 'point'
+}

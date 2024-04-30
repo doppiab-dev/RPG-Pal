@@ -19,30 +19,28 @@ const LanguageSelector: FC<LanguageSelectorProps> = ({ style }) => {
     void changeLanguage(selectedLanguage)
   }
 
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        width: '100%',
-        ...style
-      }}
-      data-testid="language-selector"
-    >
-      <Paper elevation={5} sx={{ display: 'flex', width: '100%' }} data-testid="language-paper">
-        <Select
-          value={i18n.language}
-          onChange={handleLanguageChange}
-          variant="outlined"
-          sx={{ display: 'flex', width: '100%' }}
-          data-testid="language-select"
-        >
-          <MenuItem value="en">🇬🇧🇨🇦 English 🇦🇺🇺🇸</MenuItem>
-          <MenuItem value="it">🇮🇹🇸🇲 Italiano 🇻🇦🇮🇹</MenuItem>
-        </Select>
-      </Paper>
-    </Box>
-  )
+  return <Box
+    sx={{
+      display: 'flex',
+      justifyContent: 'center',
+      width: '100%',
+      ...style
+    }}
+    data-testid="language-selector"
+  >
+    <Paper elevation={5} sx={{ display: 'flex', width: '100%' }} data-testid="language-paper">
+      <Select
+        value={i18n.language}
+        onChange={handleLanguageChange}
+        variant="outlined"
+        sx={{ display: 'flex', width: '100%' }}
+        data-testid="language-select"
+      >
+        <MenuItem value="en">🇬🇧🇨🇦 English 🇦🇺🇺🇸</MenuItem>
+        <MenuItem value="it">🇮🇹🇸🇲 Italiano 🇻🇦🇮🇹</MenuItem>
+      </Select>
+    </Paper>
+  </Box>
 }
 
 export default LanguageSelector

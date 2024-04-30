@@ -1,5 +1,5 @@
 import { type FC } from 'react'
-import { faBuildingFlag, faGlobe, faLocationPin, faMap, faMountain, faShop, faTents, faTreeCity } from '@fortawesome/free-solid-svg-icons'
+import { faBuildingFlag, faGlobe, faLandmarkFlag, faMap, faMountain, faShop, faTents, faTreeCity } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 interface POIIconProps {
@@ -13,7 +13,7 @@ const POIIcon: FC<POIIconProps> = ({ place }) => {
     case 'continent':
       return <FontAwesomeIcon icon={faMap} />
     case 'region':
-      return <FontAwesomeIcon icon={faLocationPin} />
+      return <FontAwesomeIcon icon={faLandmarkFlag} />
     case 'city':
       return <FontAwesomeIcon icon={faTreeCity} />
     case 'camp':

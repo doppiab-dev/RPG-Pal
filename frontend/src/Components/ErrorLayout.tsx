@@ -12,7 +12,8 @@ const ErrorLayout: FC<WithChildren> = ({ children }) => (
       minHeight: '100vh',
       alignItems: 'center',
       justifyContent: 'center'
-    }} >
+    }}
+  >
     <Box
       sx={{
         display: 'flex',
