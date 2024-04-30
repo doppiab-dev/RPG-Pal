@@ -12,7 +12,7 @@ import {
   type Theme
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { PlacesOfInterestValues, parseErrorMessage, schema } from '../Utils/f'
+import { PlacesOfInterestValues, parseErrorMessage } from '../Utils/f'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import { type SubmitHandler, useForm } from 'react-hook-form'
@@ -21,6 +21,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import TextAreaDialog from '../Components/TextAreaDialog'
 import Text from '../Components/Text'
 import POIIcon from '../Components/POIIcon'
+import * as yup from 'yup'
 
 interface PointOfInterestProps {
   point: number
@@ -31,6 +32,10 @@ interface PointOfInterestProps {
 
 const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defaultOpen = false }) => {
   const { t } = useTranslation()
+
+  const schema = yup.object().shape({
+    text: yup.string()
+  })
 
   const {
     handleSubmit, control, setValue, reset, setError, formState: { errors }

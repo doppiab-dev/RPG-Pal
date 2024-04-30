@@ -1,6 +1,5 @@
 import { usernameIsValid } from '../Api/user'
 import { maxWords, authorization } from './config'
-import * as yup from 'yup'
 
 export const apply = <T>(x: T, f: (x: T) => T): T => f(x)
 
@@ -92,10 +91,6 @@ export const formatPOI = (poi: PlacesOfInterestDTO): PlacesOfInterest => {
     roots
   } satisfies PlacesOfInterest
 }
-
-export const schema = yup.object().shape({
-  text: yup.string()
-})
 
 export enum PlacesOfInterestValues {
   'world' = 0,

@@ -8,7 +8,7 @@ import {
   Typography
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { parseErrorMessage, shrinkText, schema } from '../Utils/f'
+import { parseErrorMessage, shrinkText } from '../Utils/f'
 import {
   clearMasterState,
   fetchACampaign,
@@ -32,10 +32,15 @@ import Loader from '../Components/Loader'
 import TextAreaDialog from '../Components/TextAreaDialog'
 import ErrorComponent from '../Components/Error'
 import Text from '../Components/Text'
+import * as yup from 'yup'
 
 interface CampaignProps {
   activeCampaign: number
 }
+
+const schema = yup.object().shape({
+  text: yup.string()
+})
 
 const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
   const { t } = useTranslation()
