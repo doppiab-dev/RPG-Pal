@@ -97,6 +97,10 @@ interface CreatePoiBody {
   parent: string | null
   type: string
 }
+interface UpdatePoiBody {
+  description: string
+  parent: string | null
+}
 /**
  * Redux
  */

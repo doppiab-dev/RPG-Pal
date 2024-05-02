@@ -8,6 +8,7 @@ import {
   deleteCampaign,
   deletePoi,
   editCampaign,
+  editPoi,
   editPoiName,
   upsertDescription,
   upsertPlot
@@ -149,8 +150,8 @@ export const deleteAPoi = createAsyncThunk(
   'deleteAPoi',
   async ({ token, id, poi }: DeleteAPoi, thunkApi) => {
     try {
-      await deletePoi(token, id, poi)
-      return { poi }
+      const response = await deletePoi(token, id, poi)
+      return response.data
     } catch (e) {
       const error = formatThunkError(e, 'deleteAPoi error')
 
@@ -169,8 +170,8 @@ export const editAPoiName = createAsyncThunk(
   'editAPoiName',
   async ({ token, id, poi, name }: EditAPoiName, thunkApi) => {
     try {
-      await editPoiName(token, id, poi, name)
-      return { poi, name }
+      const response = await editPoiName(token, id, poi, name)
+      return response.data
     } catch (e) {
       const error = formatThunkError(e, 'editAPoiName error')
 
@@ -194,6 +195,27 @@ export const createAPoi = createAsyncThunk(
       return response.data
     } catch (e) {
       const error = formatThunkError(e, 'createAPoi error')
+
+      return thunkApi.rejectWithValue(error)
+    }
+  }
+)
+
+type EditAPoi = Authenticated & {
+  id: number
+  poi: number
+  description: string
+  parent: string | null
+}
+
+export const editAPoi = createAsyncThunk(
+  'editAPoi',
+  async ({ token, id, poi, description, parent }: EditAPoi, thunkApi) => {
+    try {
+      const response = await editPoi(token, id, poi, description, parent)
+      return response.data
+    } catch (e) {
+      const error = formatThunkError(e, 'editAPoi error')
 
       return thunkApi.rejectWithValue(error)
     }
@@ -341,13 +363,10 @@ export const master = createSlice({
       state.campaignInfoStatus = 'error'
     })
     builder.addCase(editAPoiName.fulfilled, (state, action) => {
-      const { name, poi } = action.payload
-      state.campaign.placesOfInterest.points = {
-        ...state.campaign.placesOfInterest.points,
-        [poi]: {
-          ...state.campaign.placesOfInterest.points[poi],
-          name
-        }
+      const placesOfInterest = formatPOI(action.payload)
+      state.campaign = {
+        ...state.campaign,
+        placesOfInterest
       }
       state.campaignInfoStatus = 'success'
       state.errorMessage = ''
@@ -362,12 +381,48 @@ export const master = createSlice({
       state.campaignsInfoStatus = 'error'
     })
     builder.addCase(deleteAPoi.fulfilled, (state, action) => {
-      const { poi } = action.payload
-      const pointsOfInterest = { ...state.campaign.placesOfInterest.points }
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-      delete pointsOfInterest[poi]
-      state.campaign.placesOfInterest.points = { ...pointsOfInterest }
-      state.campaignsInfoStatus = 'success'
+      const placesOfInterest = formatPOI(action.payload)
+      state.campaign = {
+        ...state.campaign,
+        placesOfInterest
+      }
+      state.campaignInfoStatus = 'success'
+      state.errorMessage = ''
+    })
+    builder.addCase(createAPoi.pending, (state) => {
+      state.campaignsInfoStatus = 'loading'
+    })
+    builder.addCase(createAPoi.rejected, (state, action) => {
+      state.errorMessage = Boolean(action.error) && typeof action.error === 'string'
+        ? action.error
+        : action.payload as string
+      state.campaignsInfoStatus = 'error'
+    })
+    builder.addCase(createAPoi.fulfilled, (state, action) => {
+      const placesOfInterest = formatPOI(action.payload)
+      state.campaign = {
+        ...state.campaign,
+        placesOfInterest
+      }
+      state.campaignInfoStatus = 'success'
+      state.errorMessage = ''
+    })
+    builder.addCase(editAPoi.pending, (state) => {
+      state.campaignsInfoStatus = 'loading'
+    })
+    builder.addCase(editAPoi.rejected, (state, action) => {
+      state.errorMessage = Boolean(action.error) && typeof action.error === 'string'
+        ? action.error
+        : action.payload as string
+      state.campaignsInfoStatus = 'error'
+    })
+    builder.addCase(editAPoi.fulfilled, (state, action) => {
+      const placesOfInterest = formatPOI(action.payload)
+      state.campaign = {
+        ...state.campaign,
+        placesOfInterest
+      }
+      state.campaignInfoStatus = 'success'
       state.errorMessage = ''
     })
   }

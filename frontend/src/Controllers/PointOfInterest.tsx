@@ -24,7 +24,7 @@ import { type SubmitHandler, useForm, Controller } from 'react-hook-form'
 import { faMapLocationDot, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useAppDispatch, useAppSelector } from '../Utils/store'
-import { createAPoi, deleteAPoi, editAPoiName, setErrorMessage } from '../Store/master'
+import { createAPoi, deleteAPoi, editAPoi, editAPoiName, setErrorMessage } from '../Store/master'
 import { selectToken } from '../Store/users'
 import TextAreaDialog from '../Components/TextAreaDialog'
 import Text from '../Components/Text'
@@ -147,15 +147,14 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
   const onSubmit: SubmitHandler<PointOfInterestText> = useCallback(async (data) => {
     try {
       const description = data.text ?? ''
-      const parent = Boolean(data.parent) ? data.parent : null
-      console.log(`upsert poi description: '${description}'`)
-      console.log(`upsert poi parent: '${parent}'`)
+      const parent = data.parent === '' || data.parent === undefined ? null : data.parent
+      await dispatch(editAPoi({ description, token, id: activeCampaign, poi: point, parent }))
       setOpenDescriptionEdit(false)
     } catch (e) {
       const msg = parseErrorMessage((e))
       setError('text', { type: 'custom', message: msg ?? 'validation failed' }, { shouldFocus: true })
     }
-  }, [setError])
+  }, [activeCampaign, dispatch, point, setError, token])
 
   const openCreatePoi = useCallback((type: string) => {
     setCreateValue('parent', String(point))
