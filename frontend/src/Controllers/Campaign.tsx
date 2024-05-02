@@ -8,7 +8,7 @@ import {
   Typography
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { parseErrorMessage, shrinkText } from '../Utils/f'
+import { buttonStyle, parseErrorMessage, shrinkText } from '../Utils/f'
 import {
   clearMasterState,
   fetchACampaign,
@@ -163,6 +163,8 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       cancel={cancelDescription}
       body={t('activeCampaign.descriptionBody')}
       title={t('activeCampaign.descriptionTitle')}
+      text={campaign.description}
+      defaultEditMode={!Boolean(campaign.description)}
     />
     <TextAreaDialog
       open={plot}
@@ -174,6 +176,8 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       cancel={cancelPlot}
       body={t('activeCampaign.plotBody')}
       title={t('activeCampaign.plotTitle')}
+      text={campaign.plot}
+      defaultEditMode={!Boolean(campaign.plot)}
     />
     <Box display='flex' width='100%' flexDirection='column' boxShadow={1} height='67px'>
       <Typography fontSize='3rem' alignSelf='center'>{campaign.name}</Typography>
@@ -215,12 +219,8 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
                 endIcon={<GroupAdd />}
                 sx={{
                   boxShadow: 4,
-                  width: '15vw',
-                  maxWidth: '250px',
-                  textOverflow: 'ellipsis',
-                  overflow: 'hidden',
-                  height: '5vh',
-                  alignSelf: 'flex-end'
+                  alignSelf: 'flex-end',
+                  ...buttonStyle
                 }}
               >
                 {t('activeCampaign.addGroupButton')}
@@ -235,7 +235,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
                       <Button
                         variant="contained"
                         endIcon={<FontAwesomeIcon icon={faPeopleGroup} />}
-                        sx={{ boxShadow: 4, width: '15vw', maxWidth: '250px', textOverflow: 'ellipsis', overflow: 'hidden', height: '5vh' }}
+                        sx={{ boxShadow: 4, ...buttonStyle }}
                         key={group.id}
                       >
                         {group.name}
@@ -247,7 +247,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
                   variant="contained"
                   endIcon={<GroupAdd />}
                   startIcon={<FontAwesomeIcon icon={faPlus} />}
-                  sx={{ boxShadow: 4, width: '15vw', maxWidth: '250px', textOverflow: 'ellipsis', overflow: 'hidden', height: '5vh' }}
+                  sx={{ boxShadow: 4, ...buttonStyle }}
                 >
                   {t('activeCampaign.addGroupButton')}
                 </Button>
@@ -266,12 +266,8 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
               startIcon={<FontAwesomeIcon icon={faPlus} />}
               sx={{
                 boxShadow: 4,
-                width: '15vw',
-                maxWidth: '250px',
-                textOverflow: 'ellipsis',
-                overflow: 'hidden',
-                height: '5vh',
-                alignSelf: 'flex-end'
+                alignSelf: 'flex-end',
+                ...buttonStyle
               }}
             >
               {t('activeCampaign.addLocationButton')}

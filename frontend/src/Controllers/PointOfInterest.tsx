@@ -176,6 +176,8 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
       cancel={cancelDescription}
       body={t('activeCampaign.poiBody')}
       title={t('activeCampaign.poiTitle')}
+      text={points[point].description}
+      defaultEditMode={!Boolean(points[point].description)}
     >
       {
         points[point].place !== 'world' &&
@@ -259,7 +261,7 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
       text={points[point].description}
       emptyText={t('activeCampaign.POInoDescription') + t(`placesOfInterest.${points[point].place}`) + t('activeCampaign.POInoDescription2')}
       button={t('placesOfInterest.edit') + t(`placesOfInterest.${points[point].place}`)}
-      showMore={t('placesOfInterest.edit') + t(`placesOfInterest.${points[point].place}`)}
+      showMore={t('placesOfInterest.showMore')}
     />
     <Divider />
     {

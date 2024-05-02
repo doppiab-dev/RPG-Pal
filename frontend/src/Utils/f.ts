@@ -113,3 +113,12 @@ export enum PlacesOfInterestEnum {
   'neighborhood' = 'neighborhood',
   'point' = 'point'
 }
+
+export const buttonStyle = {
+  width: '15vw',
+  maxWidth: '250px',
+  textOverflow: 'ellipsis',
+  overflow: 'hidden',
+  height: '5vh',
+  maxHeight: '40px'
+}

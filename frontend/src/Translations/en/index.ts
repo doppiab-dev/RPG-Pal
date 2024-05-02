@@ -112,7 +112,9 @@ const textArea = {
   title: 'Your text',
   body: 'Create your text',
   cancel: 'Clear text',
-  button: 'Save text'
+  button: 'Save text',
+  edit: 'Edit mode',
+  read: 'Read mode'
 }
 const placesOfInterest = {
   world: 'World',
@@ -124,6 +126,7 @@ const placesOfInterest = {
   neighborhood: 'District',
   point: 'Shop / Inn / More…',
   edit: 'Edit ',
+  showMore: 'Read More',
   deleteTitle: 'Delete ',
   deleteText1: 'Are you sure you want to delete this Point of Interest: "',
   deleteText2: '"? All its children will be deleted too.',

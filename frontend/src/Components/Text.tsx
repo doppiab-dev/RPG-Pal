@@ -3,6 +3,7 @@ import { Box, Button, Typography } from '@mui/material'
 import { ReadMore, Description as DescriptionIcon } from '@mui/icons-material'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { buttonStyle } from '../Utils/f'
 
 interface TextProps {
   open: () => void
@@ -21,15 +22,7 @@ const Text: FC<TextProps> = ({ open, chunked, text, emptyText, button, showMore 
       variant="contained"
       startIcon={<FontAwesomeIcon icon={faPlus} />}
       endIcon={<DescriptionIcon />}
-      sx={{
-        boxShadow: 4,
-        width: '15vw',
-        maxWidth: '250px',
-        textOverflow: 'ellipsis',
-        overflow: 'hidden',
-        height: '5vh',
-        alignSelf: 'flex-end'
-      }}
+      sx={{ boxShadow: 4, alignSelf: 'flex-end', ...buttonStyle }}
     >
       {button}
     </Button>
@@ -40,16 +33,7 @@ const Text: FC<TextProps> = ({ open, chunked, text, emptyText, button, showMore 
       onClick={open}
       variant="contained"
       endIcon={<ReadMore />}
-      sx={{
-        boxShadow: 4,
-        width: '15vw',
-        maxWidth: '250px',
-        textOverflow: 'ellipsis',
-        overflow: 'hidden',
-        height: '5vh',
-        maxHeight: '40px',
-        alignSelf: 'flex-end'
-      }}
+      sx={{ boxShadow: 4, alignSelf: 'flex-end', ...buttonStyle }}
     >
       {showMore}
     </Button>
