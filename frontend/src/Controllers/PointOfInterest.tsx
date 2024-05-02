@@ -30,8 +30,8 @@ import TextAreaDialog from '../Components/TextAreaDialog'
 import Text from '../Components/Text'
 import POIIcon from '../Components/POIIcon'
 import ConfirmationDialog from '../Components/ConfirmationDialog'
-import * as yup from 'yup'
 import CustomOptionsModal from '../Components/CustomOptionsModal'
+import * as yup from 'yup'
 
 interface PointOfInterestProps {
   point: number
@@ -50,20 +50,38 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
   const schema = yup.object().shape({
     text: yup.string()
   })
+  const schemaNotFull = yup.object().shape({
+    text: yup.string(),
+    type: yup.string()
+      .oneOf(['', 'world', 'continent', 'region', 'area', 'city', 'camp', 'neighborhood', 'point'], t('campaign.validationErrorInvalidType')),
+    parent: yup.string()
+  })
+  const schemaPOI = yup.object().shape({
+    text: yup.string()
+      .required(t('campaign.validationErrorRequired'))
+      .max(32, t('campaign.validationErrorTooLong'))
+      .trim(),
+    type: yup.string()
+      .required(t('campaign.typeValidationErrorRequired'))
+      .oneOf(['world', 'continent', 'region', 'area', 'city', 'camp', 'neighborhood', 'point'], t('campaign.validationErrorInvalidType')),
+    parent: yup.string()
+      .required(t('campaign.parentValidationErrorRequired'))
+  })
 
   const {
     handleSubmit, control, setValue, reset, setError, formState: { errors }
-  } = useForm<PointOfInterestInputs>({
-    resolver: yupResolver(schema),
+  } = useForm<PointOfInterestText>({
+    resolver: yupResolver(schemaNotFull),
     defaultValues: {
       text: '',
-      parent: ''
+      parent: '',
+      type: ''
     }
   })
   const {
     control: controlCreate, handleSubmit: handleSubmitCreate, formState: { errors: errorsCreate }, reset: resetCreate, setValue: setCreateValue
   } = useForm<PointOfInterestInputs>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schemaPOI),
     defaultValues: {
       text: '',
       parent: '',
@@ -132,12 +150,14 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
     }
   }, [activeCampaign, dispatch, point, token])
 
-  const onSubmit: SubmitHandler<PointOfInterestInputs> = useCallback(async (data) => {
+  const onSubmit: SubmitHandler<PointOfInterestText> = useCallback(async (data) => {
     try {
       const description = data.text ?? ''
       const parent = Boolean(data.parent) ? data.parent : null
+      const type = Boolean(data.type) ? data.type : ''
       console.log(`upsert poi description: '${description}'`)
       console.log(`upsert poi parent: '${parent}'`)
+      console.log(`upsert poi type: '${type}'`)
       setOpenDescriptionEdit(false)
     } catch (e) {
       const msg = parseErrorMessage((e))

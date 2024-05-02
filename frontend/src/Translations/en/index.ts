@@ -55,6 +55,9 @@ const campaign = {
   validationErrorInvalid: 'Name contains invalid characters',
   statusvalidationErrorRequired: 'A status is required',
   validationErrorInvalidStatus: 'Status is invalid',
+  typeValidationErrorRequired: 'A Type is required',
+  validationErrorInvalidType: 'Type is invalid',
+  parentValidationErrorRequired: 'A parent is required',
   createButton: "Let's Start!",
   create: 'Choose a name for your new Campaign',
   editButton: 'Edit',
@@ -104,7 +107,8 @@ const activeCampaign = {
   poiBody: 'Create/Modify your Point of Interest description',
   editParent: 'Attach, as a child, to a different Point of Interest',
   parentLabel: 'Create, as a child of "',
-  parentLabel2: '", a new Point of Interest'
+  parentLabel2: '", a new Point of Interest',
+  createLocation: 'Add a new Point of Interest'
 }
 const lorem = {
   ipsum: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',

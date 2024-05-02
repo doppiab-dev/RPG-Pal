@@ -8,9 +8,10 @@ import {
   Typography
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { buttonStyle, parseErrorMessage, shrinkText } from '../Utils/f'
+import { PlacesOfInterestEnum, buttonStyle, parseErrorMessage, shrinkText } from '../Utils/f'
 import {
   clearMasterState,
+  createAPoi,
   fetchACampaign,
   selectCampaign,
   selectCampaignInfoStatus,
@@ -32,6 +33,7 @@ import Loader from '../Components/Loader'
 import TextAreaDialog from '../Components/TextAreaDialog'
 import ErrorComponent from '../Components/Error'
 import Text from '../Components/Text'
+import CustomOptionsModal from '../Components/CustomOptionsModal'
 import * as yup from 'yup'
 
 interface CampaignProps {
@@ -47,8 +49,21 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
+  const schemaPOI = yup.object().shape({
+    text: yup.string()
+      .required(t('campaign.validationErrorRequired'))
+      .max(32, t('campaign.validationErrorTooLong'))
+      .trim(),
+    type: yup.string()
+      .required(t('campaign.typeValidationErrorRequired'))
+      .oneOf(['world', 'continent', 'region', 'area', 'city', 'camp', 'neighborhood', 'point'], t('campaign.validationErrorInvalidType')),
+    parent: yup.string()
+      .required(t('campaign.parentValidationErrorRequired'))
+  })
+
   const [description, setDescription] = useState<boolean>(false)
   const [plot, setPlot] = useState<boolean>(false)
+  const [createPoi, setCreatePoi] = useState<boolean>(false)
 
   const token = useAppSelector(selectToken)
   const campaignInfoStatus = useAppSelector(selectCampaignInfoStatus)
@@ -79,6 +94,20 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
     resolver: yupResolver(schema),
     defaultValues: {
       text: ''
+    }
+  })
+
+  const {
+    handleSubmit: handleSubmitCreate,
+    control: controlCreate,
+    reset: resetCreate,
+    formState: { errors: errorsCreate }
+  } = useForm<PointOfInterestInputs>({
+    resolver: yupResolver(schemaPOI),
+    defaultValues: {
+      text: '',
+      parent: '',
+      type: ''
     }
   })
 
@@ -125,6 +154,26 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
     resetPlot()
   }, [resetPlot])
 
+  const openCreatePoi = useCallback(() => {
+    setCreatePoi(true)
+  }, [])
+  const closeCreatePoi = useCallback(() => {
+    resetCreate()
+    setCreatePoi(false)
+  }, [resetCreate])
+  const onSubmitCreate: SubmitHandler<PointOfInterestInputs> = useCallback(async (data) => {
+    try {
+      const name = data.text ?? ''
+      const parent = data.parent ?? null
+      const type = data.type ?? ''
+      await dispatch(createAPoi({ name, parent, token, id: activeCampaign, type }))
+      setCreatePoi(false)
+    } catch (e) {
+      const msg = parseErrorMessage((e))
+      dispatch(setErrorMessage(msg))
+    }
+  }, [activeCampaign, dispatch, token])
+
   const clearError = useCallback(() => {
     dispatch(clearMasterState())
     navigate('/home')
@@ -152,6 +201,14 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
   const chunkedPlot = shrinkText(campaign.plot)
   const { points, roots } = campaign.placesOfInterest
 
+  const options: Option[] = []
+  for (const key in points) {
+    options.push({
+      id: String(key),
+      name: points[key].name
+    })
+  }
+
   return <Stack display='flex' width='calc(100% - 250px)'>
     <TextAreaDialog
       open={description}
@@ -178,6 +235,28 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       title={t('activeCampaign.plotTitle')}
       text={campaign.plot}
       defaultEditMode={!Boolean(campaign.plot)}
+    />
+    <CustomOptionsModal
+      onClose={closeCreatePoi}
+      handleSubmit={handleSubmitCreate}
+      onSubmit={onSubmitCreate}
+      open={createPoi}
+      control={controlCreate}
+      firstError={errorsCreate?.text}
+      secondError={errorsCreate?.parent}
+      thirdError={errorsCreate?.type}
+      options={options}
+      thirdOptions={Object.keys(PlacesOfInterestEnum).map(location => ({
+        id: location,
+        name: t(`placesOfInterest.${location}`)
+      }))}
+      icon={<FontAwesomeIcon icon={faMapLocationDot} />}
+      name="text"
+      firstLabel="Name"
+      secondLabel="parent"
+      thirdLabel='type'
+      title={t('placesOfInterest.createLocation')}
+      editText={t('placesOfInterest.create')}
     />
     <Box display='flex' width='100%' flexDirection='column' boxShadow={1} height='67px'>
       <Typography fontSize='3rem' alignSelf='center'>{campaign.name}</Typography>
@@ -269,6 +348,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
                 alignSelf: 'flex-end',
                 ...buttonStyle
               }}
+              onClick={openCreatePoi}
             >
               {t('activeCampaign.addLocationButton')}
             </Button>

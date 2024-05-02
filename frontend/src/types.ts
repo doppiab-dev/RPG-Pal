@@ -15,9 +15,15 @@ interface EditCampaignInputs {
 interface FormDataText {
   text?: string
 }
-type PointOfInterestInputs = FormDataText & {
+interface PointOfInterestText {
+  text?: string
   parent?: string
   type?: string
+}
+interface PointOfInterestInputs {
+  text: string
+  parent: string
+  type: string
 }
 /**
  * API
