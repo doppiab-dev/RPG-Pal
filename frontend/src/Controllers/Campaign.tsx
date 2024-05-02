@@ -63,7 +63,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
 
   const [description, setDescription] = useState<boolean>(false)
   const [plot, setPlot] = useState<boolean>(false)
-  const [createPoi, setCreatePoi] = useState<boolean>(false)
+  const [create, setCreate] = useState<boolean>(false)
 
   const token = useAppSelector(selectToken)
   const campaignInfoStatus = useAppSelector(selectCampaignInfoStatus)
@@ -98,10 +98,10 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
   })
 
   const {
-    handleSubmit: handleSubmitCreate,
-    control: controlCreate,
-    reset: resetCreate,
-    formState: { errors: errorsCreate }
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors }
   } = useForm<PointOfInterestInputs>({
     resolver: yupResolver(schemaPOI),
     defaultValues: {
@@ -154,20 +154,20 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
     resetPlot()
   }, [resetPlot])
 
-  const openCreatePoi = useCallback(() => {
-    setCreatePoi(true)
+  const openCreate = useCallback(() => {
+    setCreate(true)
   }, [])
-  const closeCreatePoi = useCallback(() => {
-    resetCreate()
-    setCreatePoi(false)
-  }, [resetCreate])
+  const closeCreate = useCallback(() => {
+    reset()
+    setCreate(false)
+  }, [reset])
   const onSubmitCreate: SubmitHandler<PointOfInterestInputs> = useCallback(async (data) => {
     try {
       const name = data.text ?? ''
       const parent = data.parent ?? null
       const type = data.type ?? ''
       await dispatch(createAPoi({ name, parent, token, id: activeCampaign, type }))
-      setCreatePoi(false)
+      setCreate(false)
     } catch (e) {
       const msg = parseErrorMessage((e))
       dispatch(setErrorMessage(msg))
@@ -237,14 +237,14 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       defaultEditMode={!Boolean(campaign.plot)}
     />
     <CustomOptionsModal
-      onClose={closeCreatePoi}
-      handleSubmit={handleSubmitCreate}
+      onClose={closeCreate}
+      handleSubmit={handleSubmit}
       onSubmit={onSubmitCreate}
-      open={createPoi}
-      control={controlCreate}
-      firstError={errorsCreate?.text}
-      secondError={errorsCreate?.parent}
-      thirdError={errorsCreate?.type}
+      open={create}
+      control={control}
+      firstError={errors?.text}
+      secondError={errors?.parent}
+      thirdError={errors?.type}
       options={options}
       thirdOptions={Object.keys(PlacesOfInterestEnum).map(location => ({
         id: location,
@@ -348,7 +348,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
                 alignSelf: 'flex-end',
                 ...buttonStyle
               }}
-              onClick={openCreatePoi}
+              onClick={openCreate}
             >
               {t('activeCampaign.addLocationButton')}
             </Button>
