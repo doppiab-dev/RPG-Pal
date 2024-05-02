@@ -52,8 +52,6 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
   })
   const schemaNotFull = yup.object().shape({
     text: yup.string(),
-    type: yup.string()
-      .oneOf(['', 'world', 'continent', 'region', 'area', 'city', 'camp', 'neighborhood', 'point'], t('campaign.validationErrorInvalidType')),
     parent: yup.string()
   })
   const schemaPOI = yup.object().shape({
@@ -74,8 +72,7 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
     resolver: yupResolver(schemaNotFull),
     defaultValues: {
       text: '',
-      parent: '',
-      type: ''
+      parent: ''
     }
   })
   const {
@@ -154,10 +151,8 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
     try {
       const description = data.text ?? ''
       const parent = Boolean(data.parent) ? data.parent : null
-      const type = Boolean(data.type) ? data.type : ''
       console.log(`upsert poi description: '${description}'`)
       console.log(`upsert poi parent: '${parent}'`)
-      console.log(`upsert poi type: '${type}'`)
       setOpenDescriptionEdit(false)
     } catch (e) {
       const msg = parseErrorMessage((e))
@@ -250,8 +245,8 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
       handleSubmit={handleSubmit}
       close={closeDescription}
       cancel={cancelDescription}
-      body={t('activeCampaign.poiBody')}
-      title={t('activeCampaign.poiTitle')}
+      body={t('placesOfInterest.poiBody') + points[point].name + t('placesOfInterest.poiBody2')}
+      title={t('placesOfInterest.edit') + t(`placesOfInterest.${points[point].place}`)}
       text={points[point].description}
       defaultEditMode={!Boolean(points[point].description)}
     >
@@ -268,6 +263,9 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
                 label={t('activeCampaign.editParent')}
                 error={Boolean(errors.parent)}
               >
+                <MenuItem value=''>
+                  {t('placesOfInterest.placeholder')}
+                </MenuItem>
                 {options.map(option => (
                   <MenuItem key={option.id} value={String(option.id)} disabled={option.disabled ?? false}>
                     {option.name}

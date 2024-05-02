@@ -103,8 +103,6 @@ const activeCampaign = {
   editDescription: 'Edit Description',
   plotTitle: 'Plot',
   plotBody: 'Create/Modify your Campaign plot',
-  poiTitle: 'Point of Interest',
-  poiBody: 'Create/Modify your Point of Interest description',
   editParent: 'Attach, as a child, to a different Point of Interest',
   parentLabel: 'Create, as a child of "',
   parentLabel2: '", a new Point of Interest',
@@ -137,7 +135,10 @@ const placesOfInterest = {
   deleteTitle: 'Delete ',
   deleteText1: 'Are you sure you want to delete this Point of Interest: "',
   deleteText2: '"? All its children will be deleted too.',
-  editName: 'Edit your Point of Interest name'
+  editName: 'Edit your Point of Interest name',
+  placeholder: 'detach it from the Point of Interest',
+  poiBody: 'Create/Modify your "',
+  poiBody2: '" description'
 }
 
 const en = {

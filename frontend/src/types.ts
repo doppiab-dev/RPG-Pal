@@ -18,7 +18,6 @@ interface FormDataText {
 interface PointOfInterestText {
   text?: string
   parent?: string
-  type?: string
 }
 interface PointOfInterestInputs {
   text: string
