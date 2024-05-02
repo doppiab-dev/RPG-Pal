@@ -8,7 +8,7 @@ import {
   Typography
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { PlacesOfInterestEnum, buttonStyle, parseErrorMessage, shrinkText } from '../Utils/f'
+import { PlacesOfInterestEnum, buttonStyle, parseErrorMessage, shrinkText, schema } from '../Utils/f'
 import {
   clearMasterState,
   createAPoi,
@@ -39,10 +39,6 @@ import * as yup from 'yup'
 interface CampaignProps {
   activeCampaign: number
 }
-
-const schema = yup.object().shape({
-  text: yup.string()
-})
 
 const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
   const { t } = useTranslation()

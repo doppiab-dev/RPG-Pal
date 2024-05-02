@@ -1,5 +1,6 @@
 import { usernameIsValid } from '../Api/user'
 import { maxWords, authorization } from './config'
+import * as yup from 'yup'
 
 export const apply = <T>(x: T, f: (x: T) => T): T => f(x)
 
@@ -122,3 +123,7 @@ export const buttonStyle = {
   height: '5vh',
   maxHeight: '40px'
 }
+
+export const schema = yup.object().shape({
+  text: yup.string()
+})

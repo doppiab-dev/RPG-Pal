@@ -17,7 +17,7 @@ import {
   type Theme
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { PlacesOfInterestEnum, PlacesOfInterestValues, parseErrorMessage } from '../Utils/f'
+import { PlacesOfInterestEnum, PlacesOfInterestValues, parseErrorMessage, schema } from '../Utils/f'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { DeleteForever, ExpandLess, ExpandMore, ModeEditOutlineOutlined } from '@mui/icons-material'
 import { type SubmitHandler, useForm, Controller } from 'react-hook-form'
@@ -47,23 +47,20 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
 
   const token = useAppSelector(selectToken)
 
-  const schema = yup.object().shape({
-    text: yup.string()
-  })
   const schemaNotFull = yup.object().shape({
     text: yup.string(),
     parent: yup.string()
   })
   const schemaPOI = yup.object().shape({
-    text: yup.string()
-      .required(t('campaign.validationErrorRequired'))
-      .max(32, t('campaign.validationErrorTooLong'))
-      .trim(),
     type: yup.string()
       .required(t('campaign.typeValidationErrorRequired'))
       .oneOf(['world', 'continent', 'region', 'area', 'city', 'camp', 'neighborhood', 'point'], t('campaign.validationErrorInvalidType')),
     parent: yup.string()
-      .required(t('campaign.parentValidationErrorRequired'))
+      .required(t('campaign.parentValidationErrorRequired')),
+    text: yup.string()
+      .required(t('campaign.validationErrorRequired'))
+      .max(32, t('campaign.validationErrorTooLong'))
+      .trim()
   })
 
   const {
