@@ -28,3 +28,6 @@ export const deletePoi = async (token: string, id: number, poi: number): Promise
 
 export const editPoiName = async (token: string, id: number, poi: number, name: string): Promise<AxiosResponse<void>> =>
   await axiosClient.patch(`/master/campaign/${id}/poi/${poi}`, { name } satisfies UpdatePoiNameBody, createApiHeaders(token))
+
+export const createPoi = async (token: string, id: number, parent: string | null, name: string, type: string): Promise<AxiosResponse<void>> =>
+  await axiosClient.post(`/master/campaign/${id}/poi`, { name, parent, type } satisfies CreatePoiBody, createApiHeaders(token))

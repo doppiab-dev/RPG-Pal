@@ -24,7 +24,7 @@ import { type SubmitHandler, useForm, Controller } from 'react-hook-form'
 import { faMapLocationDot, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useAppDispatch, useAppSelector } from '../Utils/store'
-import { deleteAPoi, editAPoiName, setErrorMessage } from '../Store/master'
+import { createAPoi, deleteAPoi, editAPoiName, setErrorMessage } from '../Store/master'
 import { selectToken } from '../Store/users'
 import TextAreaDialog from '../Components/TextAreaDialog'
 import Text from '../Components/Text'
@@ -60,7 +60,16 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
       parent: ''
     }
   })
-
+  const {
+    control: controlCreate, handleSubmit: handleSubmitCreate, formState: { errors: errorsCreate }, reset: resetCreate, setValue: setCreateValue
+  } = useForm<PointOfInterestInputs>({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      text: '',
+      parent: '',
+      type: ''
+    }
+  })
   const {
     control: controlEdit, handleSubmit: handleSubmitEdit, formState: { errors: errorsEdit }, setValue: setEditValue
   } = useForm<FormDataText>({
@@ -72,6 +81,7 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
   const [openDescriptionEdit, setOpenDescriptionEdit] = useState<boolean>(false)
   const [deletePoi, setDeletePoi] = useState<boolean>(false)
   const [editPoiName, setEditPoiName] = useState<boolean>(false)
+  const [createPoi, setCreatePoi] = useState<boolean>(false)
 
   const handleClick = useCallback(() => {
     setOpen(!open)
@@ -135,6 +145,28 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
     }
   }, [setError])
 
+  const openCreatePoi = useCallback((type: string) => {
+    setCreateValue('parent', String(point))
+    setCreateValue('type', type)
+    setCreatePoi(true)
+  }, [point, setCreateValue])
+  const closeCreatePoi = useCallback(() => {
+    resetCreate()
+    setCreatePoi(false)
+  }, [resetCreate])
+  const onSubmitCreate: SubmitHandler<PointOfInterestInputs> = useCallback(async (data) => {
+    try {
+      const name = data.text ?? ''
+      const parent = data.parent ?? null
+      const type = data.type ?? ''
+      await dispatch(createAPoi({ name, parent, token, id: activeCampaign, type }))
+      setCreatePoi(false)
+    } catch (e) {
+      const msg = parseErrorMessage((e))
+      dispatch(setErrorMessage(msg))
+    }
+  }, [activeCampaign, dispatch, token])
+
   const options: Option[] = []
   for (const key in points) {
     options.push({
@@ -166,6 +198,30 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
       name="text"
       firstLabel="Name"
     />
+    <CustomOptionsModal
+      onClose={closeCreatePoi}
+      handleSubmit={handleSubmitCreate}
+      onSubmit={onSubmitCreate}
+      open={createPoi}
+      control={controlCreate}
+      firstError={errorsCreate?.text}
+      secondError={errorsCreate?.parent}
+      thirdError={errorsCreate?.type}
+      options={options}
+      thirdOptions={Object.keys(PlacesOfInterestEnum).map(location => ({
+        id: location,
+        name: t(`placesOfInterest.${location}`)
+      }))}
+      icon={<FontAwesomeIcon icon={faMapLocationDot} />}
+      name="text"
+      firstLabel="Name"
+      secondLabel="parent"
+      thirdLabel='type'
+      title={t('activeCampaign.parentLabel') + points[point].name + t('activeCampaign.parentLabel2')}
+      editText={t('placesOfInterest.create')}
+      disabled
+      thirdDisabled
+    />
     <TextAreaDialog
       open={openDescriptionEdit}
       control={control}
@@ -186,10 +242,10 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
           control={control}
           render={({ field }) =>
             <FormControl fullWidth variant="outlined" margin="normal">
-              <InputLabel>{t('activeCampaign.parentLabel')}</InputLabel>
+              <InputLabel>{t('activeCampaign.editParent')}</InputLabel>
               <Select
                 {...field}
-                label={t('activeCampaign.parentLabel')}
+                label={t('activeCampaign.editParent')}
                 error={Boolean(errors.parent)}
               >
                 {options.map(option => (
@@ -246,6 +302,7 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
                   sx={{ fontSize: '0.8rem' }}
                   startIcon={<FontAwesomeIcon icon={faPlus} style={{ fontSize: '0.8rem' }} />}
                   key={location}
+                  onClick={() => { openCreatePoi(location) }}
                 >
                   {t(`placesOfInterest.${location}`)}
                 </Button>

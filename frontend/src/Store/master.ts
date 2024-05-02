@@ -4,6 +4,7 @@ import {
   campaign,
   campaigns,
   createCampaign,
+  createPoi,
   deleteCampaign,
   deletePoi,
   editCampaign,
@@ -172,6 +173,27 @@ export const editAPoiName = createAsyncThunk(
       return { poi, name }
     } catch (e) {
       const error = formatThunkError(e, 'editAPoiName error')
+
+      return thunkApi.rejectWithValue(error)
+    }
+  }
+)
+
+type CreateAPoi = Authenticated & {
+  id: number
+  parent: string | null
+  name: string
+  type: string
+}
+
+export const createAPoi = createAsyncThunk(
+  'createAPoi',
+  async ({ token, id, name, parent, type }: CreateAPoi, thunkApi) => {
+    try {
+      const response = await createPoi(token, id, parent, name, type)
+      return response.data
+    } catch (e) {
+      const error = formatThunkError(e, 'createAPoi error')
 
       return thunkApi.rejectWithValue(error)
     }

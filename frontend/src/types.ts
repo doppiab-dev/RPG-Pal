@@ -17,6 +17,7 @@ interface FormDataText {
 }
 type PointOfInterestInputs = FormDataText & {
   parent?: string
+  type?: string
 }
 /**
  * API
@@ -85,6 +86,11 @@ interface PlacesOfInterestDTO {
 }
 interface UpdatePoiNameBody {
   name: string
+}
+interface CreatePoiBody {
+  name: string
+  parent: string | null
+  type: string
 }
 /**
  * Redux
