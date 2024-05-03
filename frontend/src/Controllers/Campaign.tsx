@@ -203,6 +203,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       name: points[key].name
     })
   }
+  options.unshift({ id: '', name: t('placesOfInterest.clear') })
 
   return <Stack display='flex' width='calc(100% - 250px)'>
     <TextAreaDialog

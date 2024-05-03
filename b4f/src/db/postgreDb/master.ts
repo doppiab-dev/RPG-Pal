@@ -207,7 +207,7 @@ export const createPoi = async (
   VALUES ($1, $2, $3, $4, $5)
   RETURNING id
   `
-  const createPoiValues = [user_id, numeric_id, name, place, Number(parent)]
+  const createPoiValues = [user_id, numeric_id, name, place, parent === null ? parent : Number(parent)]
   const res = await client.query<DBPlacesOfInterest>(createPoiQuery, createPoiValues)
 
   if (res.rowCount === null || res.rowCount === 0) {
@@ -306,7 +306,7 @@ export const editPoi = async (
   SET description = $1, parent = $2
   WHERE campaign_id = $3 AND user_id = $4 AND id = $5
   `
-  const editPoiValues = [description, Number(parent), numeric_id, user_id, id]
+  const editPoiValues = [description, parent === null ? parent : Number(parent), numeric_id, user_id, id]
   const res = await client.query<DBPlacesOfInterest>(editPoiQuery, editPoiValues)
 
   if (res.rowCount === null || res.rowCount === 0) {

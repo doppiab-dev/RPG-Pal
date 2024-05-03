@@ -138,7 +138,8 @@ const placesOfInterest = {
   placeholder: 'detach it from the Point of Interest',
   poiBody: 'Create/Modify your "',
   poiBody2: '" description',
-  createLocation: 'Add a new Point of Interest'
+  createLocation: 'Add a new Point of Interest',
+  clear: 'Clear Value'
 }
 
 const en = {
