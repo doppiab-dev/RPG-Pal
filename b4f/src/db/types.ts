@@ -40,7 +40,7 @@ export interface DBPlacesOfInterest {
   campaign_id: number
   user_id: string
   parent: number | null
-  children: number[]
+  children: number[] | null
   description: string | null
   name: string
   place: PlacesOfInterestType

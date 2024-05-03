@@ -184,7 +184,7 @@ type CreateAPoi = Authenticated & {
   id: number
   parent: string | null
   name: string
-  type: string
+  type: PlacesOfInterestType
 }
 
 export const createAPoi = createAsyncThunk(
@@ -372,13 +372,13 @@ export const master = createSlice({
       state.errorMessage = ''
     })
     builder.addCase(deleteAPoi.pending, (state) => {
-      state.campaignsInfoStatus = 'loading'
+      state.campaignInfoStatus = 'loading'
     })
     builder.addCase(deleteAPoi.rejected, (state, action) => {
       state.errorMessage = Boolean(action.error) && typeof action.error === 'string'
         ? action.error
         : action.payload as string
-      state.campaignsInfoStatus = 'error'
+      state.campaignInfoStatus = 'error'
     })
     builder.addCase(deleteAPoi.fulfilled, (state, action) => {
       const placesOfInterest = formatPOI(action.payload)
@@ -390,13 +390,13 @@ export const master = createSlice({
       state.errorMessage = ''
     })
     builder.addCase(createAPoi.pending, (state) => {
-      state.campaignsInfoStatus = 'loading'
+      state.campaignInfoStatus = 'loading'
     })
     builder.addCase(createAPoi.rejected, (state, action) => {
       state.errorMessage = Boolean(action.error) && typeof action.error === 'string'
         ? action.error
         : action.payload as string
-      state.campaignsInfoStatus = 'error'
+      state.campaignInfoStatus = 'error'
     })
     builder.addCase(createAPoi.fulfilled, (state, action) => {
       const placesOfInterest = formatPOI(action.payload)
@@ -408,13 +408,13 @@ export const master = createSlice({
       state.errorMessage = ''
     })
     builder.addCase(editAPoi.pending, (state) => {
-      state.campaignsInfoStatus = 'loading'
+      state.campaignInfoStatus = 'loading'
     })
     builder.addCase(editAPoi.rejected, (state, action) => {
       state.errorMessage = Boolean(action.error) && typeof action.error === 'string'
         ? action.error
         : action.payload as string
-      state.campaignsInfoStatus = 'error'
+      state.campaignInfoStatus = 'error'
     })
     builder.addCase(editAPoi.fulfilled, (state, action) => {
       const placesOfInterest = formatPOI(action.payload)

@@ -169,7 +169,7 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
     try {
       const name = data.text ?? ''
       const parent = data.parent ?? null
-      const type = data.type ?? ''
+      const type = data.type as PlacesOfInterestType
       await dispatch(createAPoi({ name, parent, token, id: activeCampaign, type }))
       setCreatePoi(false)
     } catch (e) {

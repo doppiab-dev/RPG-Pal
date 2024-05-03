@@ -3,7 +3,7 @@ import { missingInBody, validateToken, verifyMissingToken } from './utils'
 import { RepositoryType } from '../../config'
 import { dbFactory } from '../../db'
 import { Logger } from '../../logger'
-import { type UpsertDescriptionBody, type UpsertPlotBody, type CreateCampaignBody, type EditCampaignBody } from '../types'
+import { type UpsertDescriptionBody, type UpsertPlotBody, type CreateCampaignBody, type EditCampaignBody, type CreatePoiBody } from '../types'
 import express from 'express'
 
 export const masterRouter = express.Router()
@@ -166,6 +166,33 @@ masterRouter.put('/campaign/:id/plot', asyncErrWrapper(async (req, res) => {
     return res.status(204).json()
   } catch (e) {
     const { status, error } = formatError(e as Error, '013-RESPONSE', 'masterRouter /campaign/:id/plot put')
+
+    return res.status(status).json(error)
+  }
+}))
+
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+masterRouter.post('/campaign/:id/poi', asyncErrWrapper(async (req, res) => {
+  try {
+    const token = verifyMissingToken(req.headers.authorization)
+    const { userId } = validateToken(token)
+    const body: CreatePoiBody = req.body
+    const { name, parent, type } = body
+    const { id } = req.params
+    if (missingInBody(name)) throw new Error('name is missing in body')
+    if (missingInBody(type)) throw new Error('type is missing in body')
+    if (parent === undefined || parent === '') throw new Error('parent value is invalid')
+    if (missingInBody(id)) throw new Error('id is missing in body')
+
+    const createPoiTimestamp = performance.now()
+    const db = dbFactory(RepositoryType)
+    const data = await db.createPoi(id, userId, name, parent, type)
+    const createTime = Math.round(performance.now() - createPoiTimestamp)
+    Logger.writeEvent(`Master: create poi in ${createTime} ms`)
+
+    return res.status(200).json(data)
+  } catch (e) {
+    const { status, error } = formatError(e as Error, '014-RESPONSE', 'masterRouter /campaign/:id/poi put')
 
     return res.status(status).json(error)
   }

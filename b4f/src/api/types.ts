@@ -54,7 +54,8 @@ export interface CampaignDTO {
   placesOfInterest: PlacesOfInterestDTO
   groups: CampaignGroupDTO[]
 }
-interface PlacesOfInterestDTO {
+
+export interface PlacesOfInterestDTO {
   points: CampaignPlaceOfInterestDTO[]
   roots: number[]
 }
@@ -86,4 +87,19 @@ export interface UpsertDescriptionBody {
 
 export interface UpsertPlotBody {
   plot: string
+}
+
+export interface UpdatePoiNameBody {
+  name: string
+}
+
+export interface CreatePoiBody {
+  name: string
+  parent: string | null
+  type: PlacesOfInterestType
+}
+
+export interface UpdatePoiBody {
+  description: string
+  parent: string | null
 }

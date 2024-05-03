@@ -1,7 +1,14 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { tableCampaigns, tableGroups, tablePlacesOfInterest } from '../../config'
 import { dbConfig } from '.'
-import { type CampaignStatus, type ListCampaignDTO, type GetCampaignsDTO, type CampaignDTO } from '../../api/types'
+import {
+  type CampaignStatus,
+  type ListCampaignDTO,
+  type GetCampaignsDTO,
+  type CampaignDTO,
+  type PlacesOfInterestDTO,
+  type PlacesOfInterestType
+} from '../../api/types'
 import { type DBCampaignGroup, type DBPlacesOfInterest, type DBCampaigns, type DBCampaignsGroups } from '../types'
 import { composePoi } from './utils'
 
@@ -93,28 +100,21 @@ export const getCampaign = async (id: string, user_id: string): Promise<Campaign
   LEFT JOIN ${tableGroups} g ON c.id = g.campaign_id
   WHERE c.user_id = $1 AND c.id = $2
   `
-  const POIQuery = `
-  SELECT * FROM ${tablePlacesOfInterest}
-  WHERE user_id = $1 AND campaign_id = $2
-  ORDER by parent ASC
-  `
-  const values = [user_id, id]
+  const values = [user_id, numeric_id]
   const campaign = await client.query<DBCampaignGroup>(campaignQuery, values)
-  const pois = await client.query<DBPlacesOfInterest>(POIQuery, values)
 
   client.release()
   if (campaign.rowCount === null || campaign.rowCount === 0) throw new Error('fetch campaign failed')
-  if (pois.rowCount === null) throw new Error('fetch poi failed')
 
+  const { placesOfInterest } = await fetchPoi(id, user_id)
   const row = campaign.rows[0]
-  const { roots } = composePoi(pois.rows)
 
   return {
     id: row.id,
     name: row.name,
     description: row.description ?? '',
     plot: row.plot ?? '',
-    placesOfInterest: { roots, points: pois.rows.map(row => ({ ...row, description: row.description ?? '' })) },
+    placesOfInterest,
     groups: row.group_id === null ? [] : campaign.rows.map(row => ({ id: row.group_id, name: row.group_name }))
   }
 }
@@ -131,6 +131,34 @@ export const upsertDescription = async (id: string, user_id: string, description
   client.release()
 }
 
+const fetchPoi = async (campaign_id: string, user_id: string): Promise<{ placesOfInterest: PlacesOfInterestDTO }> => {
+  const numeric_id = Number(campaign_id)
+  if (isNaN(numeric_id)) throw new Error('fetch failed, id not valid.')
+
+  const client = await dbConfig.connect()
+  const POIQuery = `
+  SELECT * FROM ${tablePlacesOfInterest}
+  WHERE user_id = $1 AND campaign_id = $2
+  `
+  const values = [user_id, numeric_id]
+  const pois = await client.query<DBPlacesOfInterest>(POIQuery, values)
+  client.release()
+
+  if (pois.rowCount === null) throw new Error('fetch poi failed')
+  const { roots } = composePoi(pois.rows)
+
+  return {
+    placesOfInterest: {
+      roots,
+      points: pois.rows.map(row => ({
+        ...row,
+        description: row.description ?? '',
+        children: row.children ?? []
+      }))
+    }
+  }
+}
+
 export const upsertPlot = async (id: string, user_id: string, plot: string): Promise<void> => {
   const client = await dbConfig.connect()
   const upsertPlotQuery = `
@@ -141,4 +169,51 @@ export const upsertPlot = async (id: string, user_id: string, plot: string): Pro
   const upsertPlotValues = [plot, id, user_id]
   await client.query(upsertPlotQuery, upsertPlotValues)
   client.release()
+}
+
+export const createPoi = async (
+  campaign_id: string,
+  user_id: string,
+  name: string,
+  parent: string | null,
+  place: PlacesOfInterestType
+): Promise<PlacesOfInterestDTO> => {
+  const numeric_id = Number(campaign_id)
+  if (isNaN(numeric_id)) throw new Error('fetch failed, id not valid.')
+  if (parent !== null && isNaN(Number(parent))) throw new Error('fetch failed, parent not valid.')
+
+  const client = await dbConfig.connect()
+  const createPoiQuery = `
+  INSERT INTO ${tablePlacesOfInterest}
+  (user_id, campaign_id, name, place, parent)
+  VALUES ($1, $2, $3, $4, $5)
+  RETURNING id
+  `
+  const createPoiValues = [user_id, numeric_id, name, place, Number(parent)]
+  const res = await client.query<DBPlacesOfInterest>(createPoiQuery, createPoiValues)
+
+  if (res.rowCount === null || res.rowCount === 0) {
+    client.release()
+    throw new Error('create poi failed')
+  }
+
+  if (parent !== null) {
+    const { id } = res.rows[0]
+    const updateParentPoiQuery = `
+    UPDATE ${tablePlacesOfInterest}
+    SET children = array_append(children, $1)
+    WHERE campaign_id = $2 AND user_id = $3 AND id = $4
+    `
+    const updateParentPoiValues = [id, numeric_id, user_id, Number(parent)]
+    const rows = await client.query<DBPlacesOfInterest>(updateParentPoiQuery, updateParentPoiValues)
+    if (rows.rowCount === null || rows.rowCount === 0) {
+      client.release()
+      throw new Error('update poi parent failed')
+    }
+  }
+
+  client.release()
+  const { placesOfInterest } = await fetchPoi(campaign_id, user_id)
+
+  return placesOfInterest
 }

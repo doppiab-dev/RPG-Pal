@@ -19,6 +19,11 @@ interface PointOfInterestText {
   text?: string
   parent?: string
 }
+interface PointOfInterestCreateInputs {
+  text: string
+  parent?: string
+  type: string
+}
 interface PointOfInterestInputs {
   text: string
   parent: string
@@ -95,7 +100,7 @@ interface UpdatePoiNameBody {
 interface CreatePoiBody {
   name: string
   parent: string | null
-  type: string
+  type: PlacesOfInterestType
 }
 interface UpdatePoiBody {
   description: string

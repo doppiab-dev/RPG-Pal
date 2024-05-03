@@ -54,7 +54,6 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       .required(t('campaign.typeValidationErrorRequired'))
       .oneOf(['world', 'continent', 'region', 'area', 'city', 'camp', 'neighborhood', 'point'], t('campaign.validationErrorInvalidType')),
     parent: yup.string()
-      .required(t('campaign.parentValidationErrorRequired'))
   })
 
   const [description, setDescription] = useState<boolean>(false)
@@ -98,7 +97,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
     control,
     reset,
     formState: { errors }
-  } = useForm<PointOfInterestInputs>({
+  } = useForm<PointOfInterestCreateInputs>({
     resolver: yupResolver(schemaPOI),
     defaultValues: {
       text: '',
@@ -160,8 +159,8 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
   const onSubmitCreate: SubmitHandler<PointOfInterestInputs> = useCallback(async (data) => {
     try {
       const name = data.text ?? ''
-      const parent = data.parent ?? null
-      const type = data.type ?? ''
+      const parent = data.parent === '' || data.parent === undefined ? null : data.parent
+      const type = data.type as PlacesOfInterestType
       await dispatch(createAPoi({ name, parent, token, id: activeCampaign, type }))
       setCreate(false)
     } catch (e) {

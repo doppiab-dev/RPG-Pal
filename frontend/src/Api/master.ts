@@ -34,7 +34,7 @@ export const createPoi = async (
   id: number,
   parent: string | null,
   name: string,
-  type: string
+  type: PlacesOfInterestType
 ): Promise<AxiosResponse<PlacesOfInterestDTO>> =>
   await axiosClient.post(`/master/campaign/${id}/poi`, { name, parent, type } satisfies CreatePoiBody, createApiHeaders(token))
 

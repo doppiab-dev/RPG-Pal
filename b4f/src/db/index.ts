@@ -1,6 +1,14 @@
 import { dbConnectorPostgreDb } from './postgreDb'
 import { type DbType } from '../config'
-import { type CampaignStatus, type ListCampaignDTO, type GetCampaignsDTO, type UserInfoDTO, type CampaignDTO } from '../api/types'
+import {
+  type CampaignStatus,
+  type ListCampaignDTO,
+  type GetCampaignsDTO,
+  type UserInfoDTO,
+  type CampaignDTO,
+  type PlacesOfInterestType,
+  type PlacesOfInterestDTO
+} from '../api/types'
 
 export const dbFactory = (dbType: DbType): Connector => {
   if (dbType === 'postgres') return dbConnectorPostgreDb
@@ -20,4 +28,5 @@ export interface Connector {
   getCampaign: (id: string, userId: string) => Promise<CampaignDTO>
   upsertDescription: (id: string, userId: string, description: string) => Promise<void>
   upsertPlot: (id: string, userId: string, plot: string) => Promise<void>
+  createPoi: (id: string, userId: string, name: string, parent: string | null, type: PlacesOfInterestType) => Promise<PlacesOfInterestDTO>
 }
