@@ -31,4 +31,5 @@ export interface Connector {
   createPoi: (id: string, userId: string, name: string, parent: string | null, type: PlacesOfInterestType) => Promise<PlacesOfInterestDTO>
   editPoiName: (id: string, userId: string, name: string, poi: string) => Promise<PlacesOfInterestDTO>
   editPoi: (id: string, userId: string, poi: string, description: string, parent: string | null) => Promise<PlacesOfInterestDTO>
+  deletePoi: (id: string, userId: string, poi: string) => Promise<PlacesOfInterestDTO>
 }

@@ -258,3 +258,26 @@ masterRouter.put('/campaign/:id/poi/:poi', asyncErrWrapper(async (req, res) => {
     return res.status(status).json(error)
   }
 }))
+
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+masterRouter.delete('/campaign/:id/poi/:poi', asyncErrWrapper(async (req, res) => {
+  try {
+    const token = verifyMissingToken(req.headers.authorization)
+    const { userId } = validateToken(token)
+    const { id, poi } = req.params
+    if (missingInBody(poi)) throw new Error('poi id is missing in body')
+    if (missingInBody(id)) throw new Error('id is missing in body')
+
+    const deletePoiTimestamp = performance.now()
+    const db = dbFactory(RepositoryType)
+    const data = await db.deletePoi(id, userId, poi)
+    const deleteTime = Math.round(performance.now() - deletePoiTimestamp)
+    Logger.writeEvent(`Master: delete poi in ${deleteTime} ms`)
+
+    return res.status(200).json(data)
+  } catch (e) {
+    const { status, error } = formatError(e as Error, '017-RESPONSE', 'masterRouter /campaign/:id/poi/:id delete')
+
+    return res.status(status).json(error)
+  }
+}))

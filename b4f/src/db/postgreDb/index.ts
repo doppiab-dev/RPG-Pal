@@ -11,7 +11,8 @@ import {
   upsertDescription,
   createPoi,
   editPoiName,
-  editPoi
+  editPoi,
+  deletePoi
 } from './master'
 import { type Connector } from '..'
 
@@ -37,5 +38,6 @@ export const dbConnectorPostgreDb: Connector = {
   upsertPlot,
   createPoi,
   editPoiName,
-  editPoi
+  editPoi,
+  deletePoi
 }
