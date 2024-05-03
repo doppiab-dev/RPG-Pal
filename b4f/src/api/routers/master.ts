@@ -9,7 +9,8 @@ import {
   type CreateCampaignBody,
   type EditCampaignBody,
   type CreatePoiBody,
-  type UpdatePoiNameBody
+  type UpdatePoiNameBody,
+  type UpdatePoiBody
 } from '../types'
 import express from 'express'
 
@@ -226,6 +227,33 @@ masterRouter.patch('/campaign/:id/poi/:poi', asyncErrWrapper(async (req, res) =>
     return res.status(200).json(data)
   } catch (e) {
     const { status, error } = formatError(e as Error, '015-RESPONSE', 'masterRouter /campaign/:id/poi/:id patch')
+
+    return res.status(status).json(error)
+  }
+}))
+
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+masterRouter.put('/campaign/:id/poi/:poi', asyncErrWrapper(async (req, res) => {
+  try {
+    const token = verifyMissingToken(req.headers.authorization)
+    const { userId } = validateToken(token)
+    const body: UpdatePoiBody = req.body
+    const { description, parent } = body
+    const { id, poi } = req.params
+    if (missingInBody(description)) throw new Error('description is missing in body')
+    if (missingInBody(poi)) throw new Error('poi id is missing in body')
+    if (missingInBody(id)) throw new Error('id is missing in body')
+    if (parent === undefined || parent === '') throw new Error('parent value is invalid')
+
+    const editPoiTimestamp = performance.now()
+    const db = dbFactory(RepositoryType)
+    const data = await db.editPoi(id, userId, poi, description, parent)
+    const editTime = Math.round(performance.now() - editPoiTimestamp)
+    Logger.writeEvent(`Master: edit poi in ${editTime} ms`)
+
+    return res.status(200).json(data)
+  } catch (e) {
+    const { status, error } = formatError(e as Error, '016-RESPONSE', 'masterRouter /campaign/:id/poi/:id put')
 
     return res.status(status).json(error)
   }

@@ -248,3 +248,79 @@ export const editPoiName = async (
 
   return placesOfInterest
 }
+
+export const editPoi = async (
+  campaign_id: string,
+  user_id: string,
+  poi: string,
+  description: string,
+  parent: string | null
+): Promise<PlacesOfInterestDTO> => {
+  const numeric_id = Number(campaign_id)
+  const id = Number(poi)
+  if (isNaN(numeric_id)) throw new Error('fetch failed, campaign id not valid.')
+  if (isNaN(id)) throw new Error('fetch failed, id not valid.')
+  if (parent !== null && isNaN(Number(parent))) throw new Error('fetch failed, parent not valid.')
+  const client = await dbConfig.connect()
+
+  const oldParentQuery = `
+  SELECT parent FROM ${tablePlacesOfInterest}
+  WHERE user_id = $1 AND campaign_id = $2 AND id = $3
+  `
+  const oldParentValues = [user_id, numeric_id, id]
+  const oldParentRes = await client.query<DBPlacesOfInterest>(oldParentQuery, oldParentValues)
+  if (oldParentRes.rowCount === null || oldParentRes.rowCount === 0) {
+    client.release()
+    throw new Error('edit poi failed')
+  }
+  const oldParent = oldParentRes.rows[0].parent
+
+  const editPoiQuery = `
+  UPDATE ${tablePlacesOfInterest}
+  SET description = $1, parent = $2
+  WHERE campaign_id = $3 AND user_id = $4 AND id = $5
+  `
+  const editPoiValues = [description, Number(parent), numeric_id, user_id, id]
+  const res = await client.query<DBPlacesOfInterest>(editPoiQuery, editPoiValues)
+
+  if (res.rowCount === null || res.rowCount === 0) {
+    client.release()
+    throw new Error('edit poi failed')
+  }
+
+  if (oldParent !== parent) {
+    if (oldParent !== null) {
+      const updateParentPoiQuery = `
+    UPDATE ${tablePlacesOfInterest}
+    SET children = array_remove(children, $1)
+    WHERE campaign_id = $2 AND user_id = $3 AND id = $4
+    `
+      const updateParentPoiValues = [id, numeric_id, user_id, Number(oldParent)]
+
+      const res = await client.query<DBPlacesOfInterest>(updateParentPoiQuery, updateParentPoiValues)
+
+      if (res.rowCount === null || res.rowCount === 0) {
+        client.release()
+        throw new Error('update poi parent failed')
+      }
+    }
+    if (parent !== null) {
+      const updateParentPoiQuery = `
+      UPDATE ${tablePlacesOfInterest}
+      SET children = array_append(children, $1)
+      WHERE campaign_id = $2 AND user_id = $3 AND id = $4
+      `
+      const updateParentPoiValues = [id, numeric_id, user_id, Number(parent)]
+      const rows = await client.query<DBPlacesOfInterest>(updateParentPoiQuery, updateParentPoiValues)
+      if (rows.rowCount === null || rows.rowCount === 0) {
+        client.release()
+        throw new Error('update poi parent failed')
+      }
+    }
+  }
+
+  client.release()
+  const { placesOfInterest } = await fetchPoi(campaign_id, user_id)
+
+  return placesOfInterest
+}
