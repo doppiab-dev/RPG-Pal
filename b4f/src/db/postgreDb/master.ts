@@ -131,6 +131,18 @@ export const upsertDescription = async (id: string, user_id: string, description
   client.release()
 }
 
+export const upsertPlot = async (id: string, user_id: string, plot: string): Promise<void> => {
+  const client = await dbConfig.connect()
+  const upsertPlotQuery = `
+  UPDATE ${tableCampaigns}
+  SET plot = $1
+  WHERE id = $2 AND user_id = $3
+  `
+  const upsertPlotValues = [plot, id, user_id]
+  await client.query(upsertPlotQuery, upsertPlotValues)
+  client.release()
+}
+
 const fetchPoi = async (campaign_id: string, user_id: string): Promise<{ placesOfInterest: PlacesOfInterestDTO }> => {
   const numeric_id = Number(campaign_id)
   if (isNaN(numeric_id)) throw new Error('fetch failed, id not valid.')
@@ -159,16 +171,22 @@ const fetchPoi = async (campaign_id: string, user_id: string): Promise<{ placesO
   }
 }
 
-export const upsertPlot = async (id: string, user_id: string, plot: string): Promise<void> => {
+const getLocations = async (campaign_id: string, user_id: string): Promise<number[]> => {
+  const numeric_id = Number(campaign_id)
+  if (isNaN(numeric_id)) throw new Error('fetch failed, id not valid.')
+
   const client = await dbConfig.connect()
-  const upsertPlotQuery = `
-  UPDATE ${tableCampaigns}
-  SET plot = $1
-  WHERE id = $2 AND user_id = $3
+  const locationsQuery = `
+  SELECT id FROM ${tablePlacesOfInterest}
+  WHERE user_id = $1 AND campaign_id = $2
   `
-  const upsertPlotValues = [plot, id, user_id]
-  await client.query(upsertPlotQuery, upsertPlotValues)
+  const locationsValues = [user_id, numeric_id]
+  const locationRes = await client.query<DBPlacesOfInterest>(locationsQuery, locationsValues)
   client.release()
+
+  if (locationRes.rowCount === null || locationRes.rowCount === 0) throw new Error('location list poi failed')
+
+  return locationRes.rows.map(l => l.id)
 }
 
 export const createPoi = async (
@@ -199,6 +217,13 @@ export const createPoi = async (
 
   if (parent !== null) {
     const { id } = res.rows[0]
+
+    const locations = await getLocations(campaign_id, user_id)
+    if (!locations.some(l => l === id)) { // Check for DB consistency
+      client.release()
+      throw new Error('invalid poi id')
+    }
+
     const updateParentPoiQuery = `
     UPDATE ${tablePlacesOfInterest}
     SET children = array_append(children, $1)
@@ -261,6 +286,7 @@ export const editPoi = async (
   if (isNaN(numeric_id)) throw new Error('fetch failed, campaign id not valid.')
   if (isNaN(id)) throw new Error('fetch failed, id not valid.')
   if (parent !== null && isNaN(Number(parent))) throw new Error('fetch failed, parent not valid.')
+
   const client = await dbConfig.connect()
 
   const oldParentQuery = `
@@ -305,6 +331,12 @@ export const editPoi = async (
       }
     }
     if (parent !== null) {
+      const locations = await getLocations(campaign_id, user_id)
+      if (!locations.some(l => l === id)) { // Check for DB consistency
+        client.release()
+        throw new Error('invalid poi id')
+      }
+
       const updateParentPoiQuery = `
       UPDATE ${tablePlacesOfInterest}
       SET children = array_append(children, $1)
