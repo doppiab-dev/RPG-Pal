@@ -217,3 +217,34 @@ export const createPoi = async (
 
   return placesOfInterest
 }
+
+export const editPoiName = async (
+  campaign_id: string,
+  user_id: string,
+  name: string,
+  poi: string
+): Promise<PlacesOfInterestDTO> => {
+  const numeric_id = Number(campaign_id)
+  const id = Number(poi)
+  if (isNaN(numeric_id)) throw new Error('fetch failed, campaign id not valid.')
+  if (isNaN(id)) throw new Error('fetch failed, id not valid.')
+
+  const client = await dbConfig.connect()
+  const editPoiNameQuery = `
+  UPDATE ${tablePlacesOfInterest}
+  SET name = $1
+  WHERE campaign_id = $2 AND user_id = $3 AND id = $4
+  `
+  const editPoiNameValues = [name, numeric_id, user_id, id]
+  const res = await client.query<DBPlacesOfInterest>(editPoiNameQuery, editPoiNameValues)
+
+  if (res.rowCount === null || res.rowCount === 0) {
+    client.release()
+    throw new Error('edit poi failed')
+  }
+
+  client.release()
+  const { placesOfInterest } = await fetchPoi(campaign_id, user_id)
+
+  return placesOfInterest
+}

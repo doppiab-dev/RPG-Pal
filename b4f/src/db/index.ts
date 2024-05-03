@@ -29,4 +29,5 @@ export interface Connector {
   upsertDescription: (id: string, userId: string, description: string) => Promise<void>
   upsertPlot: (id: string, userId: string, plot: string) => Promise<void>
   createPoi: (id: string, userId: string, name: string, parent: string | null, type: PlacesOfInterestType) => Promise<PlacesOfInterestDTO>
+  editPoiName: (id: string, userId: string, name: string, poi: string) => Promise<PlacesOfInterestDTO>
 }

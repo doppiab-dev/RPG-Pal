@@ -3,7 +3,14 @@ import { missingInBody, validateToken, verifyMissingToken } from './utils'
 import { RepositoryType } from '../../config'
 import { dbFactory } from '../../db'
 import { Logger } from '../../logger'
-import { type UpsertDescriptionBody, type UpsertPlotBody, type CreateCampaignBody, type EditCampaignBody, type CreatePoiBody } from '../types'
+import {
+  type UpsertDescriptionBody,
+  type UpsertPlotBody,
+  type CreateCampaignBody,
+  type EditCampaignBody,
+  type CreatePoiBody,
+  type UpdatePoiNameBody
+} from '../types'
 import express from 'express'
 
 export const masterRouter = express.Router()
@@ -192,7 +199,33 @@ masterRouter.post('/campaign/:id/poi', asyncErrWrapper(async (req, res) => {
 
     return res.status(200).json(data)
   } catch (e) {
-    const { status, error } = formatError(e as Error, '014-RESPONSE', 'masterRouter /campaign/:id/poi put')
+    const { status, error } = formatError(e as Error, '014-RESPONSE', 'masterRouter /campaign/:id/poi post')
+
+    return res.status(status).json(error)
+  }
+}))
+
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+masterRouter.patch('/campaign/:id/poi/:poi', asyncErrWrapper(async (req, res) => {
+  try {
+    const token = verifyMissingToken(req.headers.authorization)
+    const { userId } = validateToken(token)
+    const body: UpdatePoiNameBody = req.body
+    const { name } = body
+    const { id, poi } = req.params
+    if (missingInBody(name)) throw new Error('name is missing in body')
+    if (missingInBody(poi)) throw new Error('poi id is missing in body')
+    if (missingInBody(id)) throw new Error('id is missing in body')
+
+    const editPoiTimestamp = performance.now()
+    const db = dbFactory(RepositoryType)
+    const data = await db.editPoiName(id, userId, name, poi)
+    const editTime = Math.round(performance.now() - editPoiTimestamp)
+    Logger.writeEvent(`Master: edit poi name in ${editTime} ms`)
+
+    return res.status(200).json(data)
+  } catch (e) {
+    const { status, error } = formatError(e as Error, '015-RESPONSE', 'masterRouter /campaign/:id/poi/:id patch')
 
     return res.status(status).json(error)
   }
