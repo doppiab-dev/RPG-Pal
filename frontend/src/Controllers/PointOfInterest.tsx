@@ -245,6 +245,7 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
       title={t('placesOfInterest.edit') + t(`placesOfInterest.${points[point].place}`)}
       text={points[point].description}
       defaultEditMode={!Boolean(points[point].description)}
+      button={t('placesOfInterest.button')}
     >
       {
         points[point].place !== 'world' &&

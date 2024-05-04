@@ -82,7 +82,8 @@ const Campaigns: FC = () => {
 
   const clearError = useCallback(() => {
     dispatch(clearMasterState())
-  }, [dispatch])
+    navigate('/home')
+  }, [dispatch, navigate])
 
   const goToHome = useCallback(() => {
     navigate('/home')

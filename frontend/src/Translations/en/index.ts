@@ -139,7 +139,8 @@ const placesOfInterest = {
   poiBody: 'Create/Modify your "',
   poiBody2: '" description',
   createLocation: 'Add a new Point of Interest',
-  clear: 'Clear Value'
+  clear: 'Clear Value',
+  button: 'Save data'
 }
 
 const en = {
