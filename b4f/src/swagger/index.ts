@@ -3,7 +3,7 @@ import swaggerJSDoc from 'swagger-jsdoc'
 const swaggerDefinition = {
   openapi: '3.0.3',
   info: {
-    title: 'API Documentation AsciaScalfita',
+    title: 'API Documentation RPG-Pal',
     version: '0.0.1'
   },
   components: {
