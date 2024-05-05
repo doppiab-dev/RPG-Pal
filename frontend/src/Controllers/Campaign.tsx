@@ -153,8 +153,8 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
     setCreate(true)
   }, [])
   const closeCreate = useCallback(() => {
-    reset()
     setCreate(false)
+    reset()
   }, [reset])
   const onSubmitCreate: SubmitHandler<PointOfInterestInputs> = useCallback(async (data) => {
     try {
@@ -163,11 +163,12 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       const type = data.type as PlacesOfInterestType
       await dispatch(createAPoi({ name, parent, token, id: activeCampaign, type }))
       setCreate(false)
+      reset()
     } catch (e) {
       const msg = parseErrorMessage((e))
       dispatch(setErrorMessage(msg))
     }
-  }, [activeCampaign, dispatch, token])
+  }, [activeCampaign, dispatch, reset, token])
 
   const clearError = useCallback(() => {
     dispatch(clearMasterState())
