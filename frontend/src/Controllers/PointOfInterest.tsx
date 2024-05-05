@@ -64,7 +64,7 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
   })
 
   const {
-    handleSubmit, control, setValue, reset, setError, formState: { errors }
+    handleSubmit, control, setValue, getValues, reset, setError, formState: { errors }
   } = useForm<PointOfInterestText>({
     resolver: yupResolver(schemaNotFull),
     defaultValues: {
@@ -144,6 +144,11 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
     }
   }, [activeCampaign, dispatch, point, token])
 
+  const updateDescriptionValue = useCallback((text: string) => {
+    const value = getValues('text')
+    setValue('text', `${value} ${text}`
+    )
+  }, [getValues, setValue])
   const onSubmit: SubmitHandler<PointOfInterestText> = useCallback(async (data) => {
     try {
       const description = data.text ?? ''
@@ -246,6 +251,7 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
       text={points[point].description}
       defaultEditMode={!Boolean(points[point].description)}
       button={t('placesOfInterest.button')}
+      setValue={updateDescriptionValue}
     >
       {
         points[point].place !== 'world' &&

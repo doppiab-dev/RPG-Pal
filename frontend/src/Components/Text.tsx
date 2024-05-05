@@ -3,7 +3,7 @@ import { Box, Button, Typography } from '@mui/material'
 import { ReadMore, Description as DescriptionIcon } from '@mui/icons-material'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { buttonStyle } from '../Utils/f'
+import { buttonStyle, removeHtmlTags } from '../Utils/f'
 
 interface TextProps {
   open: () => void
@@ -28,7 +28,7 @@ const Text: FC<TextProps> = ({ open, chunked, text, emptyText, button, showMore 
     </Button>
   </Box>
   : <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
-    <Typography>{chunked}</Typography>
+    <Typography>{removeHtmlTags(chunked)}</Typography>
     <Button
       onClick={open}
       variant="contained"

@@ -71,6 +71,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
     setValue: setDescriptionValue,
     reset: resetDescription,
     setError: setDescriptionError,
+    getValues: getDescriptionValues,
     formState: { errors: descriptionErrors }
   } = useForm<FormDataText>({
     resolver: yupResolver(schema),
@@ -82,6 +83,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
     handleSubmit: handlePlotSubmit,
     control: controlPlot,
     setValue: setPlotValue,
+    getValues: getPlotValues,
     reset: resetPlot,
     setError: setPlotError,
     formState: { errors: plotErrors }
@@ -137,6 +139,10 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
   const cancelDescription = useCallback(() => {
     resetDescription()
   }, [resetDescription])
+  const updateDescriptionValue = useCallback((text: string) => {
+    const value = getDescriptionValues('text')
+    setDescriptionValue('text', `${value} ${text}`)
+  }, [getDescriptionValues, setDescriptionValue])
 
   const closePlot = useCallback(() => {
     setPlot(false)
@@ -148,6 +154,10 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
   const cancelPlot = useCallback(() => {
     resetPlot()
   }, [resetPlot])
+  const updatePlotValue = useCallback((text: string) => {
+    const value = getPlotValues('text')
+    setPlotValue('text', `${value} ${text}`)
+  }, [getPlotValues, setPlotValue])
 
   const openCreate = useCallback(() => {
     setCreate(true)
@@ -219,6 +229,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       title={t('activeCampaign.descriptionTitle')}
       text={campaign.description}
       defaultEditMode={!Boolean(campaign.description)}
+      setValue={updateDescriptionValue}
     />
     <TextAreaDialog
       open={plot}
@@ -232,6 +243,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       title={t('activeCampaign.plotTitle')}
       text={campaign.plot}
       defaultEditMode={!Boolean(campaign.plot)}
+      setValue={updatePlotValue}
     />
     <CustomOptionsModal
       onClose={closeCreate}

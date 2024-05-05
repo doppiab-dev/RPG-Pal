@@ -117,7 +117,12 @@ const textArea = {
   cancel: 'Clear text',
   button: 'Save text',
   edit: 'Edit mode',
-  read: 'Read mode'
+  read: 'Read mode',
+  addTitle: 'Title',
+  addSubtitle: 'Subtitle',
+  bold: 'Bold',
+  italic: 'Italic',
+  underlined: 'Underlined'
 }
 const placesOfInterest = {
   world: 'World',

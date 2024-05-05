@@ -127,3 +127,6 @@ export const buttonStyle = {
 export const schema = yup.object().shape({
   text: yup.string()
 })
+
+export const removeHtmlTags = (text: string): string =>
+  text.replace(/<[^>]*>/g, ' ')

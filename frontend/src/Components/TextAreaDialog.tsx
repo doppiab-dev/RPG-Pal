@@ -1,11 +1,24 @@
 import { useCallback, useState, type FC } from 'react'
-import { TextField, Button, Typography, Divider, Box, Dialog, DialogContent, DialogTitle, DialogActions, IconButton } from '@mui/material'
+import {
+  TextField,
+  Button,
+  Typography,
+  Divider,
+  Box,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogActions,
+  IconButton,
+  ButtonGroup
+} from '@mui/material'
 import { type Control, Controller, type FieldErrors, type SubmitHandler, type UseFormHandleSubmit } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { Send, Close } from '@mui/icons-material'
-import { faTimes, faEdit, faChevronLeft } from '@fortawesome/free-solid-svg-icons'
+import { faTimes, faEdit, faChevronLeft, faHeading, faUnderline, faItalic, faBold, faTextHeight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { buttonStyle } from '../Utils/f'
+import HtmlParser from './HtmlParser'
 
 type TextAreaDialogProps = WithChildren & {
   open: boolean
@@ -20,6 +33,7 @@ type TextAreaDialogProps = WithChildren & {
   cancel: () => void
   handleSubmit: UseFormHandleSubmit<FormDataText>
   onSubmit: SubmitHandler<FormDataText>
+  setValue: (text: string) => void
 }
 
 const TextAreaDialog: FC<TextAreaDialogProps> = ({
@@ -35,7 +49,8 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
   cancel,
   handleSubmit,
   close,
-  onSubmit
+  onSubmit,
+  setValue
 }) => {
   const { t } = useTranslation()
 
@@ -74,7 +89,7 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
       editMode
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         ? <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%' }}>
-          <DialogContent>
+          <DialogContent sx={{ p: '12px 24px 0 24px' }}>
             <Typography>
               {body ?? t('textArea.body')}
             </Typography>
@@ -105,6 +120,43 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
             </Box>
             {children}
           </DialogContent>
+          <ButtonGroup sx={{ display: 'flex', marginLeft: '2vw' }} variant="outlined">
+            <Button
+              sx={{ fontSize: '0.8rem' }}
+              startIcon={<FontAwesomeIcon icon={faHeading} style={{ fontSize: '0.8rem' }} />}
+              onClick={() => { setValue('<h2> </h2>') }}
+            >
+              {t('textArea.addTitle')}
+            </Button>
+            <Button
+              sx={{ fontSize: '0.8rem' }}
+              startIcon={<FontAwesomeIcon icon={faTextHeight} style={{ fontSize: '0.8rem' }} />}
+              onClick={() => { setValue('<h3> </h3>') }}
+            >
+              {t('textArea.addSubtitle')}
+            </Button>
+            <Button
+              sx={{ fontSize: '0.8rem' }}
+              startIcon={<FontAwesomeIcon icon={faBold} style={{ fontSize: '0.8rem' }} />}
+              onClick={() => { setValue('<b> </b>') }}
+            >
+              {t('textArea.bold')}
+            </Button>
+            <Button
+              sx={{ fontSize: '0.8rem' }}
+              startIcon={<FontAwesomeIcon icon={faItalic} style={{ fontSize: '0.8rem' }} />}
+              onClick={() => { setValue('<i> </i>') }}
+            >
+              {t('textArea.italic')}
+            </Button>
+            <Button
+              sx={{ fontSize: '0.8rem' }}
+              startIcon={<FontAwesomeIcon icon={faUnderline} style={{ fontSize: '0.8rem' }} />}
+              onClick={() => { setValue('<u> </u>') }}
+            >
+              {t('textArea.underlined')}
+            </Button>
+          </ButtonGroup>
           <DialogActions sx={{ p: 2, justifyContent: 'flex-end' }}>
             <Button
               variant="contained"
@@ -129,7 +181,7 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
           </DialogActions>
         </form>
         : <DialogContent>
-          <Typography sx={{ whiteSpace: 'break-spaces' }}>{text}</Typography>
+          <HtmlParser style={{ whiteSpace: 'break-spaces' }}>{text}</HtmlParser>
           <DialogActions sx={{ p: 2, justifyContent: 'flex-end' }}>
             <Button
               variant="contained"
