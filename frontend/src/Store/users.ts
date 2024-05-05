@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { formatThunkError, userInitialState } from '../Utils/store'
 import { googleLogin } from '../Api/login'
 import { deleteUser, updateUsername, userInfo } from '../Api/user'
+import { sanitize } from 'dompurify'
 
 export const authenticateUser = createAsyncThunk(
   'authenticateUser',
@@ -43,8 +44,9 @@ export const updateTheUsername = createAsyncThunk(
   'updateTheUsername',
   async ({ token, username }: UpdateTheUsername, thunkApi) => {
     try {
-      await updateUsername(token, username)
-      return { username }
+      const newUsername = sanitize(username)
+      await updateUsername(token, newUsername)
+      return { username: newUsername }
     } catch (e) {
       const error = formatThunkError(e, 'updateTheUsername error')
 

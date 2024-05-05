@@ -14,6 +14,7 @@ import {
   upsertPlot
 } from '../Api/master'
 import { formatPOI } from '../Utils/f'
+import { sanitize } from 'dompurify'
 
 export const retrieveMasterInfo = createAsyncThunk(
   'retrieveMasterInfo',
@@ -37,7 +38,7 @@ export const createACampaign = createAsyncThunk(
   'createCampaign',
   async ({ token, name }: CreateACampaign, thunkApi) => {
     try {
-      const response = await createCampaign(token, name)
+      const response = await createCampaign(token, sanitize(name))
       return response.data
     } catch (e) {
       const error = formatThunkError(e, 'createACampaign error')
@@ -57,8 +58,9 @@ export const editACampaign = createAsyncThunk(
   'editACampaign',
   async ({ token, name, status, id }: EditACampaign, thunkApi) => {
     try {
-      await editCampaign(token, name, status, id)
-      return { name, id, status }
+      const newName = sanitize(name)
+      await editCampaign(token, newName, status, id)
+      return { name: newName, id, status }
     } catch (e) {
       const error = formatThunkError(e, 'editACampaign error')
 
@@ -112,8 +114,9 @@ export const upsertADescription = createAsyncThunk(
   'upsertADescription',
   async ({ token, id, description }: UpsertADescription, thunkApi) => {
     try {
-      await upsertDescription(token, id, description)
-      return { description }
+      const newDescription = sanitize(description)
+      await upsertDescription(token, id, newDescription)
+      return { description: newDescription }
     } catch (e) {
       const error = formatThunkError(e, 'upsertADescription error')
 
@@ -131,8 +134,9 @@ export const upsertAPlot = createAsyncThunk(
   'upsertAPlot',
   async ({ token, id, plot }: UpsertAPlot, thunkApi) => {
     try {
-      await upsertPlot(token, id, plot)
-      return { plot }
+      const newPlot = sanitize(plot)
+      await upsertPlot(token, id, newPlot)
+      return { plot: newPlot }
     } catch (e) {
       const error = formatThunkError(e, 'upsertAPlot error')
 
@@ -170,7 +174,7 @@ export const editAPoiName = createAsyncThunk(
   'editAPoiName',
   async ({ token, id, poi, name }: EditAPoiName, thunkApi) => {
     try {
-      const response = await editPoiName(token, id, poi, name)
+      const response = await editPoiName(token, id, poi, sanitize(name))
       return response.data
     } catch (e) {
       const error = formatThunkError(e, 'editAPoiName error')
@@ -191,7 +195,7 @@ export const createAPoi = createAsyncThunk(
   'createAPoi',
   async ({ token, id, name, parent, type }: CreateAPoi, thunkApi) => {
     try {
-      const response = await createPoi(token, id, parent, name, type)
+      const response = await createPoi(token, id, parent, sanitize(name), type)
       return response.data
     } catch (e) {
       const error = formatThunkError(e, 'createAPoi error')
@@ -212,7 +216,7 @@ export const editAPoi = createAsyncThunk(
   'editAPoi',
   async ({ token, id, poi, description, parent }: EditAPoi, thunkApi) => {
     try {
-      const response = await editPoi(token, id, poi, description, parent)
+      const response = await editPoi(token, id, poi, sanitize(description), parent)
       return response.data
     } catch (e) {
       const error = formatThunkError(e, 'editAPoi error')

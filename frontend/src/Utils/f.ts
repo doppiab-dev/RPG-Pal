@@ -128,5 +128,9 @@ export const schema = yup.object().shape({
   text: yup.string()
 })
 
-export const removeHtmlTags = (text: string): string =>
-  text.replace(/<[^>]*>/g, ' ')
+export const removeHtmlTags = (text: string): string => {
+  const div = document.createElement('div')
+  div.innerHTML = text
+
+  return div.innerText
+}
