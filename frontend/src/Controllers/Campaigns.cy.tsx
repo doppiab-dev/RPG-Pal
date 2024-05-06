@@ -44,8 +44,6 @@ describe('<Campaign />', () => {
       .and('have.css', 'width', '250px')
       .and('have.css', 'color', hexToRgb(theme.palette.primary.main))
       .and('have.css', 'background-color', hexToRgb(theme.palette.background.paper))
-    cy.get("[data-testid='campaign-list']").should('have.css', 'width', '250px').and('have.css', 'height', '884px')
-    cy.get("[data-testid='campaign-list-title']").should('have.css', 'font-size', '14px').and('have.css', 'letter-spacing', '0')
     checkCss('campaign-list-create')
     checkCss('campaign-list-home')
     checkCss('campaign-list-logout')

@@ -36,6 +36,7 @@
 //   }
 // }
 import CryptoJS from 'crypto-js'
+import { masterInitialState, playerInitialState } from './utils'
 
 Cypress.on("uncaught:exception", (err) => {
   if (
@@ -82,7 +83,7 @@ Cypress.Commands.add(('loginByGoogleApi' as any), () => {
           picture: body.picture,
         }
       }
-      const state = {
+      const state: State = {
         userInfo: {
           user: {
             ...userData.user,
@@ -107,16 +108,8 @@ Cypress.Commands.add(('loginByGoogleApi' as any), () => {
           userInfoStatus: "idle",
           usernameStatus: "idle"
         },
-        masterInfo: {
-          campaigns: [],
-          campaignsInfoStatus: "success",
-          errorMessage: ""
-        },
-        playerInfo: {
-          characters: [],
-          charactersInfoStatus: "success",
-          errorMessage: ""
-        }
+        masterInfo: { ...masterInitialState },
+        playerInfo: { ...playerInitialState }
       }
       window.localStorage.setItem('rpgPal', CryptoJS.AES.encrypt(JSON.stringify(state), secretKey).toString())
     })

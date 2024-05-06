@@ -252,6 +252,7 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
       defaultEditMode={!Boolean(points[point].description)}
       button={t('placesOfInterest.button')}
       setValue={updateDescriptionValue}
+      testId='poi-description'
     >
       {
         points[point].place !== 'world' &&
@@ -265,12 +266,13 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
                 {...field}
                 label={t('activeCampaign.editParent')}
                 error={Boolean(errors.parent)}
+                data-testid='second-select'
               >
-                <MenuItem value=''>
+                <MenuItem value='' data-testid='option-second-default'>
                   {t('placesOfInterest.placeholder')}
                 </MenuItem>
                 {options.map(option => (
-                  <MenuItem key={option.id} value={String(option.id)} disabled={option.disabled ?? false}>
+                  <MenuItem key={option.id} value={String(option.id)} disabled={option.disabled ?? false} data-testid={`option-second-${option.id}`}>
                     {option.name}
                   </MenuItem>
                 ))}
@@ -296,6 +298,7 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
             setValue('text', points[point].name)
             openEditPoiName()
           }}
+          data-testid='edit-poi-name-button'
         >
           <ModeEditOutlineOutlined />
         </ListItemIcon>
@@ -305,6 +308,7 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
             e.stopPropagation()
             openDeletePoi()
           }}
+          data-testid='delete-poi-button'
         >
           <DeleteForever />
         </ListItemIcon>
@@ -324,6 +328,7 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
                   startIcon={<FontAwesomeIcon icon={faPlus} style={{ fontSize: '0.8rem' }} />}
                   key={location}
                   onClick={() => { openCreatePoi(location) }}
+                  data-testid={`add-poi-${location}-button`}
                 >
                   {t(`placesOfInterest.${location}`)}
                 </Button>
@@ -340,6 +345,7 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
       emptyText={t('activeCampaign.POInoDescription') + t(`placesOfInterest.${points[point].place}`) + t('activeCampaign.POInoDescription2')}
       button={t('placesOfInterest.edit') + t(`placesOfInterest.${points[point].place}`)}
       showMore={t('placesOfInterest.showMore')}
+      testId={`poi-description-${points[point].place}`}
     />
     <Divider />
     {

@@ -12,9 +12,10 @@ interface TextProps {
   emptyText: string
   button: string
   showMore: string
+  testId: string
 }
 
-const Text: FC<TextProps> = ({ open, chunked, text, emptyText, button, showMore }) => text === ''
+const Text: FC<TextProps> = ({ open, chunked, text, emptyText, button, showMore, testId }) => text === ''
   ? <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
     <Typography>{emptyText}</Typography>
     <Button
@@ -23,17 +24,19 @@ const Text: FC<TextProps> = ({ open, chunked, text, emptyText, button, showMore 
       startIcon={<FontAwesomeIcon icon={faPlus} />}
       endIcon={<DescriptionIcon />}
       sx={{ boxShadow: 4, alignSelf: 'flex-end', ...buttonStyle }}
+      data-testid={`add-${testId}-button`}
     >
       {button}
     </Button>
   </Box>
   : <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
-    <Typography>{removeHtmlTags(chunked)}</Typography>
+    <Typography data-testid={`chunked-${testId}-text`}>{removeHtmlTags(chunked)}</Typography>
     <Button
       onClick={open}
       variant="contained"
       endIcon={<ReadMore />}
       sx={{ boxShadow: 4, alignSelf: 'flex-end', ...buttonStyle }}
+      data-testid={`read-more-${testId}-button`}
     >
       {showMore}
     </Button>

@@ -29,6 +29,7 @@ type TextAreaDialogProps = WithChildren & {
   button?: string
   text: string
   defaultEditMode?: boolean
+  testId: string
   close: () => void
   cancel: () => void
   handleSubmit: UseFormHandleSubmit<FormDataText>
@@ -45,6 +46,7 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
   title,
   text,
   children,
+  testId,
   defaultEditMode = false,
   cancel,
   handleSubmit,
@@ -107,6 +109,7 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
                     margin="dense"
                     error={Boolean(errors.text)}
                     helperText={errors.text?.message}
+                    data-testid={`${testId}-text`}
                     InputProps={{
                       ...field,
                       endAdornment:
@@ -125,6 +128,7 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
               sx={{ fontSize: '0.8rem' }}
               startIcon={<FontAwesomeIcon icon={faHeading} style={{ fontSize: '0.8rem' }} />}
               onClick={() => { setValue('<h2> </h2>') }}
+              data-testid={`add-edit-${testId}-title`}
             >
               {t('textArea.addTitle')}
             </Button>
@@ -132,6 +136,7 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
               sx={{ fontSize: '0.8rem' }}
               startIcon={<FontAwesomeIcon icon={faTextHeight} style={{ fontSize: '0.8rem' }} />}
               onClick={() => { setValue('<h3> </h3>') }}
+              data-testid={`add-edit-${testId}-subtitle`}
             >
               {t('textArea.addSubtitle')}
             </Button>
@@ -139,6 +144,7 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
               sx={{ fontSize: '0.8rem' }}
               startIcon={<FontAwesomeIcon icon={faBold} style={{ fontSize: '0.8rem' }} />}
               onClick={() => { setValue('<b> </b>') }}
+              data-testid={`add-edit-${testId}-bold`}
             >
               {t('textArea.bold')}
             </Button>
@@ -146,6 +152,7 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
               sx={{ fontSize: '0.8rem' }}
               startIcon={<FontAwesomeIcon icon={faItalic} style={{ fontSize: '0.8rem' }} />}
               onClick={() => { setValue('<i> </i>') }}
+              data-testid={`add-edit-${testId}-italic`}
             >
               {t('textArea.italic')}
             </Button>
@@ -153,6 +160,7 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
               sx={{ fontSize: '0.8rem' }}
               startIcon={<FontAwesomeIcon icon={faUnderline} style={{ fontSize: '0.8rem' }} />}
               onClick={() => { setValue('<u> </u>') }}
+              data-testid={`add-edit-${testId}-underlined`}
             >
               {t('textArea.underlined')}
             </Button>
@@ -164,6 +172,7 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
               size="large"
               endIcon={<FontAwesomeIcon icon={faChevronLeft} />}
               onClick={openReadMode}
+              data-testid={`open-read-${testId}-button`}
               sx={{ ...buttonStyle }}
             >
               {t('textArea.read')}
@@ -181,7 +190,7 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
           </DialogActions>
         </form>
         : <DialogContent>
-          <HtmlParser style={{ whiteSpace: 'break-spaces' }}>{text}</HtmlParser>
+          <HtmlParser style={{ whiteSpace: 'break-spaces' }} testId={testId}>{text}</HtmlParser>
           <DialogActions sx={{ p: 2, justifyContent: 'flex-end' }}>
             <Button
               variant="contained"
@@ -190,6 +199,7 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
               endIcon={<FontAwesomeIcon icon={faEdit} data-testid="edit-mode" />}
               onClick={openEditMode}
               sx={{ ...buttonStyle }}
+              data-testid={`open-edit-${testId}-button`}
             >
               {t('textArea.edit')}
             </Button>

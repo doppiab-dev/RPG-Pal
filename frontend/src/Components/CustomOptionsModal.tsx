@@ -111,9 +111,10 @@ const CustomTextModal: FC<CustomTextModalProps> = ({
                   label={capitalize(secondLabel)}
                   error={Boolean(secondError)}
                   disabled={disabled}
+                  data-testid='second-select'
                 >
                   {options.map(option => (
-                    <MenuItem key={option.id} value={String(option.id)}>{option.name}</MenuItem>
+                    <MenuItem key={option.id} value={String(option.id)} data-testid={`option-second-${option.id}`}>{option.name}</MenuItem>
                   ))}
                 </Select>
                 {Boolean(secondError) && (
@@ -135,9 +136,10 @@ const CustomTextModal: FC<CustomTextModalProps> = ({
                   label={capitalize(thirdLabel)}
                   error={Boolean(thirdError)}
                   disabled={thirdDisabled}
+                  data-testid='third-select'
                 >
                   {thirdOptions.map(option => (
-                    <MenuItem key={option.id} value={String(option.id)}>{option.name}</MenuItem>
+                    <MenuItem key={option.id} value={String(option.id)} data-testid={`option-third-${option.id}`}>{option.name}</MenuItem>
                   ))}
                 </Select>
                 {Boolean(thirdError) && (

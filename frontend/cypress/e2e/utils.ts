@@ -92,3 +92,75 @@ export const deleteCampaign = () => {
   cy.get("[data-testid='delete-campaign-button']").should('exist').and('be.visible').click().wait(200)
   cy.get("[data-testid='confirmationDialog-confirm']").should('exist').and('be.visible').click().wait(200)
 }
+export const description = 'description'
+export const plot = 'plot'
+export const name = 'name'
+export const newName = 'newName'
+
+export const checkUnlinkedLocationDescription = () => {
+  cy.get('[data-testid="chunked-poi-description-continent-text"]').should('contain', description)
+}
+export const changeDescriptionAndUnlinkPoi = () => {
+  cy.get('[data-testid="add-poi-description-continent-button"]').click().wait(200)
+  cy.get('[data-testid="add-edit-poi-description-italic"]').click().wait(200)
+  cy.get('[data-testid="add-edit-poi-description-underlined"]').click().wait(200)
+  cy.get('[data-testid="poi-description-text"]').type(description).wait(100)
+  cy.get('[data-testid="second-select"]').click().wait(200)
+  cy.get('[data-testid="option-second-default"]').click().wait(200)
+  cy.get('[type="submit"]').click().wait(200)
+}
+export const addLinkedLocation = () => {
+  cy.get('[data-testid="add-poi-continent-button"]').click().wait(200)
+  cy.get('[data-testid="first-text"]').type(name).wait(200)
+  cy.get('[type="submit"]').click().wait(200)
+}
+export const checkLocationDescription = () => {
+  cy.get('[data-testid="chunked-poi-description-world-text"]').should('contain', description)
+}
+export const addDescriptionToLocation = () => {
+  cy.get('[data-testid="add-poi-description-world-button"]').click().wait(200)
+  cy.get('.MuiInputBase-root').type(description).wait(100)
+  cy.get('[data-testid="add-edit-poi-description-bold"]').click().wait(200)
+  cy.get('[type="submit"]').click().wait(200)
+}
+export const checkLocationNameChanged = () => {
+  cy.get('.MuiListItemButton-root > .MuiBox-root').should('contain', newName)
+}
+export const changeLocationName = () => {
+  cy.get('[data-testid="edit-poi-name-button"]').click().wait(200)
+  cy.get('[data-testid="first-text"]')
+    .type('{selectall}', { delay: 50 })
+    .type('{backspace}', { delay: 50 })
+    .type('{backspace}', { delay: 50 })
+  cy.get('[data-testid="first-text"]').type(newName).wait(200)
+  cy.get('[type="submit"]').click().wait(200)
+}
+export const checkLocationCreated = () => {
+  cy.get('.MuiListItemButton-root > .MuiBox-root').should('contain', name)
+}
+export const addLocationUnlinked = () => {
+  cy.get('[data-testid="add-location-button"]').click().wait(200)
+  cy.get('[data-testid="first-text"]').type(name).wait(200)
+  cy.get('[data-testid="third-select"]').click().wait(200)
+  cy.get('[data-testid="option-third-world"]').click().wait(200)
+  cy.get('[type="submit"]').click().wait(200)
+}
+export const checkPlot = () => {
+  cy.get('[data-testid="chunked-plot-text"]').should('contain', plot)
+}
+export const addPlot = () => {
+  cy.get('[data-testid="add-plot-button"]').click().wait(200)
+  cy.get('.MuiInputBase-root').type(plot).wait(100)
+  cy.get('[data-testid="add-edit-plot-subtitle"]').click().wait(200)
+  cy.get('[type="submit"]').click().wait(200)
+}
+export const checkDescription = () => {
+  cy.get('[data-testid="chunked-description-text"]').should('contain', description)
+}
+export const addDescription = () => {
+  cy.get('[data-testid="campaign-item"]').click().wait(200)
+  cy.get('[data-testid="add-description-button"]').click().wait(200)
+  cy.get('.MuiInputBase-root').type(description).wait(100)
+  cy.get('[data-testid="add-edit-description-title"]').click().wait(200)
+  cy.get('[type="submit"]').click().wait(200)
+}

@@ -230,6 +230,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       text={campaign.description}
       defaultEditMode={!Boolean(campaign.description)}
       setValue={updateDescriptionValue}
+      testId='description'
     />
     <TextAreaDialog
       open={plot}
@@ -244,6 +245,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       text={campaign.plot}
       defaultEditMode={!Boolean(campaign.plot)}
       setValue={updatePlotValue}
+      testId='plot'
     />
     <CustomOptionsModal
       onClose={closeCreate}
@@ -280,6 +282,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
           chunked={chunkedDescription}
           button={t('activeCampaign.descriptionButton')}
           showMore={t('activeCampaign.showMore')}
+          testId='description'
         />
       </Box>
       <Divider />
@@ -292,6 +295,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
           chunked={chunkedPlot}
           button={t('activeCampaign.plotButton')}
           showMore={t('activeCampaign.showMore')}
+          testId='plot'
         />
       </Box>
       <Divider />
@@ -310,6 +314,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
                   alignSelf: 'flex-end',
                   ...buttonStyle
                 }}
+                data-testid="add-group-button"
               >
                 {t('activeCampaign.addGroupButton')}
               </Button>
@@ -319,12 +324,13 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
               <Box display='flex' gap='3vw' justifyContent='space-between'>
                 <Box display='flex' gap='3vw' justifyContent='flex-end'>
                   {
-                    campaign.groups.map(group =>
+                    campaign.groups.map((group, i) =>
                       <Button
                         variant="contained"
                         endIcon={<FontAwesomeIcon icon={faPeopleGroup} />}
                         sx={{ boxShadow: 4, ...buttonStyle }}
                         key={group.id}
+                        data-testid={`group-${i}-button`}
                       >
                         {group.name}
                       </Button>
@@ -336,6 +342,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
                   endIcon={<GroupAdd />}
                   startIcon={<FontAwesomeIcon icon={faPlus} />}
                   sx={{ boxShadow: 4, ...buttonStyle }}
+                  data-testid="add-group-button"
                 >
                   {t('activeCampaign.addGroupButton')}
                 </Button>
@@ -358,6 +365,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
                 ...buttonStyle
               }}
               onClick={openCreate}
+              data-testid="add-location-button"
             >
               {t('activeCampaign.addLocationButton')}
             </Button>
