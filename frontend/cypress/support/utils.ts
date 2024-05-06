@@ -1,10 +1,10 @@
-export const playerInitialState: PlayerStore = {
+export const playerInitialState = {
   characters: [],
   charactersInfoStatus: 'idle',
   errorMessage: ''
 }
 
-export const masterInitialState: MasterStore = {
+export const masterInitialState = {
   campaigns: [],
   campaign: {
     id: 0,
