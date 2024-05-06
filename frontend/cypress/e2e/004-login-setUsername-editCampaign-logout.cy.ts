@@ -1,5 +1,9 @@
-import { addDescription, checkDescription, addPlot, checkPlot, addLocationUnlinked, checkLocationCreated, changeLocationName, checkLocationNameChanged, addDescriptionToLocation, checkLocationDescription, addLinkedLocation, changeDescriptionAndUnlinkPoi, checkUnlinkedLocationDescription } from "./utils"
-import { checkIfWeAreInLoginComponent, checkIfWeAreInSetUsernameComponent, createCampaign, deleteUserAndLogout, goToCampaign, loginBeforeEach, openCampaign, selectAValidUsername } from "./utils"
+import {
+  addDescription, checkDescription, addPlot, checkPlot, addLocationUnlinked, checkLocationCreated, changeLocationName, checkLocationNameChanged,
+  addDescriptionToLocation, checkLocationDescription, addLinkedLocation, changeDescriptionAndUnlinkPoi, checkUnlinkedLocationDescription,
+  checkIfWeAreInLoginComponent, checkIfWeAreInSetUsernameComponent, createCampaign, deleteUserAndLogout, goToCampaign, loginBeforeEach, openCampaign,
+  selectAValidUsername
+} from "./utils"
 
 describe('login-setUsername-createcampaign-logout', function () {
   loginBeforeEach()
