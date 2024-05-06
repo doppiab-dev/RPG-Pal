@@ -9,3 +9,4 @@ export const mainColor = '#42047E'
 export const secondaryColor = '#07F49E'
 export const Version = packageJson.version
 export const beHost = process.env.REACT_APP_BE_HOST
+export const maxWords: number = 150

@@ -18,7 +18,7 @@ export const getUserInfo = async (user_id: string): Promise<UserInfoDTO> => {
   const userInfos = await client.query<DBUserInfo>(userInfoQuery, userInfoValues)
   client.release()
 
-  if (userInfos.rowCount == null || userInfos.rowCount === 0) {
+  if (userInfos.rowCount === null || userInfos.rowCount === 0) {
     return {
       username: null,
       master: { campaigns: 0 },
@@ -30,8 +30,8 @@ export const getUserInfo = async (user_id: string): Promise<UserInfoDTO> => {
 
   return {
     username: userInfo.username ?? null,
-    master: { campaigns: userInfo.campaigns ?? 0 },
-    player: { characters: userInfo.characters ?? 0 }
+    master: { campaigns: userInfo.campaigns != null ? Number(userInfo.campaigns) : 0 },
+    player: { characters: userInfo.characters != null ? Number(userInfo.characters) : 0 }
   }
 }
 
@@ -48,7 +48,7 @@ export const checkUsername = async (username: string): Promise<boolean> => {
   const check = await client.query<DBCheckUsername>(checkUsernameQuery, checkUsernameValues)
   client.release()
 
-  if (check.rowCount == null) return false
+  if (check.rowCount === null) return false
 
   return !check.rows[0].exists
 }

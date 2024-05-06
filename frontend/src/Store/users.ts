@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { formatThunkError, userInitialState } from '../Utils/store'
 import { googleLogin } from '../Api/login'
 import { deleteUser, updateUsername, userInfo } from '../Api/user'
+import { sanitize } from 'dompurify'
 
 export const authenticateUser = createAsyncThunk(
   'authenticateUser',
@@ -43,8 +44,9 @@ export const updateTheUsername = createAsyncThunk(
   'updateTheUsername',
   async ({ token, username }: UpdateTheUsername, thunkApi) => {
     try {
-      await updateUsername(token, username)
-      return { username }
+      const newUsername = sanitize(username)
+      await updateUsername(token, newUsername)
+      return { username: newUsername }
     } catch (e) {
       const error = formatThunkError(e, 'updateTheUsername error')
 
@@ -104,6 +106,7 @@ export const user = createSlice({
       state.token = token
       state.isUserLogged = true
       state.authStatus = 'success'
+      state.errorMessage = ''
     })
     builder.addCase(retrieveUserInfo.pending, (state) => {
       state.userInfoStatus = 'loading'
@@ -118,6 +121,7 @@ export const user = createSlice({
     builder.addCase(retrieveUserInfo.fulfilled, (state, action) => {
       state.userInfo = { ...action.payload }
       state.userInfoStatus = 'success'
+      state.errorMessage = ''
     })
     builder.addCase(updateTheUsername.pending, (state) => {
       state.usernameStatus = 'loading'
@@ -133,6 +137,7 @@ export const user = createSlice({
       const { username } = { ...action.payload }
       state.userInfo.username = username
       state.usernameStatus = 'success'
+      state.errorMessage = ''
     })
     builder.addCase(deleteTheUser.pending, (state) => {
       state.userInfoStatus = 'loading'
@@ -145,6 +150,7 @@ export const user = createSlice({
     })
     builder.addCase(deleteTheUser.fulfilled, (state) => {
       state.usernameStatus = 'success'
+      state.errorMessage = ''
     })
   }
 })

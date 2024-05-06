@@ -9,8 +9,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { validateUsername, parseErrorMessage } from '../Utils/f'
 import { useForm, Controller, type SubmitHandler } from 'react-hook-form'
 import { capitalize } from 'lodash'
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
-import HighlightOffIcon from '@mui/icons-material/HighlightOff'
+import { CheckCircleOutline, HighlightOff } from '@mui/icons-material'
 import useDebouncerValidation from '../Hooks/useDebouncerValidation'
 import * as Yup from 'yup'
 
@@ -68,7 +67,7 @@ const Username: FC<UsernameProps> = ({ children, username = '', style }) => {
   }, [dispatch, setError, token])
 
   const handleClearUsername = useCallback(() => {
-    setValue('username', username)
+    setValue('username', capitalize(username))
   }, [setValue, username])
 
   return <form
@@ -88,12 +87,12 @@ const Username: FC<UsernameProps> = ({ children, username = '', style }) => {
         error={Boolean(errors.username)}
         helperText={field.value.trim() !== '' && !Boolean(errors.username)
           ? <span style={{ display: 'flex', color: 'green', alignItems: 'center', gap: '2vw', padding: 0 }} data-testid="helpertext-1">
-            <CheckCircleOutlineIcon />
+            <CheckCircleOutline />
             {t('username.valid')}
           </span>
           : Boolean(errors.username) &&
           <span style={{ display: 'flex', alignItems: 'center', gap: '2vw', padding: 0 }} data-testid="error-helpertext-1">
-            <HighlightOffIcon />
+            <HighlightOff />
             {errors.username?.message}
           </span>}
         sx={{ width: '100%', boxShadow: Boolean(errors.username) || field.value.trim() !== '' ? 0 : 5 }}

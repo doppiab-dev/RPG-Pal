@@ -1,7 +1,7 @@
-import { type FC, useCallback, useEffect, Fragment, useState } from 'react'
-import { Box, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, Stack, useTheme } from '@mui/material'
+import { type FC, useCallback, useEffect, useState } from 'react'
+import { Stack } from '@mui/material'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faDragon, faDice } from '@fortawesome/free-solid-svg-icons'
+import { faDice } from '@fortawesome/free-solid-svg-icons'
 import { useTranslation } from 'react-i18next'
 import { useAppDispatch, useAppSelector } from '../Utils/store'
 import {
@@ -21,27 +21,20 @@ import { clearPlayerState } from '../Store/player'
 import { useNavigate } from 'react-router-dom'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { InfoOutlined } from '@mui/icons-material'
-import HomeIcon from '@mui/icons-material/Home'
-import LogoutIcon from '@mui/icons-material/Logout'
-import NewIcon from '@mui/icons-material/FiberNew'
 import useGoogleLoginWithRedux from '../Hooks/useGoogleLoginWithRedux'
 import UserInfo from './UserInfo'
-import Campaign from './Campaign'
-import ImageLayout from '../Components/ImageLayout'
 import Loader from '../Components/Loader'
 import ErrorComponent from '../Components/Error'
 import CustomOptionsModal from '../Components/CustomOptionsModal'
-import Item from '../Components/CampaignItem'
 import ConfirmationDialog from '../Components/ConfirmationDialog'
-import bg from '../Images/rpg_pal.jpeg'
+import MenuList from '../Components/MenuList'
+import Container from '../Components/Campaigns'
 import * as ls from '../Utils/ls'
 import * as Yup from 'yup'
 
 const Campaigns: FC = () => {
   const { t } = useTranslation()
   const { logOut } = useGoogleLoginWithRedux()
-  const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
@@ -89,7 +82,8 @@ const Campaigns: FC = () => {
 
   const clearError = useCallback(() => {
     dispatch(clearMasterState())
-  }, [dispatch])
+    navigate('/home')
+  }, [dispatch, navigate])
 
   const goToHome = useCallback(() => {
     navigate('/home')
@@ -130,7 +124,6 @@ const Campaigns: FC = () => {
   }, [])
 
   const setCampaign = useCallback((id: number) => {
-    // qui fetch
     setActiveCampaign(id)
   }, [])
 
@@ -218,7 +211,7 @@ const Campaigns: FC = () => {
       firstError={errorsCreate?.campaign}
       title={t('campaign.create')}
       editText={t('campaign.createButton')}
-      name="create_campaign"
+      name="campaign"
       firstLabel="campaign"
     />
     <CustomOptionsModal
@@ -238,188 +231,25 @@ const Campaigns: FC = () => {
           }))
       }
       icon={<FontAwesomeIcon icon={faDice} />}
-      name="edit_campaign"
+      name="campaign"
       firstLabel="campaign"
       secondLabel="status"
       title={t('campaign.edit')}
       editText={t('campaign.editButton')}
     />
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'flex-start',
-        flexDirection: 'column',
-        width: '250px',
-        color: theme.palette.primary.main,
-        backgroundColor: theme.palette.background.paper
-      }}
-      component={Paper}
-      elevation={10}
-      data-testid="campaign-component"
-    >
-      <List
-        sx={{
-          width: '100%',
-          height: '100%',
-          padding: 0
-        }}
-        data-testid="campaign-list"
-      >
-        <ListItem sx={{ paddingBottom: '16px', height: '66px' }}>
-          <ListItemText
-            sx={{ my: 0 }}
-            primary={t('campaign.title')}
-            primaryTypographyProps={{
-              fontSize: '2rem',
-              letterSpacing: 0
-            }}
-            data-testid="campaign-list-title"
-          />
-          <ListItemIcon sx={{ fontSize: '1.5rem', color: theme.palette.primary.main }}>
-            <FontAwesomeIcon icon={faDragon} data-testid="campaign-list-title-icon" />
-          </ListItemIcon>
-        </ListItem>
-        <Divider />
-        <Box display='flex' flexDirection='column' height='calc(100% - 67px)' justifyContent='space-between'>
-          <Box display='flex' flexDirection='column' sx={{ overflowY: 'auto', overflowX: 'hidden' }}>
-            {
-              campaingsInfo.length === 0
-                ? <Fragment>
-                  <ListItemButton
-                    onClick={openCreateCampaign}
-                    sx={{
-                      display: 'flex',
-                      width: '100%',
-                      '&:hover': {
-                        backgroundColor: theme.palette.primary.light,
-                        color: theme.palette.primary.contrastText,
-                        '& .MuiListItemIcon-root': {
-                          color: theme.palette.primary.contrastText
-                        }
-                      },
-                      justifyContent: 'space-between'
-                    }}
-                    data-testid="campaign-list-create"
-                  >
-                    <ListItemText data-testid="campaign-list-create-text">{t('campaign.new')}</ListItemText>
-                    <ListItemIcon
-                      sx={{
-                        minWidth: 0,
-                        color: theme.palette.primary.main
-                      }}
-                    >
-                      <NewIcon />
-                    </ListItemIcon>
-                  </ListItemButton>
-                  <Divider />
-                </Fragment>
-                : campaingsInfo.map(campaign =>
-                  <Item
-                    campaign={campaign}
-                    key={campaign.id}
-                    activeCampaign={activeCampaign}
-                    openEditCampaign={openEditCampaign}
-                    openDeleteCampaign={openDeleteCampaign}
-                    setValue={setValue}
-                    setActiveCampaign={setCampaign}
-                  />
-                )
-            }
-          </Box>
-          <Box display='flex' flexDirection='column'>
-            <Divider />
-            <ListItemButton
-              sx={{
-                display: 'flex',
-                width: '100%',
-                '&:hover': {
-                  backgroundColor: theme.palette.primary.light,
-                  color: theme.palette.primary.contrastText,
-                  '& .MuiListItemIcon-root': {
-                    color: theme.palette.primary.contrastText
-                  }
-                },
-                justifyContent: 'space-between'
-              }}
-              onClick={openUserInfo}
-              data-testid="campaign-list-user"
-            >
-              <ListItemText data-testid="campaign-list-user-title">{t('campaign.user')}</ListItemText>
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  color: theme.palette.primary.main
-                }}
-              >
-                <InfoOutlined />
-              </ListItemIcon>
-            </ListItemButton>
-            <Divider />
-            <ListItemButton
-              sx={{
-                display: 'flex',
-                width: '100%',
-                '&:hover': {
-                  backgroundColor: theme.palette.primary.light,
-                  color: theme.palette.primary.contrastText,
-                  '& .MuiListItemIcon-root': {
-                    color: theme.palette.primary.contrastText
-                  }
-                },
-                justifyContent: 'space-between'
-              }}
-              onClick={goToHome}
-              data-testid="campaign-list-home"
-            >
-              <ListItemText data-testid="campaign-list-home-title">{t('campaign.home')}</ListItemText>
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  color: theme.palette.primary.main
-                }}
-              >
-                <HomeIcon />
-              </ListItemIcon>
-            </ListItemButton>
-            <Divider />
-            <ListItemButton
-              sx={{
-                display: 'flex',
-                width: '100%',
-                '&:hover': {
-                  backgroundColor: theme.palette.primary.light,
-                  color: theme.palette.primary.contrastText,
-                  '& .MuiListItemIcon-root': {
-                    color: theme.palette.primary.contrastText
-                  }
-                },
-                justifyContent: 'space-between'
-              }}
-              onClick={handleLogOut}
-              data-testid="campaign-list-logout"
-            >
-              <ListItemText data-testid="campaign-list-logout-text">{t('campaign.logout')}</ListItemText>
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  color: theme.palette.primary.main
-                }}
-              >
-                <LogoutIcon />
-              </ListItemIcon>
-            </ListItemButton>
-          </Box>
-        </Box>
-      </List>
-    </Box>
-    {
-      activeCampaign === 0
-        ? <ImageLayout
-          url={bg}
-          style={{ width: 'calc(100% - 250px)', height: '100%', backgroundColor: 'unset' }}
-        />
-        : <Campaign activeCampaign={activeCampaign} />
-    }
+    <MenuList
+      campaingsInfo={campaingsInfo}
+      activeCampaign={activeCampaign}
+      openCreateCampaign={openCreateCampaign}
+      openEditCampaign={openEditCampaign}
+      openDeleteCampaign={openDeleteCampaign}
+      setValue={setValue}
+      setCampaign={setCampaign}
+      openUserInfo={openUserInfo}
+      goToHome={goToHome}
+      handleLogOut={handleLogOut}
+    />
+    <Container activeCampaign={activeCampaign} />
   </Stack>
 }
 

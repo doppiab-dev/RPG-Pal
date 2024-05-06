@@ -1,5 +1,6 @@
 import { usernameIsValid } from '../Api/user'
-import { authorization } from './config'
+import { maxWords, authorization } from './config'
+import * as yup from 'yup'
 
 export const apply = <T>(x: T, f: (x: T) => T): T => f(x)
 
@@ -62,4 +63,74 @@ export enum CampaignTypeEnum {
   'active' = 'active',
   'on_hold' = 'on_hold',
   'ended' = 'ended'
+}
+
+export const shrinkText = (text: string): string => {
+  const words = text.split(' ')
+
+  return words.length <= maxWords
+    ? text
+    : `${words.slice(0, maxWords).join(' ')}…`
+}
+
+export const formatPOI = (poi: PlacesOfInterestDTO): PlacesOfInterest => {
+  const { points: pois, roots } = poi
+  const points = pois.reduce((acc, curr) => {
+    acc[curr.id] = {
+      name: curr.name,
+      place: curr.place,
+      description: curr.description,
+      parent: curr.parent,
+      children: curr.children
+    }
+    return acc
+    // eslint-disable-next-line @typescript-eslint/prefer-reduce-type-parameter
+  }, {} as unknown as Record<number, PlaceOfInterestPoint>)
+
+  return {
+    points,
+    roots
+  } satisfies PlacesOfInterest
+}
+
+export enum PlacesOfInterestValues {
+  'world' = 0,
+  'continent' = 1,
+  'region' = 2,
+  'area' = 3,
+  'city' = 3,
+  'camp' = 3,
+  'neighborhood' = 4,
+  'point' = 5
+}
+
+export enum PlacesOfInterestEnum {
+  'world' = 'world',
+  'continent' = 'continent',
+  'region' = 'region',
+  'area' = 'area',
+  'city' = 'city',
+  'camp' = 'camp',
+  'neighborhood' = 'neighborhood',
+  'point' = 'point'
+}
+
+export const buttonStyle = {
+  width: '15vw',
+  maxWidth: '250px',
+  textOverflow: 'ellipsis',
+  overflow: 'hidden',
+  height: '5vh',
+  maxHeight: '40px'
+}
+
+export const schema = yup.object().shape({
+  text: yup.string()
+})
+
+export const removeHtmlTags = (text: string): string => {
+  const div = document.createElement('div')
+  div.innerHTML = text
+
+  return div.innerText
 }

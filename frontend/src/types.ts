@@ -12,6 +12,23 @@ interface EditCampaignInputs {
   campaign: string
   status: string
 }
+interface FormDataText {
+  text?: string
+}
+interface PointOfInterestText {
+  text?: string
+  parent?: string
+}
+interface PointOfInterestCreateInputs {
+  text: string
+  parent?: string
+  type: string
+}
+interface PointOfInterestInputs {
+  text: string
+  parent: string
+  type: string
+}
 /**
  * API
 */
@@ -46,6 +63,48 @@ interface CreateCampaignBody {
 interface EditCampaignBody {
   name: string
   status: CampaignStatus
+}
+interface CampaignGroupDTO {
+  id: number
+  name: string
+}
+interface CampaignPlaceOfInterestDTO {
+  id: number
+  name: string
+  place: PlacesOfInterestType
+  description: string
+  parent: number | null
+  children: number[]
+}
+interface CampaignDTO {
+  id: number
+  name: string
+  description: string
+  plot: string
+  placesOfInterest: PlacesOfInterestDTO
+  groups: CampaignGroupDTO[]
+}
+interface UpsertDescriptionBody {
+  description: string
+}
+interface UpsertPlotBody {
+  plot: string
+}
+interface PlacesOfInterestDTO {
+  points: CampaignPlaceOfInterestDTO[]
+  roots: number[]
+}
+interface UpdatePoiNameBody {
+  name: string
+}
+interface CreatePoiBody {
+  name: string
+  parent: string | null
+  type: PlacesOfInterestType
+}
+interface UpdatePoiBody {
+  description: string
+  parent: string | null
 }
 /**
  * Redux
@@ -84,8 +143,10 @@ interface PlayerStore {
 }
 interface MasterStore {
   campaigns: Campaigns
+  campaign: Campaign
   campaignsInfoStatus: Status
   errorMessage: string
+  campaignInfoStatus: Status
 }
 interface Authenticated {
   token: string
@@ -98,13 +159,13 @@ interface UserInfo {
 interface Username {
   username: string | null
 }
-interface Campaign {
+interface CampaignListItem {
   id: number
   name: string
   groups: number
   status: CampaignStatus
 }
-type Campaigns = Campaign[]
+type Campaigns = CampaignListItem[]
 interface Character {
   name: string
   level: number
@@ -113,6 +174,26 @@ interface Character {
 }
 type Characters = Character[]
 type CampaignStatus = 'active' | 'on_hold' | 'ended'
+type PlacesOfInterestType = 'world' | 'continent' | 'region' | 'area' | 'city' | 'camp' | 'neighborhood' | 'point'
+interface Campaign {
+  id: number
+  name: string
+  description: string
+  plot: string
+  placesOfInterest: PlacesOfInterest
+  groups: CampaignGroupDTO[]
+}
+interface PlacesOfInterest {
+  points: Record<number, PlaceOfInterestPoint>
+  roots: number[]
+}
+interface PlaceOfInterestPoint {
+  name: string
+  place: PlacesOfInterestType
+  description: string
+  parent: number | null
+  children: number[]
+}
 /**
  * Utils
  */
@@ -122,4 +203,5 @@ interface WithChildren {
 interface Option {
   name: string
   id: string
+  disabled?: boolean
 }

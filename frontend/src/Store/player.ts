@@ -42,6 +42,7 @@ export const player = createSlice({
     builder.addCase(retrievePlayerInfo.fulfilled, (state, action) => {
       state.characters = { ...action.payload }
       state.charactersInfoStatus = 'success'
+      state.errorMessage = ''
     })
   }
 })

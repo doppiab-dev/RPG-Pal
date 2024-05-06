@@ -24,12 +24,17 @@ interface CustomTextModalProps {
   control: Control<any>
   firstError: FieldError | undefined
   secondError?: FieldError
+  thirdError?: FieldError
   name: string
   firstLabel: string
   secondLabel?: string
+  thirdLabel?: string
   options?: Option[]
+  thirdOptions?: Option[]
   editText?: string
   title?: string
+  disabled?: boolean
+  thirdDisabled?: boolean
 }
 
 const CustomTextModal: FC<CustomTextModalProps> = ({
@@ -46,7 +51,12 @@ const CustomTextModal: FC<CustomTextModalProps> = ({
   secondLabel,
   editText,
   options,
-  title
+  title,
+  thirdError,
+  thirdLabel,
+  thirdOptions,
+  disabled = false,
+  thirdDisabled = false
 }) => {
   const { t } = useTranslation()
 
@@ -74,7 +84,7 @@ const CustomTextModal: FC<CustomTextModalProps> = ({
         {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
         <form onSubmit={handleSubmit(onSubmit)} id={name}>
           <Controller
-            name={firstLabel}
+            name={name}
             control={control}
             render={({ field }) => (
               <TextField
@@ -94,19 +104,46 @@ const CustomTextModal: FC<CustomTextModalProps> = ({
               name={secondLabel}
               control={control}
               render={({ field }) => <FormControl fullWidth variant="outlined" margin="normal">
-                <InputLabel id="select-label-2">{secondLabel}</InputLabel>
+                <InputLabel id="select-label-2">{capitalize(secondLabel)}</InputLabel>
                 <Select
                   {...field}
                   labelId="select-label-2"
-                  label={secondLabel}
+                  label={capitalize(secondLabel)}
                   error={Boolean(secondError)}
+                  disabled={disabled}
+                  data-testid='second-select'
                 >
                   {options.map(option => (
-                    <MenuItem key={option.id} value={String(option.id)}>{option.name}</MenuItem>
+                    <MenuItem key={option.id} value={String(option.id)} data-testid={`option-second-${option.id}`}>{option.name}</MenuItem>
                   ))}
                 </Select>
                 {Boolean(secondError) && (
                   <FormHelperText error>{secondError?.message ?? ''}</FormHelperText>
+                )}
+              </FormControl>
+              }
+            />
+          }
+          {
+            (thirdLabel !== undefined && thirdOptions !== undefined) && <Controller
+              name={thirdLabel}
+              control={control}
+              render={({ field }) => <FormControl fullWidth variant="outlined" margin="normal">
+                <InputLabel id="select-label-3">{capitalize(thirdLabel)}</InputLabel>
+                <Select
+                  {...field}
+                  labelId="select-label-3"
+                  label={capitalize(thirdLabel)}
+                  error={Boolean(thirdError)}
+                  disabled={thirdDisabled}
+                  data-testid='third-select'
+                >
+                  {thirdOptions.map(option => (
+                    <MenuItem key={option.id} value={String(option.id)} data-testid={`option-third-${option.id}`}>{option.name}</MenuItem>
+                  ))}
+                </Select>
+                {Boolean(thirdError) && (
+                  <FormHelperText error>{thirdError?.message ?? ''}</FormHelperText>
                 )}
               </FormControl>
               }
@@ -123,7 +160,7 @@ const CustomTextModal: FC<CustomTextModalProps> = ({
           </Button>
         </form>
       </Box>
-    </Modal >
+    </Modal>
   )
 }
 

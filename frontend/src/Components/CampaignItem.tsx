@@ -1,13 +1,12 @@
 import { type FC, Fragment } from 'react'
 import { Divider, ListItemButton, ListItemIcon, ListItemText, useTheme } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import { ModeEditOutlineOutlined, DeleteForever } from '@mui/icons-material'
 import { type UseFormSetValue } from 'react-hook-form'
 import StatusIcon from './StatusIcon'
-import EditIcon from '@mui/icons-material/ModeEditOutlineOutlined'
-import DeleteIcon from '@mui/icons-material/DeleteForever'
 
 interface CampaignItemProps {
-  campaign: Campaign
+  campaign: CampaignListItem
   activeCampaign: number
   openEditCampaign: (id: number) => void
   openDeleteCampaign: (id: number) => void
@@ -26,7 +25,7 @@ const CampaignItem: FC<CampaignItemProps> = ({ campaign, openEditCampaign, openD
         gap: '1vw',
         color: campaign.id === activeCampaign
           ? theme.palette.primary.contrastText
-          : theme.palette.text.primary,
+          : theme.palette.primary.main,
         backgroundColor: campaign.id === activeCampaign
           ? theme.palette.primary.main
           : 'transparent',
@@ -45,7 +44,7 @@ const CampaignItem: FC<CampaignItemProps> = ({ campaign, openEditCampaign, openD
     >
       <ListItemText
         primary={campaign.name}
-        secondary={`${campaign.groups} ${t('campaign.groups')}
+        secondary={`${campaign.groups} ${t('campaign.groups')},
         ${t('campaign.status')} ${t(`campaign.${campaign.status}`)}`}
         sx={{
           '& .MuiListItemText-secondary': {
@@ -65,7 +64,7 @@ const CampaignItem: FC<CampaignItemProps> = ({ campaign, openEditCampaign, openD
           minWidth: 0,
           color: campaign.id === activeCampaign
             ? theme.palette.primary.contrastText
-            : theme.palette.text.primary
+            : theme.palette.primary.main
         }}
         onClick={(e) => {
           e.stopPropagation()
@@ -75,7 +74,7 @@ const CampaignItem: FC<CampaignItemProps> = ({ campaign, openEditCampaign, openD
         }}
         data-testid="edit-campaign-button"
       >
-        <EditIcon />
+        <ModeEditOutlineOutlined />
       </ListItemIcon>
       <ListItemIcon
         sx={{
@@ -83,7 +82,7 @@ const CampaignItem: FC<CampaignItemProps> = ({ campaign, openEditCampaign, openD
           minWidth: 0,
           color: campaign.id === activeCampaign
             ? theme.palette.primary.contrastText
-            : theme.palette.text.primary
+            : theme.palette.primary.main
         }}
         onClick={(e) => {
           e.stopPropagation()
@@ -91,7 +90,7 @@ const CampaignItem: FC<CampaignItemProps> = ({ campaign, openEditCampaign, openD
         }}
         data-testid="delete-campaign-button"
       >
-        <DeleteIcon />
+        <DeleteForever />
       </ListItemIcon>
     </ListItemButton>
     <Divider />

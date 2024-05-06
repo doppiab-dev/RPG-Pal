@@ -2,8 +2,7 @@ import { type FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useTheme, Box, Typography, Tooltip } from '@mui/material'
 import { Version } from '../Utils/config'
-import InfoIcon from '@mui/icons-material/InfoOutlined'
-import LogOutIcon from '@mui/icons-material/Logout'
+import { InfoOutlined, Logout } from '@mui/icons-material'
 
 interface HomeInfoProps {
   handleLogOut: () => void
@@ -37,10 +36,10 @@ const HomeInfo: FC<HomeInfoProps> = ({ handleLogOut }) => {
       >
         {t('home.logout')}
       </Typography>
-      <LogOutIcon sx={{ color: theme.palette.primary.main }} />
+      <Logout sx={{ color: theme.palette.primary.main }} />
     </Box>
     <Tooltip title={`${t('home.version')} ${Version}`}>
-      <InfoIcon
+      <InfoOutlined
         fontSize='medium'
         sx={{
           alignSelf: 'flex-end',

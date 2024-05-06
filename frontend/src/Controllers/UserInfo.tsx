@@ -10,6 +10,7 @@ import { clearPlayerState } from '../Store/player'
 import useGoogleLoginWithRedux from '../Hooks/useGoogleLoginWithRedux'
 import Username from './Username'
 import ConfirmationDialog from '../Components/ConfirmationDialog'
+import LanguageSelector from '../Components/LanguageSelector'
 import * as ls from '../Utils/ls'
 
 interface UserInfoProps {
@@ -90,6 +91,10 @@ const UserInfo: FC<UserInfoProps> = ({
         <Typography data-testid="user-info-text">
           {text ?? t('userInfo.text')}
         </Typography>
+        <Typography variant="h6" component="h2" data-testid="user-info-title" mt='2vh'>
+          {t('login.language')}
+        </Typography>
+        <LanguageSelector style={{ width: '100%', mt: '1vh' }} />
         <Typography variant="h6" component="h2" data-testid="user-info-title" mt='2vh'>
           {title ?? t('userInfo.changeUsername')}
         </Typography>

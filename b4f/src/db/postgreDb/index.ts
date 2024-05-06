@@ -1,7 +1,19 @@
 import { DbName, DbPort, DbPass, DbUser, DbHost } from '../../config'
 import { Pool } from 'pg'
 import { getUserInfo, checkUsername, upsetUsername, deleteUser } from './user'
-import { getCampaigns, createCampaign, editCampaign, deleteCampaign } from './master'
+import {
+  getCampaigns,
+  createCampaign,
+  editCampaign,
+  deleteCampaign,
+  getCampaign,
+  upsertPlot,
+  upsertDescription,
+  createPoi,
+  editPoiName,
+  editPoi,
+  deletePoi
+} from './master'
 import { type Connector } from '..'
 
 export const dbConfig = new Pool({
@@ -20,5 +32,12 @@ export const dbConnectorPostgreDb: Connector = {
   getCampaigns,
   createCampaign,
   editCampaign,
-  deleteCampaign
+  deleteCampaign,
+  getCampaign,
+  upsertDescription,
+  upsertPlot,
+  createPoi,
+  editPoiName,
+  editPoi,
+  deletePoi
 }
