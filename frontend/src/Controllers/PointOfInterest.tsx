@@ -221,18 +221,18 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
       open={createPoi}
       control={controlCreate}
       firstError={errorsCreate?.text}
-      secondError={errorsCreate?.parent}
-      thirdError={errorsCreate?.type}
-      options={options}
-      thirdOptions={Object.keys(PlacesOfInterestEnum).map(location => ({
+      secondError={errorsCreate?.type}
+      thirdError={errorsCreate?.parent}
+      options={Object.keys(PlacesOfInterestEnum).map(location => ({
         id: location,
         name: t(`placesOfInterest.${location}`)
       }))}
+      thirdOptions={options}
       icon={<FontAwesomeIcon icon={faMapLocationDot} />}
       name="text"
       firstLabel="Name"
-      secondLabel="parent"
-      thirdLabel='type'
+      secondLabel='type'
+      thirdLabel='parent'
       title={t('activeCampaign.parentLabel') + points[point].name + t('activeCampaign.parentLabel2')}
       editText={t('placesOfInterest.create')}
       disabled

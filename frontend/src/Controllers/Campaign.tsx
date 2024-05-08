@@ -254,18 +254,18 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       open={create}
       control={control}
       firstError={errors?.text}
-      secondError={errors?.parent}
-      thirdError={errors?.type}
-      options={options}
-      thirdOptions={Object.keys(PlacesOfInterestEnum).map(location => ({
+      secondError={errors?.type}
+      thirdError={errors?.parent}
+      options={Object.keys(PlacesOfInterestEnum).map(location => ({
         id: location,
         name: t(`placesOfInterest.${location}`)
       }))}
+      thirdOptions={options}
       icon={<FontAwesomeIcon icon={faMapLocationDot} />}
       name="text"
       firstLabel="Name"
-      secondLabel="parent"
-      thirdLabel='type'
+      secondLabel='type'
+      thirdLabel='parent'
       title={t('placesOfInterest.createLocation')}
       editText={t('placesOfInterest.create')}
     />
