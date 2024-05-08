@@ -295,10 +295,10 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       title={t('placesOfInterest.createLocation')}
       editText={t('placesOfInterest.create')}
     />
-    <Box display='flex' width='100%' flexDirection='column' boxShadow={1} height='67px'>
-      <Typography fontSize='3rem' alignSelf='center'>{campaign.name}</Typography>
+    <Box display='flex' width='100%' flexDirection='column' boxShadow={1} height='66px'>
+      <Typography fontSize='3rem' alignSelf='center' height='100%'>{campaign.name}</Typography>
     </Box>
-    <Box width='98%' alignSelf='center' flexDirection='column' sx={{ overflowY: 'auto', overflowX: 'hidden' }}>
+    <Box width='98%' alignSelf='center' height='calc(100% - 67px)' flexDirection='column' sx={{ overflowY: 'auto', overflowX: 'hidden' }}>
       <Box display='flex' width='100%' flexDirection='column' minHeight='80px' maxHeight='250px' sx={{ overflowY: 'auto', overflowX: 'hidden' }}>
         <Typography variant="h6" component="h2">{t('activeCampaign.description')}</Typography>
         <Text
