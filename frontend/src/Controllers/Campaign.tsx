@@ -53,7 +53,18 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
     type: yup.string()
       .required(t('campaign.typeValidationErrorRequired'))
       .oneOf(['world', 'continent', 'region', 'area', 'city', 'camp', 'neighborhood', 'point'], t('campaign.validationErrorInvalidType')),
-    parent: yup.string()
+    parent: yup.string().test({
+      name: 'parentValidation',
+      message: t('campaign.parentNotValid'),
+      test: function (value: string | undefined, context: yup.TestContext) {
+        const { type } = context.parent
+        if (value !== undefined && value !== '' && type !== '' && type !== undefined) {
+          return PlacesOfInterestValues[points[Number(value)].place] < PlacesOfInterestValues[(type as PlacesOfInterestType)]
+        }
+
+        return true
+      }
+    })
   })
 
   const [description, setDescription] = useState<boolean>(false)
@@ -167,7 +178,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
     setCreate(false)
     reset()
   }, [reset])
-  const onSubmitCreate: SubmitHandler<PointOfInterestInputs> = useCallback(async (data) => {
+  const onSubmitCreate: SubmitHandler<PointOfInterestCreateInputs> = useCallback(async (data) => {
     try {
       const name = data.text ?? ''
       const parent = data.parent === '' || data.parent === undefined ? null : data.parent

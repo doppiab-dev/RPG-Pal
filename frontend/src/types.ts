@@ -21,8 +21,8 @@ interface PointOfInterestText {
 }
 interface PointOfInterestCreateInputs {
   text: string
-  parent?: string
   type: string
+  parent?: string
 }
 interface PointOfInterestInputs {
   text: string

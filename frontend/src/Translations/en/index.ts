@@ -58,6 +58,7 @@ const campaign = {
   typeValidationErrorRequired: 'A Type is required',
   validationErrorInvalidType: 'Type is invalid',
   parentValidationErrorRequired: 'A parent is required',
+  parentNotValid: 'Parent is invalid',
   createButton: "Let's Start!",
   create: 'Choose a name for your new Campaign',
   editButton: 'Edit',
