@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-duplicate-enum-values */
 export interface ErrorPayload {
   status: number
   error: { message: string, code: string }
@@ -70,6 +71,17 @@ export enum PlacesOfInterestEnum {
   'camp' = 'camp',
   'neighborhood' = 'neighborhood',
   'point' = 'point'
+}
+
+export enum PlacesOfInterestValues {
+  'world' = 0,
+  'continent' = 1,
+  'region' = 2,
+  'area' = 3,
+  'city' = 3,
+  'camp' = 3,
+  'neighborhood' = 4,
+  'point' = 5
 }
 
 export interface CampaignPlaceOfInterestDTO {
