@@ -8,7 +8,7 @@ import {
   Typography
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { PlacesOfInterestEnum, buttonStyle, parseErrorMessage, shrinkText, schema } from '../Utils/f'
+import { PlacesOfInterestEnum, buttonStyle, parseErrorMessage, shrinkText, schema, PlacesOfInterestValues } from '../Utils/f'
 import {
   clearMasterState,
   createAPoi,
@@ -98,6 +98,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
     handleSubmit,
     control,
     reset,
+    watch,
     formState: { errors }
   } = useForm<PointOfInterestCreateInputs>({
     resolver: yupResolver(schemaPOI),
@@ -200,6 +201,9 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       })
   }, [token, dispatch, activeCampaign])
 
+  const selectedParent = watch('parent')
+  const selectedType = watch('type')
+
   if (campaignInfoStatus === 'loading') return <Loader />
   if (campaignInfoStatus === 'error') return <ErrorComponent clearError={clearError} msg={errorMessage} />
 
@@ -207,14 +211,39 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
   const chunkedPlot = shrinkText(campaign.plot)
   const { points, roots } = campaign.placesOfInterest
 
-  const options: Option[] = []
+  const parentOptions: Option[] = []
   for (const key in points) {
-    options.push({
+    const typeSelected = selectedType !== '' && selectedType !== undefined
+    parentOptions.push({
       id: String(key),
-      name: points[key].name
+      name: points[key].name,
+      disabled: typeSelected
+        ? PlacesOfInterestValues[points[key].place] >= (PlacesOfInterestValues[(selectedType as PlacesOfInterestType)])
+        : false
     })
   }
-  options.unshift({ id: '', name: t('placesOfInterest.clear') })
+  parentOptions.unshift({ id: '', name: t('placesOfInterest.clear') })
+
+  const typeOptions = Object.keys(PlacesOfInterestEnum).reduce<Option[]>((options, location) => {
+    const parentSelected = selectedParent !== '' && selectedParent !== undefined
+    options = options.length === 0
+      ? [{
+        id: location,
+        name: t(`placesOfInterest.${location}`),
+        disabled: parentSelected
+          ? PlacesOfInterestValues[points[Number(selectedParent)].place] >= (PlacesOfInterestValues[(location as PlacesOfInterestType)])
+          : false
+      }]
+      : [...options, {
+        id: location,
+        name: t(`placesOfInterest.${location}`),
+        disabled: parentSelected
+          ? PlacesOfInterestValues[points[Number(selectedParent)].place] >= (PlacesOfInterestValues[(location as PlacesOfInterestType)])
+          : false
+      }]
+
+    return options
+  }, [])
 
   return <Stack display='flex' width='calc(100% - 250px)'>
     <TextAreaDialog
@@ -256,11 +285,8 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       firstError={errors?.text}
       secondError={errors?.type}
       thirdError={errors?.parent}
-      options={Object.keys(PlacesOfInterestEnum).map(location => ({
-        id: location,
-        name: t(`placesOfInterest.${location}`)
-      }))}
-      thirdOptions={options}
+      options={typeOptions}
+      thirdOptions={parentOptions}
       icon={<FontAwesomeIcon icon={faMapLocationDot} />}
       name="text"
       firstLabel="Name"

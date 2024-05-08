@@ -183,14 +183,19 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
     }
   }, [activeCampaign, dispatch, token])
 
-  const options: Option[] = []
+  const parentOptions: Option[] = []
   for (const key in points) {
-    options.push({
+    parentOptions.push({
       id: String(key),
       name: points[key].name,
       disabled: PlacesOfInterestValues[points[point].place] <= PlacesOfInterestValues[points[key].place]
     })
   }
+
+  const typeOptions = Object.keys(PlacesOfInterestEnum).map(location => ({
+    id: location,
+    name: t(`placesOfInterest.${location}`)
+  }))
 
   return <Box display='flex' flexDirection='column' sx={{ ...style }}>
     <ConfirmationDialog
@@ -223,11 +228,8 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
       firstError={errorsCreate?.text}
       secondError={errorsCreate?.type}
       thirdError={errorsCreate?.parent}
-      options={Object.keys(PlacesOfInterestEnum).map(location => ({
-        id: location,
-        name: t(`placesOfInterest.${location}`)
-      }))}
-      thirdOptions={options}
+      options={typeOptions}
+      thirdOptions={parentOptions}
       icon={<FontAwesomeIcon icon={faMapLocationDot} />}
       name="text"
       firstLabel="Name"
@@ -271,7 +273,7 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
                 <MenuItem value='' data-testid='option-second-default'>
                   {t('placesOfInterest.placeholder')}
                 </MenuItem>
-                {options.map(option => (
+                {parentOptions.map(option => (
                   <MenuItem key={option.id} value={String(option.id)} disabled={option.disabled ?? false} data-testid={`option-second-${option.id}`}>
                     {option.name}
                   </MenuItem>
