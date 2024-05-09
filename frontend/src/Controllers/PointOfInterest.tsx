@@ -395,6 +395,7 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
       button={t('placesOfInterest.edit') + t(`placesOfInterest.${points[point].place}`)}
       showMore={t('placesOfInterest.showMore')}
       testId={`poi-description-${points[point].place}`}
+      editMode={points[point].description === ''}
     />
     <Divider />
     {

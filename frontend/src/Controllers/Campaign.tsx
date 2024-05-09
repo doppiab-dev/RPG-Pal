@@ -320,6 +320,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
           button={t('activeCampaign.descriptionButton')}
           showMore={t('activeCampaign.showMore')}
           testId='description'
+          editMode={campaign.description === ''}
         />
       </Box>
       <Divider />
@@ -332,6 +333,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
           button={t('activeCampaign.plotButton')}
           showMore={t('activeCampaign.showMore')}
           testId='plot'
+          editMode={campaign.plot === ''}
         />
       </Box>
       <Divider />
