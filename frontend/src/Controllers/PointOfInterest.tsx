@@ -107,6 +107,7 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
   const openDescription = useCallback(() => {
     const location = points[point]
     setValue('text', location.description)
+    setValue('thumbnail', location.thumbnail)
     setValue('parent', location.parent === null ? '' : String(location.parent))
     setOpenDescriptionEdit(true)
   }, [point, points, setValue])

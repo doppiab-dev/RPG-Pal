@@ -89,7 +89,7 @@ const activeCampaign = {
   group: 'Groups',
   noDescription: 'Your campaign has no description',
   POInoDescription: 'Your ',
-  POInoDescription2: ' has no description',
+  POInoDescription2: ' has no thumbnail',
   descriptionButton: 'Add Description',
   showMore: 'Read More',
   noPlot: 'Your campaign has no plot',

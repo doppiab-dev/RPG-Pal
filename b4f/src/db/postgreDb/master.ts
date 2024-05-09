@@ -166,6 +166,7 @@ const fetchPoi = async (campaign_id: string, user_id: string): Promise<{ placesO
       points: pois.rows.map(row => ({
         ...row,
         description: row.description ?? '',
+        thumbnail: row.thumbnail ?? '',
         children: row.children ?? []
       }))
     }
@@ -330,6 +331,7 @@ export const editPoi = async (
   user_id: string,
   poi: string,
   description: string,
+  thumbnail: string,
   parent: string | null
 ): Promise<PlacesOfInterestDTO> => {
   const numeric_id = Number(campaign_id)
@@ -356,10 +358,10 @@ export const editPoi = async (
 
   const editPoiQuery = `
   UPDATE ${tablePlacesOfInterest}
-  SET description = $1, parent = $2
-  WHERE campaign_id = $3 AND user_id = $4 AND id = $5
+  SET description = $1, parent = $2, thumbnail = $3
+  WHERE campaign_id = $4 AND user_id = $5 AND id = $6
   `
-  const editPoiValues = [description, parent === null ? parent : Number(parent), numeric_id, user_id, id]
+  const editPoiValues = [description, parent === null ? parent : Number(parent), thumbnail, numeric_id, user_id, id]
   const res = await client.query<DBPlacesOfInterest>(editPoiQuery, editPoiValues)
 
   client.release()

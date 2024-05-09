@@ -89,6 +89,7 @@ export interface CampaignPlaceOfInterestDTO {
   name: string
   place: PlacesOfInterestType
   description: string
+  thumbnail: string
   parent: number | null
   children: number[]
 }
@@ -113,5 +114,6 @@ export interface CreatePoiBody {
 
 export interface UpdatePoiBody {
   description: string
+  thumbnail: string
   parent: string | null
 }
