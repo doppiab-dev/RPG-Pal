@@ -66,6 +66,12 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
     setEditMode(true)
   }, [])
 
+  const getRows = useCallback(() => {
+    if (!Boolean(children)) return 29
+
+    return Boolean((children as any)?.props?.children) ? 20 : 25
+  }, [children])
+
   return <Dialog
     open={open}
     onClose={close}
@@ -105,7 +111,7 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
                     fullWidth
                     variant="outlined"
                     multiline
-                    rows={Boolean(children) ? 20 : 25}
+                    rows={getRows()}
                     margin="dense"
                     error={Boolean(errors.text)}
                     helperText={errors.text?.message}

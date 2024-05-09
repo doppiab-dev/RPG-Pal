@@ -15,9 +15,9 @@ interface EditCampaignInputs {
 interface FormDataText {
   text?: string
 }
-interface PointOfInterestText {
-  text?: string
+type PointOfInterestText = FormDataText & {
   parent?: string
+  thumbnail?: string
 }
 interface PointOfInterestCreateInputs {
   text: string
@@ -73,6 +73,7 @@ interface CampaignPlaceOfInterestDTO {
   name: string
   place: PlacesOfInterestType
   description: string
+  thumbnail: string
   parent: number | null
   children: number[]
 }
@@ -104,6 +105,7 @@ interface CreatePoiBody {
 }
 interface UpdatePoiBody {
   description: string
+  thumbnail: string
   parent: string | null
 }
 /**
@@ -191,6 +193,7 @@ interface PlaceOfInterestPoint {
   name: string
   place: PlacesOfInterestType
   description: string
+  thumbnail: string
   parent: number | null
   children: number[]
 }

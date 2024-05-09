@@ -43,6 +43,7 @@ export const editPoi = async (
   id: number,
   poi: number,
   description: string,
-  parent: string | null
+  parent: string | null,
+  thumbnail: string
 ): Promise<AxiosResponse<PlacesOfInterestDTO>> =>
-  await axiosClient.put(`/master/campaign/${id}/poi/${poi}`, { description, parent } satisfies UpdatePoiBody, createApiHeaders(token))
+  await axiosClient.put(`/master/campaign/${id}/poi/${poi}`, { description, parent, thumbnail } satisfies UpdatePoiBody, createApiHeaders(token))

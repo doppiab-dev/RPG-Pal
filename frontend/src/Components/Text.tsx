@@ -8,14 +8,13 @@ import { buttonStyle, removeHtmlTags } from '../Utils/f'
 interface TextProps {
   open: () => void
   chunked: string
-  text: string
   emptyText: string
   button: string
   showMore: string
   testId: string
 }
 
-const Text: FC<TextProps> = ({ open, chunked, text, emptyText, button, showMore, testId }) => text === ''
+const Text: FC<TextProps> = ({ open, chunked, emptyText, button, showMore, testId }) => chunked === ''
   ? <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
     <Typography>{emptyText}</Typography>
     <Button

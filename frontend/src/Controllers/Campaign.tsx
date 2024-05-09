@@ -218,8 +218,6 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
   if (campaignInfoStatus === 'loading') return <Loader />
   if (campaignInfoStatus === 'error') return <ErrorComponent clearError={clearError} msg={errorMessage} />
 
-  const chunkedDescription = shrinkText(campaign.description)
-  const chunkedPlot = shrinkText(campaign.plot)
   const { points, roots } = campaign.placesOfInterest
 
   const parentOptions: Option[] = []
@@ -257,6 +255,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
   }, [])
 
   return <Stack display='flex' width='calc(100% - 250px)'>
+    {/* add/edit description Dialog */}
     <TextAreaDialog
       open={description}
       control={controlDescription}
@@ -272,6 +271,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       setValue={updateDescriptionValue}
       testId='description'
     />
+    {/* add/edit plot Dialog */}
     <TextAreaDialog
       open={plot}
       control={controlPlot}
@@ -287,6 +287,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       setValue={updatePlotValue}
       testId='plot'
     />
+    {/* add/edit location Dialog */}
     <CustomOptionsModal
       onClose={closeCreate}
       handleSubmit={handleSubmit}
@@ -315,8 +316,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
         <Text
           emptyText={t('activeCampaign.noDescription')}
           open={openDescription}
-          text={campaign.description}
-          chunked={chunkedDescription}
+          chunked={shrinkText(campaign.description)}
           button={t('activeCampaign.descriptionButton')}
           showMore={t('activeCampaign.showMore')}
           testId='description'
@@ -328,8 +328,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
         <Text
           emptyText={t('activeCampaign.noPlot')}
           open={openPlot}
-          text={campaign.plot}
-          chunked={chunkedPlot}
+          chunked={shrinkText(campaign.plot)}
           button={t('activeCampaign.plotButton')}
           showMore={t('activeCampaign.showMore')}
           testId='plot'

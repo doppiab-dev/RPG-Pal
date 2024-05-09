@@ -146,7 +146,8 @@ const placesOfInterest = {
   poiBody2: '" description',
   createLocation: 'Add a new Point of Interest',
   clear: 'Clear Value',
-  button: 'Save data'
+  button: 'Save data',
+  thumbnailLabel: 'Create a Thumbnail for your Point of Interest'
 }
 
 const en = {

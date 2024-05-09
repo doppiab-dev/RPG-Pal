@@ -80,6 +80,7 @@ export const formatPOI = (poi: PlacesOfInterestDTO): PlacesOfInterest => {
       name: curr.name,
       place: curr.place,
       description: curr.description,
+      thumbnail: curr.thumbnail,
       parent: curr.parent,
       children: curr.children
     }
