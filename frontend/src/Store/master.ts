@@ -209,14 +209,15 @@ type EditAPoi = Authenticated & {
   id: number
   poi: number
   description: string
+  thumbnail: string
   parent: string | null
 }
 
 export const editAPoi = createAsyncThunk(
   'editAPoi',
-  async ({ token, id, poi, description, parent }: EditAPoi, thunkApi) => {
+  async ({ token, id, poi, description, parent, thumbnail }: EditAPoi, thunkApi) => {
     try {
-      const response = await editPoi(token, id, poi, sanitize(description), parent)
+      const response = await editPoi(token, id, poi, sanitize(description), parent, sanitize(thumbnail))
       return response.data
     } catch (e) {
       const error = formatThunkError(e, 'editAPoi error')

@@ -42,6 +42,7 @@ export interface DBPlacesOfInterest {
   parent: number | null
   children: number[] | null
   description: string | null
+  thumbnail: string | null
   name: string
   place: PlacesOfInterestType
 }

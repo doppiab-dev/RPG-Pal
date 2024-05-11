@@ -7,7 +7,8 @@ import {
   type GetCampaignsDTO,
   type CampaignDTO,
   type PlacesOfInterestDTO,
-  type PlacesOfInterestType
+  type PlacesOfInterestType,
+  PlacesOfInterestValues
 } from '../../api/types'
 import { type DBCampaignGroup, type DBPlacesOfInterest, type DBCampaigns, type DBCampaignsGroups } from '../types'
 import { composePoi } from './utils'
@@ -165,6 +166,7 @@ const fetchPoi = async (campaign_id: string, user_id: string): Promise<{ placesO
       points: pois.rows.map(row => ({
         ...row,
         description: row.description ?? '',
+        thumbnail: row.thumbnail ?? '',
         children: row.children ?? []
       }))
     }
@@ -246,6 +248,22 @@ const getParent = async (user_id: string, numeric_id: number, id: number): Promi
   return res.rows[0].parent
 }
 
+const checkValidPlaceParentType = async (user_id: string, numeric_id: number, id: string, place: PlacesOfInterestType): Promise<void> => {
+  const client = await dbConfig.connect()
+  const query = `
+  SELECT place FROM ${tablePlacesOfInterest}
+  WHERE user_id = $1 AND campaign_id = $2 AND id = $3
+  `
+  const values = [user_id, numeric_id, Number(id)]
+  const res = await client.query<DBPlacesOfInterest>(query, values)
+  client.release()
+
+  if (res.rowCount === null || res.rowCount === 0) throw new Error('fetch failed, parent not valid')
+
+  const parentPlace = res.rows[0].place
+  if (PlacesOfInterestValues[parentPlace] >= PlacesOfInterestValues[place]) throw new Error('fetch failed, parent not valid.')
+}
+
 export const createPoi = async (
   campaign_id: string,
   user_id: string,
@@ -256,6 +274,7 @@ export const createPoi = async (
   const numeric_id = Number(campaign_id)
   if (isNaN(numeric_id)) throw new Error('fetch failed, id not valid.')
   if (parent !== null && isNaN(Number(parent))) throw new Error('fetch failed, parent not valid.')
+  if (parent !== null) await checkValidPlaceParentType(user_id, numeric_id, parent, place)
 
   const client = await dbConfig.connect()
   const createPoiQuery = `
@@ -312,6 +331,7 @@ export const editPoi = async (
   user_id: string,
   poi: string,
   description: string,
+  thumbnail: string,
   parent: string | null
 ): Promise<PlacesOfInterestDTO> => {
   const numeric_id = Number(campaign_id)
@@ -321,15 +341,27 @@ export const editPoi = async (
   if (parent !== null && isNaN(Number(parent))) throw new Error('fetch failed, parent not valid.')
 
   const client = await dbConfig.connect()
+  const poiQuery = `
+  SELECT place FROM ${tablePlacesOfInterest}
+  WHERE user_id = $1 AND campaign_id = $2 AND id = $3
+  `
+  const poiValues = [user_id, numeric_id, Number(id)]
+  const poiRes = await client.query<DBPlacesOfInterest>(poiQuery, poiValues)
+  if (poiRes.rowCount === null || poiRes.rowCount === 0) {
+    client.release()
+    throw new Error('edit poi failed')
+  }
+  const place = poiRes.rows[0].place
+  if (parent !== null) await checkValidPlaceParentType(user_id, numeric_id, parent, place)
 
   const oldParent = await getParent(user_id, numeric_id, id)
 
   const editPoiQuery = `
   UPDATE ${tablePlacesOfInterest}
-  SET description = $1, parent = $2
-  WHERE campaign_id = $3 AND user_id = $4 AND id = $5
+  SET description = $1, parent = $2, thumbnail = $3
+  WHERE campaign_id = $4 AND user_id = $5 AND id = $6
   `
-  const editPoiValues = [description, parent === null ? parent : Number(parent), numeric_id, user_id, id]
+  const editPoiValues = [description, parent === null ? parent : Number(parent), thumbnail, numeric_id, user_id, id]
   const res = await client.query<DBPlacesOfInterest>(editPoiQuery, editPoiValues)
 
   client.release()

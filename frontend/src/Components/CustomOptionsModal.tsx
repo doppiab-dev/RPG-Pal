@@ -113,9 +113,16 @@ const CustomTextModal: FC<CustomTextModalProps> = ({
                   disabled={disabled}
                   data-testid='second-select'
                 >
-                  {options.map(option => (
-                    <MenuItem key={option.id} value={String(option.id)} data-testid={`option-second-${option.id}`}>{option.name}</MenuItem>
-                  ))}
+                  {options.map(option =>
+                    <MenuItem
+                      key={option.id}
+                      value={String(option.id)}
+                      data-testid={`option-second-${option.id}`}
+                      disabled={option.disabled ?? false}
+                    >
+                      {option.name}
+                    </MenuItem>
+                  )}
                 </Select>
                 {Boolean(secondError) && (
                   <FormHelperText error>{secondError?.message ?? ''}</FormHelperText>
@@ -139,7 +146,9 @@ const CustomTextModal: FC<CustomTextModalProps> = ({
                   data-testid='third-select'
                 >
                   {thirdOptions.map(option => (
-                    <MenuItem key={option.id} value={String(option.id)} data-testid={`option-third-${option.id}`}>{option.name}</MenuItem>
+                    <MenuItem key={option.id} value={String(option.id)} data-testid={`option-third-${option.id}`} disabled={option.disabled ?? false}>
+                      {option.name}
+                    </MenuItem>
                   ))}
                 </Select>
                 {Boolean(thirdError) && (

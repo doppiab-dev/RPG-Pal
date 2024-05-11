@@ -1,4 +1,4 @@
-import { useCallback, useState, type FC } from 'react'
+import { Fragment, useCallback, useState, type FC } from 'react'
 import {
   Box,
   Button,
@@ -13,6 +13,7 @@ import {
   ListItemText,
   MenuItem,
   Select,
+  TextField,
   type SxProps,
   type Theme
 } from '@mui/material'
@@ -49,7 +50,8 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
 
   const schemaNotFull = yup.object().shape({
     text: yup.string(),
-    parent: yup.string()
+    parent: yup.string(),
+    thumbnail: yup.string()
   })
   const schemaPOI = yup.object().shape({
     type: yup.string()
@@ -69,7 +71,8 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
     resolver: yupResolver(schemaNotFull),
     defaultValues: {
       text: '',
-      parent: ''
+      parent: '',
+      thumbnail: ''
     }
   })
   const {
@@ -104,6 +107,7 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
   const openDescription = useCallback(() => {
     const location = points[point]
     setValue('text', location.description)
+    setValue('thumbnail', location.thumbnail)
     setValue('parent', location.parent === null ? '' : String(location.parent))
     setOpenDescriptionEdit(true)
   }, [point, points, setValue])
@@ -152,8 +156,9 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
   const onSubmit: SubmitHandler<PointOfInterestText> = useCallback(async (data) => {
     try {
       const description = data.text ?? ''
+      const thumbnail = data.thumbnail ?? ''
       const parent = data.parent === '' || data.parent === undefined ? null : data.parent
-      await dispatch(editAPoi({ description, token, id: activeCampaign, poi: point, parent }))
+      await dispatch(editAPoi({ description, token, id: activeCampaign, poi: point, parent, thumbnail }))
       setOpenDescriptionEdit(false)
     } catch (e) {
       const msg = parseErrorMessage((e))
@@ -183,16 +188,22 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
     }
   }, [activeCampaign, dispatch, token])
 
-  const options: Option[] = []
+  const parentOptions: Option[] = []
   for (const key in points) {
-    options.push({
+    parentOptions.push({
       id: String(key),
       name: points[key].name,
       disabled: PlacesOfInterestValues[points[point].place] <= PlacesOfInterestValues[points[key].place]
     })
   }
 
+  const typeOptions = Object.keys(PlacesOfInterestEnum).map(location => ({
+    id: location,
+    name: t(`placesOfInterest.${location}`)
+  }))
+
   return <Box display='flex' flexDirection='column' sx={{ ...style }}>
+    {/* delete POI */}
     <ConfirmationDialog
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       confirm={handleDelete}
@@ -201,6 +212,7 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
       title={t('placesOfInterest.deleteTitle') + t(`placesOfInterest.${points[point].place}`)}
       dialogText={t('placesOfInterest.deleteText1') + points[point].name + t('placesOfInterest.deleteText2')}
     />
+    {/* edit POI name */}
     <CustomOptionsModal
       onClose={closeEditPoiName}
       handleSubmit={handleSubmitEdit}
@@ -214,6 +226,7 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
       name="text"
       firstLabel="Name"
     />
+    {/* create POI */}
     <CustomOptionsModal
       onClose={closeCreatePoi}
       handleSubmit={handleSubmitCreate}
@@ -221,23 +234,21 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
       open={createPoi}
       control={controlCreate}
       firstError={errorsCreate?.text}
-      secondError={errorsCreate?.parent}
-      thirdError={errorsCreate?.type}
-      options={options}
-      thirdOptions={Object.keys(PlacesOfInterestEnum).map(location => ({
-        id: location,
-        name: t(`placesOfInterest.${location}`)
-      }))}
+      secondError={errorsCreate?.type}
+      thirdError={errorsCreate?.parent}
+      options={typeOptions}
+      thirdOptions={parentOptions}
       icon={<FontAwesomeIcon icon={faMapLocationDot} />}
       name="text"
       firstLabel="Name"
-      secondLabel="parent"
-      thirdLabel='type'
+      secondLabel='type'
+      thirdLabel='parent'
       title={t('activeCampaign.parentLabel') + points[point].name + t('activeCampaign.parentLabel2')}
       editText={t('placesOfInterest.create')}
       disabled
       thirdDisabled
     />
+    {/* edit POI */}
     <TextAreaDialog
       open={openDescriptionEdit}
       control={control}
@@ -255,34 +266,73 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
       testId='poi-description'
     >
       {
-        points[point].place !== 'world' &&
-        <Controller
-          name='parent'
-          control={control}
-          render={({ field }) =>
-            <FormControl fullWidth variant="outlined" margin="normal">
-              <InputLabel>{t('activeCampaign.editParent')}</InputLabel>
-              <Select
+        points[point].place === 'world'
+          ? <Controller
+            name='thumbnail'
+            control={control}
+            render={({ field }) =>
+              <TextField
                 {...field}
-                label={t('activeCampaign.editParent')}
-                error={Boolean(errors.parent)}
-                data-testid='second-select'
-              >
-                <MenuItem value='' data-testid='option-second-default'>
-                  {t('placesOfInterest.placeholder')}
-                </MenuItem>
-                {options.map(option => (
-                  <MenuItem key={option.id} value={String(option.id)} disabled={option.disabled ?? false} data-testid={`option-second-${option.id}`}>
-                    {option.name}
-                  </MenuItem>
-                ))}
-              </Select>
-              {Boolean(errors.parent) && (
-                <FormHelperText error>{errors.parent?.message ?? ''}</FormHelperText>
-              )}
-            </FormControl>
-          }
-        />
+                label={t('placesOfInterest.thumbnailLabel')}
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                error={Boolean(errors.thumbnail)}
+                helperText={errors.thumbnail?.message ?? ''}
+                data-testid='thumbnail-text'
+              />
+            }
+          />
+          : <Fragment>
+            <Controller
+              name='thumbnail'
+              control={control}
+              render={({ field }) =>
+                <TextField
+                  {...field}
+                  label={t('placesOfInterest.thumbnailLabel')}
+                  variant="outlined"
+                  margin="normal"
+                  fullWidth
+                  error={Boolean(errors.thumbnail)}
+                  helperText={errors.thumbnail?.message ?? ''}
+                  data-testid='thumbnail-text'
+                />
+              }
+            />
+            <Controller
+              name='parent'
+              control={control}
+              render={({ field }) =>
+                <FormControl fullWidth variant="outlined" margin="normal">
+                  <InputLabel>{t('activeCampaign.editParent')}</InputLabel>
+                  <Select
+                    {...field}
+                    label={t('activeCampaign.editParent')}
+                    error={Boolean(errors.parent)}
+                    data-testid='second-select'
+                  >
+                    <MenuItem value='' data-testid='option-second-default'>
+                      {t('placesOfInterest.placeholder')}
+                    </MenuItem>
+                    {
+                      parentOptions.map(option => <MenuItem
+                        key={option.id}
+                        value={String(option.id)}
+                        disabled={option.disabled ?? false}
+                        data-testid={`option-second-${option.id}`}
+                      >
+                        {option.name}
+                      </MenuItem>)
+                    }
+                  </Select>
+                  {
+                    Boolean(errors.parent) && <FormHelperText error>{errors.parent?.message ?? ''}</FormHelperText>
+                  }
+                </FormControl>
+              }
+            />
+          </Fragment>
       }
     </TextAreaDialog>
     <ListItemButton onClick={handleClick} sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -340,12 +390,12 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
     }
     <Text
       open={openDescription}
-      chunked={points[point].description}
-      text={points[point].description}
+      chunked={points[point].thumbnail}
       emptyText={t('activeCampaign.POInoDescription') + t(`placesOfInterest.${points[point].place}`) + t('activeCampaign.POInoDescription2')}
       button={t('placesOfInterest.edit') + t(`placesOfInterest.${points[point].place}`)}
       showMore={t('placesOfInterest.showMore')}
       testId={`poi-description-${points[point].place}`}
+      editMode={points[point].description === ''}
     />
     <Divider />
     {

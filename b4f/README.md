@@ -28,14 +28,14 @@ exports.up = pgm => {
 ```
 after saved the file we run the init-db migration with this script
 ```bash
-DATABASE_URL=postgres://DB_USER:DB_PASS@DB_HOST:DB_PORT/DB_NAME yarn run migrate up
+DATABASE_URL=postgres://DB_USER:DB_PASS@DB_HOST:DB_PORT/DB_NAME yarn migrate up
 ```
 N.B. Note that if you're running from locale your DB_HOST will be localhost.
 
 ### FUTURE MIGRATION
 If you need to do another migration, like adding a column *userGroup* on table *post*
 ```bash
-yarn run migrate create user-group-on-post
+yarn migrate create user-group-on-post
 ```
 then, as before, edit *timestamp_user-group-on-post.js* adding the column on the table:
 ```js
@@ -47,6 +47,6 @@ exports.up = (pgm) => {
 ```
 and then run 
 ```bash
-yarn run migrate up 
+DATABASE_URL=postgres://DB_USER:DB_PASS@DB_HOST:DB_PORT/DB_NAME yarn migrate up
 ```
 after that there will be new column in post table.

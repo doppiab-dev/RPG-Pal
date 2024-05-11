@@ -58,6 +58,7 @@ const campaign = {
   typeValidationErrorRequired: 'A Type is required',
   validationErrorInvalidType: 'Type is invalid',
   parentValidationErrorRequired: 'A parent is required',
+  parentNotValid: 'Parent is invalid',
   createButton: "Let's Start!",
   create: 'Choose a name for your new Campaign',
   editButton: 'Edit',
@@ -88,7 +89,7 @@ const activeCampaign = {
   group: 'Groups',
   noDescription: 'Your campaign has no description',
   POInoDescription: 'Your ',
-  POInoDescription2: ' has no description',
+  POInoDescription2: ' has no thumbnail',
   descriptionButton: 'Add Description',
   showMore: 'Read More',
   noPlot: 'Your campaign has no plot',
@@ -145,7 +146,8 @@ const placesOfInterest = {
   poiBody2: '" description',
   createLocation: 'Add a new Point of Interest',
   clear: 'Clear Value',
-  button: 'Save data'
+  button: 'Save data',
+  thumbnailLabel: 'Create a Thumbnail for your Point of Interest'
 }
 
 const en = {

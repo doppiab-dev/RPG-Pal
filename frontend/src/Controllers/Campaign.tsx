@@ -8,7 +8,7 @@ import {
   Typography
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { PlacesOfInterestEnum, buttonStyle, parseErrorMessage, shrinkText, schema } from '../Utils/f'
+import { PlacesOfInterestEnum, buttonStyle, parseErrorMessage, shrinkText, schema, PlacesOfInterestValues } from '../Utils/f'
 import {
   clearMasterState,
   createAPoi,
@@ -53,7 +53,18 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
     type: yup.string()
       .required(t('campaign.typeValidationErrorRequired'))
       .oneOf(['world', 'continent', 'region', 'area', 'city', 'camp', 'neighborhood', 'point'], t('campaign.validationErrorInvalidType')),
-    parent: yup.string()
+    parent: yup.string().test({
+      name: 'parentValidation',
+      message: t('campaign.parentNotValid'),
+      test: function (value: string | undefined, context: yup.TestContext) {
+        const { type } = context.parent
+        if (value !== undefined && value !== '' && type !== '' && type !== undefined) {
+          return PlacesOfInterestValues[points[Number(value)].place] < PlacesOfInterestValues[(type as PlacesOfInterestType)]
+        }
+
+        return true
+      }
+    })
   })
 
   const [description, setDescription] = useState<boolean>(false)
@@ -98,6 +109,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
     handleSubmit,
     control,
     reset,
+    watch,
     formState: { errors }
   } = useForm<PointOfInterestCreateInputs>({
     resolver: yupResolver(schemaPOI),
@@ -166,7 +178,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
     setCreate(false)
     reset()
   }, [reset])
-  const onSubmitCreate: SubmitHandler<PointOfInterestInputs> = useCallback(async (data) => {
+  const onSubmitCreate: SubmitHandler<PointOfInterestCreateInputs> = useCallback(async (data) => {
     try {
       const name = data.text ?? ''
       const parent = data.parent === '' || data.parent === undefined ? null : data.parent
@@ -200,23 +212,50 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       })
   }, [token, dispatch, activeCampaign])
 
+  const selectedParent = watch('parent')
+  const selectedType = watch('type')
+
   if (campaignInfoStatus === 'loading') return <Loader />
   if (campaignInfoStatus === 'error') return <ErrorComponent clearError={clearError} msg={errorMessage} />
 
-  const chunkedDescription = shrinkText(campaign.description)
-  const chunkedPlot = shrinkText(campaign.plot)
   const { points, roots } = campaign.placesOfInterest
 
-  const options: Option[] = []
+  const parentOptions: Option[] = []
   for (const key in points) {
-    options.push({
+    const typeSelected = selectedType !== '' && selectedType !== undefined
+    parentOptions.push({
       id: String(key),
-      name: points[key].name
+      name: points[key].name,
+      disabled: typeSelected
+        ? PlacesOfInterestValues[points[key].place] >= (PlacesOfInterestValues[(selectedType as PlacesOfInterestType)])
+        : false
     })
   }
-  options.unshift({ id: '', name: t('placesOfInterest.clear') })
+  parentOptions.unshift({ id: '', name: t('placesOfInterest.clear') })
+
+  const typeOptions = Object.keys(PlacesOfInterestEnum).reduce<Option[]>((options, location) => {
+    const parentSelected = selectedParent !== '' && selectedParent !== undefined
+    options = options.length === 0
+      ? [{
+        id: location,
+        name: t(`placesOfInterest.${location}`),
+        disabled: parentSelected
+          ? PlacesOfInterestValues[points[Number(selectedParent)].place] >= (PlacesOfInterestValues[(location as PlacesOfInterestType)])
+          : false
+      }]
+      : [...options, {
+        id: location,
+        name: t(`placesOfInterest.${location}`),
+        disabled: parentSelected
+          ? PlacesOfInterestValues[points[Number(selectedParent)].place] >= (PlacesOfInterestValues[(location as PlacesOfInterestType)])
+          : false
+      }]
+
+    return options
+  }, [])
 
   return <Stack display='flex' width='calc(100% - 250px)'>
+    {/* add/edit description Dialog */}
     <TextAreaDialog
       open={description}
       control={controlDescription}
@@ -232,6 +271,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       setValue={updateDescriptionValue}
       testId='description'
     />
+    {/* add/edit plot Dialog */}
     <TextAreaDialog
       open={plot}
       control={controlPlot}
@@ -247,6 +287,7 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       setValue={updatePlotValue}
       testId='plot'
     />
+    {/* add/edit location Dialog */}
     <CustomOptionsModal
       onClose={closeCreate}
       handleSubmit={handleSubmit}
@@ -254,35 +295,32 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       open={create}
       control={control}
       firstError={errors?.text}
-      secondError={errors?.parent}
-      thirdError={errors?.type}
-      options={options}
-      thirdOptions={Object.keys(PlacesOfInterestEnum).map(location => ({
-        id: location,
-        name: t(`placesOfInterest.${location}`)
-      }))}
+      secondError={errors?.type}
+      thirdError={errors?.parent}
+      options={typeOptions}
+      thirdOptions={parentOptions}
       icon={<FontAwesomeIcon icon={faMapLocationDot} />}
       name="text"
       firstLabel="Name"
-      secondLabel="parent"
-      thirdLabel='type'
+      secondLabel='type'
+      thirdLabel='parent'
       title={t('placesOfInterest.createLocation')}
       editText={t('placesOfInterest.create')}
     />
-    <Box display='flex' width='100%' flexDirection='column' boxShadow={1} height='67px'>
-      <Typography fontSize='3rem' alignSelf='center'>{campaign.name}</Typography>
+    <Box display='flex' width='100%' flexDirection='column' boxShadow={1} height='66px'>
+      <Typography fontSize='3rem' alignSelf='center' height='100%'>{campaign.name}</Typography>
     </Box>
-    <Box width='98%' alignSelf='center' flexDirection='column' sx={{ overflowY: 'auto', overflowX: 'hidden' }}>
+    <Box width='98%' alignSelf='center' height='calc(100% - 67px)' flexDirection='column' sx={{ overflowY: 'auto', overflowX: 'hidden' }}>
       <Box display='flex' width='100%' flexDirection='column' minHeight='80px' maxHeight='250px' sx={{ overflowY: 'auto', overflowX: 'hidden' }}>
         <Typography variant="h6" component="h2">{t('activeCampaign.description')}</Typography>
         <Text
           emptyText={t('activeCampaign.noDescription')}
           open={openDescription}
-          text={campaign.description}
-          chunked={chunkedDescription}
+          chunked={shrinkText(campaign.description)}
           button={t('activeCampaign.descriptionButton')}
           showMore={t('activeCampaign.showMore')}
           testId='description'
+          editMode={campaign.description === ''}
         />
       </Box>
       <Divider />
@@ -291,11 +329,11 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
         <Text
           emptyText={t('activeCampaign.noPlot')}
           open={openPlot}
-          text={campaign.plot}
-          chunked={chunkedPlot}
+          chunked={shrinkText(campaign.plot)}
           button={t('activeCampaign.plotButton')}
           showMore={t('activeCampaign.showMore')}
           testId='plot'
+          editMode={campaign.plot === ''}
         />
       </Box>
       <Divider />
