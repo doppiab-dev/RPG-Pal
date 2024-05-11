@@ -26,7 +26,7 @@ app.use(nocache())
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 app.use('/api', apiRouter)
 
-const server = app.listen(ServerPort, () => { Logger.writeEvent('B4F is listening on port ' + ServerPort) }
+const server = app.listen(ServerPort, () => { Logger.writeEvent('Backend is listening on port ' + ServerPort) }
 )
 
 server.on('error', (error) => { Logger.writeException(error) })
@@ -38,7 +38,7 @@ try {
       'index.ts/Env_Const_Check'
     )
     server.close(() => {
-      Logger.writeEvent('B4F shutdown.')
+      Logger.writeEvent('Backend shutdown.')
       return process.exit(0)
     })
   }

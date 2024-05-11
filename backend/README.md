@@ -1,60 +1,52 @@
-# backend
+# Backend
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+Node backend, copy .env.example vars in .env file (you should create it) and ask [me](https://github.com/DrBlink7) on how to fill vars.
+It will run (by default) on 3001 port, you can see API Swagger [there](http://localhost:3001/swagger/)
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+## DB Migration
+We use node-pg-migrate, complete guide [here](https://salsita.github.io/node-pg-migrate/#/)
 
-## Running the application in dev mode
-
-You can run your application in dev mode that enables live coding using:
-```shell script
-./mvnw compile quarkus:dev
+### INITIALIZATION
+To do the first migration we did these steps, from backend bash run
+```bash
+yarn run migrate create init db
 ```
+a file *timestamp_init-db.js* will be created, open it and initialize with the database script, ex:
+```js
+exports.shorthands = undefined;
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
+exports.up = pgm => {
+  pgm.createTable('post', {
+    id: { type: 'text', notNull: true },
+    text: { type: 'text', notNull: true }
+  });
 
-## Packaging and running the application
-
-The application can be packaged using:
-```shell script
-./mvnw package
+  pgm.addConstraint('post', 'unique_id', {
+    unique: ['id'],
+  });
+};
 ```
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
-
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-```shell script
-./mvnw package -Dquarkus.package.type=uber-jar
+after saved the file we run the init-db migration with this script
+```bash
+DATABASE_URL=postgres://DB_USER:DB_PASS@DB_HOST:DB_PORT/DB_NAME yarn migrate up
 ```
+N.B. Note that if you're running from locale your DB_HOST will be localhost.
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using: 
-```shell script
-./mvnw package -Dnative
+### FUTURE MIGRATION
+If you need to do another migration, like adding a column *userGroup* on table *post*
+```bash
+yarn migrate create user-group-on-post
 ```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
+then, as before, edit *timestamp_user-group-on-post.js* adding the column on the table:
+```js
+exports.up = (pgm) => {
+  pgm.addColumns('post', {
+    userGroup: { type: 'text', notNull: true },
+  })
+}
 ```
-
-You can then execute your native executable with: `./target/backend-1.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.
-
-## Related Guides
-
-- RESTEasy Reactive ([guide](https://quarkus.io/guides/resteasy-reactive)): A Jakarta REST implementation utilizing build time processing and Vert.x. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
-
-## Provided Code
-
-### RESTEasy Reactive
-
-Easily start your Reactive RESTful Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+and then run 
+```bash
+DATABASE_URL=postgres://DB_USER:DB_PASS@DB_HOST:DB_PORT/DB_NAME yarn migrate up
+```
+after that there will be new column in post table.

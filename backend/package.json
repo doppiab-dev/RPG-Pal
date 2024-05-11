@@ -1,5 +1,5 @@
 {
-  "name": "b4f",
+  "name": "backend",
   "version": "0.0.1",
   "main": "./src/index.ts",
   "scripts": {

@@ -22,7 +22,7 @@ const initLogger = (): void => {
     return process.exit()
   }
   const client = {
-    cloudRole: 'b4f',
+    cloudRole: 'Backend',
     applicationVersion: Version,
     cloudRoleInstance: EnvironmentName
   }
