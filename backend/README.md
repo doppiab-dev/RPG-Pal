@@ -9,7 +9,7 @@ We use node-pg-migrate, complete guide [here](https://salsita.github.io/node-pg-
 ### INITIALIZATION
 To do the first migration we did these steps, from backend bash run
 ```bash
-yarn run migrate create init db
+yarn migrate create init db
 ```
 a file *timestamp_init-db.js* will be created, open it and initialize with the database script, ex:
 ```js

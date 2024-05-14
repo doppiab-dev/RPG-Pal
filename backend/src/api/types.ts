@@ -54,6 +54,7 @@ export interface CampaignDTO {
   plot: string
   placesOfInterest: PlacesOfInterestDTO
   groups: CampaignGroupDTO[]
+  timeline: TimelineDTO[]
 }
 
 export interface PlacesOfInterestDTO {
@@ -116,4 +117,12 @@ export interface UpdatePoiBody {
   description: string
   thumbnail: string
   parent: string | null
+}
+
+export interface TimelineDTO {
+  id: number
+  position: number
+  name: string
+  description: string
+  date: string
 }

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { tableCampaigns, tableGroups, tablePlacesOfInterest } from '../../config'
+import { tableCampaigns, tableGroups, tablePlacesOfInterest, tableTimeline } from '../../config'
 import { dbConfig } from '.'
 import {
   type CampaignStatus,
@@ -8,9 +8,10 @@ import {
   type CampaignDTO,
   type PlacesOfInterestDTO,
   type PlacesOfInterestType,
-  PlacesOfInterestValues
+  PlacesOfInterestValues,
+  type TimelineDTO
 } from '../../api/types'
-import { type DBCampaignGroup, type DBPlacesOfInterest, type DBCampaigns, type DBCampaignsGroups } from '../types'
+import { type DBCampaignGroup, type DBPlacesOfInterest, type DBCampaigns, type DBCampaignsGroups, type DBTimeline } from '../types'
 import { composePoi } from './utils'
 
 export const getCampaigns = async (user_id: string): Promise<GetCampaignsDTO> => {
@@ -108,6 +109,7 @@ export const getCampaign = async (id: string, user_id: string): Promise<Campaign
   if (campaign.rowCount === null || campaign.rowCount === 0) throw new Error('fetch campaign failed')
 
   const { placesOfInterest } = await fetchPoi(id, user_id)
+  const timeline = await fetchTimeline(id, user_id)
   const row = campaign.rows[0]
 
   return {
@@ -116,6 +118,7 @@ export const getCampaign = async (id: string, user_id: string): Promise<Campaign
     description: row.description ?? '',
     plot: row.plot ?? '',
     placesOfInterest,
+    timeline,
     groups: row.group_id === null ? [] : campaign.rows.map(row => ({ id: row.group_id, name: row.group_name }))
   }
 }
@@ -410,4 +413,30 @@ export const deletePoi = async (campaign_id: string, user_id: string, poi: strin
   const { placesOfInterest } = await fetchPoi(campaign_id, user_id)
 
   return placesOfInterest
+}
+
+const fetchTimeline = async (id: string, user_id: string): Promise<TimelineDTO[]> => {
+  const numeric_id = Number(id)
+  if (isNaN(numeric_id)) throw new Error('fetch failed, id not valid.')
+
+  const client = await dbConfig.connect()
+  const timelineQuery = `
+  SELECT *
+  FROM ${tableTimeline}
+  WHERE user_id = $1 AND campaign_id = $2
+  ORDER BY position
+  `
+  const timelineValues = [user_id, numeric_id]
+  const timeline = await client.query<DBTimeline>(timelineQuery, timelineValues)
+
+  client.release()
+  if (timeline.rowCount === null || timeline.rowCount === 0) return []
+
+  return timeline.rows.map(row => ({
+    id: row.id,
+    description: row.description ?? '',
+    name: row.name,
+    date: row.date,
+    position: row.position
+  }))
 }

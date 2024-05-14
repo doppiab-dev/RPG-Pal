@@ -46,3 +46,13 @@ export interface DBPlacesOfInterest {
   name: string
   place: PlacesOfInterestType
 }
+
+export interface DBTimeline {
+  id: number
+  campaign_id: number
+  user_id: string
+  name: string
+  description: string | null
+  date: string
+  position: number
+}
