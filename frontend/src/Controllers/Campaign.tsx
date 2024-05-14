@@ -29,6 +29,7 @@ import { useNavigate } from 'react-router-dom'
 import { GroupAdd } from '@mui/icons-material'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import PointOfInterest from './PointOfInterest'
+import EventTimeline from './EventTimeline'
 import Loader from '../Components/Loader'
 import TextAreaDialog from '../Components/TextAreaDialog'
 import ErrorComponent from '../Components/Error'
@@ -191,6 +192,13 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       dispatch(setErrorMessage(msg))
     }
   }, [activeCampaign, dispatch, reset, token])
+
+  const expandEvent = useCallback((id: number) => {
+    console.log('show event description, name, date with id:', id)
+  }, [])
+  const addEvent = useCallback((id: number) => {
+    console.log('add event: ', id)
+  }, [])
 
   const clearError = useCallback(() => {
     dispatch(clearMasterState())
@@ -411,7 +419,12 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
           <List>
             {roots.map(point => <PointOfInterest key={point} point={point} points={points} defaultOpen activeCampaign={activeCampaign} />)}
           </List>
+          {roots.length === 0 && <Divider />}
         </Box>
+      </Box>
+      <Box display='flex' flexDirection='column' height='100%' padding='1vh 0' gap='1vh'>
+        <Typography variant="h6" component="h2">{t('activeCampaign.timeline')}</Typography>
+        <EventTimeline campaign={campaign} addEvent={addEvent} expandEvent={expandEvent} />
       </Box>
     </Box>
   </Stack>

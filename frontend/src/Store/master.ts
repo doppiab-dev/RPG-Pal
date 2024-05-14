@@ -315,7 +315,7 @@ export const master = createSlice({
       state.campaignInfoStatus = 'error'
     })
     builder.addCase(fetchACampaign.fulfilled, (state, action) => {
-      const { description, groups, id, name, plot, placesOfInterest: poi } = action.payload
+      const { description, groups, id, name, plot, placesOfInterest: poi, timeline } = action.payload
       const placesOfInterest = formatPOI(poi)
       state.campaign = {
         description,
@@ -323,7 +323,8 @@ export const master = createSlice({
         id,
         name,
         plot,
-        placesOfInterest
+        placesOfInterest,
+        timeline
       }
       state.campaignInfoStatus = 'success'
       state.errorMessage = ''

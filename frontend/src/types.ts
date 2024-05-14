@@ -84,6 +84,7 @@ interface CampaignDTO {
   plot: string
   placesOfInterest: PlacesOfInterestDTO
   groups: CampaignGroupDTO[]
+  timeline: TimelineDTO[]
 }
 interface UpsertDescriptionBody {
   description: string
@@ -107,6 +108,13 @@ interface UpdatePoiBody {
   description: string
   thumbnail: string
   parent: string | null
+}
+interface TimelineDTO {
+  id: number
+  position: number
+  name: string
+  description: string
+  date: string
 }
 /**
  * Redux
@@ -184,6 +192,7 @@ interface Campaign {
   plot: string
   placesOfInterest: PlacesOfInterest
   groups: CampaignGroupDTO[]
+  timeline: Timeline[]
 }
 interface PlacesOfInterest {
   points: Record<number, PlaceOfInterestPoint>
@@ -196,6 +205,13 @@ interface PlaceOfInterestPoint {
   thumbnail: string
   parent: number | null
   children: number[]
+}
+interface Timeline {
+  id: number
+  position: number
+  name: string
+  description: string
+  date: string
 }
 /**
  * Utils

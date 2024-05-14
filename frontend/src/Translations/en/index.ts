@@ -106,7 +106,8 @@ const activeCampaign = {
   plotBody: 'Create/Modify your Campaign plot',
   editParent: 'Attach, as a child, to a different Point of Interest',
   parentLabel: 'Create, as a child of "',
-  parentLabel2: '", a new Point of Interest'
+  parentLabel2: '", a new Point of Interest',
+  timeline: 'Timeline'
 }
 const lorem = {
   ipsum: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
@@ -149,6 +150,9 @@ const placesOfInterest = {
   button: 'Save data',
   thumbnailLabel: 'Create a Thumbnail for your Point of Interest'
 }
+const timeline = {
+  title: 'Add Event'
+}
 
 const en = {
   error,
@@ -162,7 +166,8 @@ const en = {
   activeCampaign,
   lorem,
   textArea,
-  placesOfInterest
+  placesOfInterest,
+  timeline
 }
 
 export default en
