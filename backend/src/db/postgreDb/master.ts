@@ -440,3 +440,59 @@ const fetchTimeline = async (id: string, user_id: string): Promise<TimelineDTO[]
     position: row.position
   }))
 }
+
+export const upsertTimelineEvent = async (
+  campaign_id: string,
+  user_id: string,
+  name: string,
+  date: string,
+  position: number,
+  description: string,
+  event: number | null
+): Promise<TimelineDTO[]> => {
+  const numeric_id = Number(campaign_id)
+  if (isNaN(numeric_id)) throw new Error('fetch failed, id not valid.')
+
+  const client = await dbConfig.connect()
+  const upsertTimelineQuery = event === null
+    ? `
+      INSERT INTO ${tableTimeline}
+      (user_id, campaign_id, name, description, date, position)
+      VALUES ($1, $2, $3, $4, $5, $6)
+    `
+    : `
+      UPDATE ${tableTimeline}
+      SET name = $3, description = $4, date = $5, position = $6
+      WHERE campaign_id = $2 AND user_id = $1 AND event = $7
+    `
+  const upsertTimelineValues = [user_id, numeric_id, name, description, date, position]
+  const res = await client.query<DBTimeline>(upsertTimelineQuery, event === null ? upsertTimelineValues : [...upsertTimelineValues, event])
+  client.release()
+  if (res.rowCount === null || res.rowCount === 0) throw new Error('upsert timeline event failed')
+
+  const timeline = await fetchTimeline(campaign_id, user_id)
+
+  return timeline
+}
+
+export const deleteTimelineEvent = async (campaign_id: string, user_id: string, event: string): Promise<TimelineDTO[]> => {
+  const numeric_id = Number(campaign_id)
+  const id = Number(event)
+  if (isNaN(numeric_id)) throw new Error('fetch failed, campaign id not valid.')
+  if (isNaN(id)) throw new Error('fetch failed, event not valid.')
+
+  const client = await dbConfig.connect()
+  const deleteTimelineEventQuery = `
+  DELETE FROM ${tableTimeline}
+  WHERE user_id = $1 AND campaign_id = $2 AND id = $3
+  RETURNING id
+  `
+  const deleteTimelineEventValues = [user_id, numeric_id, id]
+  const res = await client.query<DBTimeline>(deleteTimelineEventQuery, deleteTimelineEventValues)
+  client.release()
+  if (res.rowCount === null || res.rowCount === 0) throw new Error('delete timeline event failed')
+
+  const timeline = await fetchTimeline(campaign_id, user_id)
+
+  return timeline
+}

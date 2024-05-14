@@ -12,7 +12,9 @@ import {
   createPoi,
   editPoiName,
   editPoi,
-  deletePoi
+  deletePoi,
+  upsertTimelineEvent,
+  deleteTimelineEvent
 } from './master'
 import { type Connector } from '..'
 
@@ -39,5 +41,7 @@ export const dbConnectorPostgreDb: Connector = {
   createPoi,
   editPoiName,
   editPoi,
-  deletePoi
+  deletePoi,
+  upsertTimelineEvent,
+  deleteTimelineEvent
 }

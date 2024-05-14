@@ -7,7 +7,8 @@ import {
   type UserInfoDTO,
   type CampaignDTO,
   type PlacesOfInterestType,
-  type PlacesOfInterestDTO
+  type PlacesOfInterestDTO,
+  type TimelineDTO
 } from '../api/types'
 
 export const dbFactory = (dbType: DbType): Connector => {
@@ -32,4 +33,7 @@ export interface Connector {
   editPoiName: (id: string, userId: string, name: string, poi: string) => Promise<PlacesOfInterestDTO>
   editPoi: (id: string, userId: string, poi: string, description: string, thumbnail: string, parent: string | null) => Promise<PlacesOfInterestDTO>
   deletePoi: (id: string, userId: string, poi: string) => Promise<PlacesOfInterestDTO>
+  upsertTimelineEvent:
+  (id: string, userId: string, name: string, date: string, position: number, description: string, event: number | null) => Promise<TimelineDTO[]>
+  deleteTimelineEvent: (id: string, userId: string, event: string) => Promise<TimelineDTO[]>
 }

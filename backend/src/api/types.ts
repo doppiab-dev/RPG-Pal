@@ -126,3 +126,11 @@ export interface TimelineDTO {
   description: string
   date: string
 }
+
+export interface UpsertTimelineBody {
+  position: number
+  name: string
+  description: string
+  date: string
+  event: number | null
+}

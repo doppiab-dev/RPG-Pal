@@ -10,7 +10,8 @@ import {
   type EditCampaignBody,
   type CreatePoiBody,
   type UpdatePoiNameBody,
-  type UpdatePoiBody
+  type UpdatePoiBody,
+  type UpsertTimelineBody
 } from '../types'
 import express from 'express'
 
@@ -278,6 +279,59 @@ masterRouter.delete('/campaign/:id/poi/:poi', asyncErrWrapper(async (req, res) =
     return res.status(200).json(data)
   } catch (e) {
     const { status, error } = formatError(e as Error, '017-RESPONSE', 'masterRouter /campaign/:id/poi/:id delete')
+
+    return res.status(status).json(error)
+  }
+}))
+
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+masterRouter.post('/campaign/:id/timeline', asyncErrWrapper(async (req, res) => {
+  try {
+    const token = verifyMissingToken(req.headers.authorization)
+    const { userId } = validateToken(token)
+    const body: UpsertTimelineBody = req.body
+    const { name, date, description, position, event } = body
+    const { id } = req.params
+    if (missingInBody(name)) throw new Error('name is missing in body')
+    if (missingInBody(date)) throw new Error('date is missing in body')
+    if (missingInBody(position)) throw new Error('position is missing in body')
+    if (missingInBody(description)) throw new Error('description is missing in body')
+    if (missingInBody(id)) throw new Error('id is missing in body')
+    if (event === undefined) throw new Error('event value is invalid')
+
+    const upsertTimelineTimestamp = performance.now()
+    const db = dbFactory(RepositoryType)
+    const data = await db.upsertTimelineEvent(id, userId, name, date, position, description, event)
+    const upsertTime = Math.round(performance.now() - upsertTimelineTimestamp)
+    Logger.writeEvent(`Master: upsert timeline event in ${upsertTime} ms`)
+
+    return res.status(200).json(data)
+  } catch (e) {
+    const { status, error } = formatError(e as Error, '018-RESPONSE', 'masterRouter /campaign/:id/timeline post')
+
+    return res.status(status).json(error)
+  }
+}))
+
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+masterRouter.delete('/campaign/:id/timeline/:event', asyncErrWrapper(async (req, res) => {
+  try {
+    const token = verifyMissingToken(req.headers.authorization)
+    const { userId } = validateToken(token)
+    const { id, event } = req.params
+    if (missingInBody(event)) throw new Error('event id is missing in body')
+    if (missingInBody(id)) throw new Error('id is missing in body')
+    if (missingInBody(event)) throw new Error('event is missing in body')
+
+    const deleteTimelineEventTimestamp = performance.now()
+    const db = dbFactory(RepositoryType)
+    const data = await db.deleteTimelineEvent(id, userId, event)
+    const deleteTime = Math.round(performance.now() - deleteTimelineEventTimestamp)
+    Logger.writeEvent(`Master: delete timeline event in ${deleteTime} ms`)
+
+    return res.status(200).json(data)
+  } catch (e) {
+    const { status, error } = formatError(e as Error, '019-RESPONSE', 'masterRouter /campaign/:id/timeline/:event delete')
 
     return res.status(status).json(error)
   }
