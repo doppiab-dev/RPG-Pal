@@ -66,7 +66,7 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
   })
 
   const {
-    handleSubmit, control, setValue, getValues, reset, setError, formState: { errors }
+    handleSubmit, control, setValue, getValues, setError, formState: { errors }
   } = useForm<PointOfInterestText>({
     resolver: yupResolver(schemaNotFull),
     defaultValues: {
@@ -112,8 +112,8 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
     setOpenDescriptionEdit(true)
   }, [point, points, setValue])
   const cancelDescription = useCallback(() => {
-    reset()
-  }, [reset])
+    setValue('text', '')
+  }, [setValue])
 
   const openDeletePoi = useCallback(() => {
     setDeletePoi(true)

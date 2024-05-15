@@ -68,8 +68,9 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
 
   const getRows = useCallback(() => {
     if (!Boolean(children)) return 29
+    if (Array.isArray(children)) return 21
 
-    return Boolean((children as any)?.props?.children) ? 20 : 25
+    return Boolean((children as any)?.props?.children) ? 22 : 25
   }, [children])
 
   return <Dialog
@@ -127,50 +128,50 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
                 )}
               />
             </Box>
+            <ButtonGroup sx={{ display: 'flex', marginLeft: '2vw' }} variant="outlined">
+              <Button
+                sx={{ fontSize: '0.8rem' }}
+                startIcon={<FontAwesomeIcon icon={faHeading} style={{ fontSize: '0.8rem' }} />}
+                onClick={() => { setValue('<h2> </h2>') }}
+                data-testid={`add-edit-${testId}-title`}
+              >
+                {t('textArea.addTitle')}
+              </Button>
+              <Button
+                sx={{ fontSize: '0.8rem' }}
+                startIcon={<FontAwesomeIcon icon={faTextHeight} style={{ fontSize: '0.8rem' }} />}
+                onClick={() => { setValue('<h3> </h3>') }}
+                data-testid={`add-edit-${testId}-subtitle`}
+              >
+                {t('textArea.addSubtitle')}
+              </Button>
+              <Button
+                sx={{ fontSize: '0.8rem' }}
+                startIcon={<FontAwesomeIcon icon={faBold} style={{ fontSize: '0.8rem' }} />}
+                onClick={() => { setValue('<b> </b>') }}
+                data-testid={`add-edit-${testId}-bold`}
+              >
+                {t('textArea.bold')}
+              </Button>
+              <Button
+                sx={{ fontSize: '0.8rem' }}
+                startIcon={<FontAwesomeIcon icon={faItalic} style={{ fontSize: '0.8rem' }} />}
+                onClick={() => { setValue('<i> </i>') }}
+                data-testid={`add-edit-${testId}-italic`}
+              >
+                {t('textArea.italic')}
+              </Button>
+              <Button
+                sx={{ fontSize: '0.8rem' }}
+                startIcon={<FontAwesomeIcon icon={faUnderline} style={{ fontSize: '0.8rem' }} />}
+                onClick={() => { setValue('<u> </u>') }}
+                data-testid={`add-edit-${testId}-underlined`}
+              >
+                {t('textArea.underlined')}
+              </Button>
+            </ButtonGroup>
             {children}
           </DialogContent>
-          <ButtonGroup sx={{ display: 'flex', marginLeft: '2vw' }} variant="outlined">
-            <Button
-              sx={{ fontSize: '0.8rem' }}
-              startIcon={<FontAwesomeIcon icon={faHeading} style={{ fontSize: '0.8rem' }} />}
-              onClick={() => { setValue('<h2> </h2>') }}
-              data-testid={`add-edit-${testId}-title`}
-            >
-              {t('textArea.addTitle')}
-            </Button>
-            <Button
-              sx={{ fontSize: '0.8rem' }}
-              startIcon={<FontAwesomeIcon icon={faTextHeight} style={{ fontSize: '0.8rem' }} />}
-              onClick={() => { setValue('<h3> </h3>') }}
-              data-testid={`add-edit-${testId}-subtitle`}
-            >
-              {t('textArea.addSubtitle')}
-            </Button>
-            <Button
-              sx={{ fontSize: '0.8rem' }}
-              startIcon={<FontAwesomeIcon icon={faBold} style={{ fontSize: '0.8rem' }} />}
-              onClick={() => { setValue('<b> </b>') }}
-              data-testid={`add-edit-${testId}-bold`}
-            >
-              {t('textArea.bold')}
-            </Button>
-            <Button
-              sx={{ fontSize: '0.8rem' }}
-              startIcon={<FontAwesomeIcon icon={faItalic} style={{ fontSize: '0.8rem' }} />}
-              onClick={() => { setValue('<i> </i>') }}
-              data-testid={`add-edit-${testId}-italic`}
-            >
-              {t('textArea.italic')}
-            </Button>
-            <Button
-              sx={{ fontSize: '0.8rem' }}
-              startIcon={<FontAwesomeIcon icon={faUnderline} style={{ fontSize: '0.8rem' }} />}
-              onClick={() => { setValue('<u> </u>') }}
-              data-testid={`add-edit-${testId}-underlined`}
-            >
-              {t('textArea.underlined')}
-            </Button>
-          </ButtonGroup>
           <DialogActions sx={{ p: 2, justifyContent: 'flex-end' }}>
             <Button
               variant="contained"
