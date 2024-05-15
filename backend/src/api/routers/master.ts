@@ -294,10 +294,11 @@ masterRouter.post('/campaign/:id/timeline', asyncErrWrapper(async (req, res) => 
     const { id } = req.params
     if (missingInBody(name)) throw new Error('name is missing in body')
     if (missingInBody(date)) throw new Error('date is missing in body')
-    if (missingInBody(position)) throw new Error('position is missing in body')
     if (missingInBody(description)) throw new Error('description is missing in body')
     if (missingInBody(id)) throw new Error('id is missing in body')
+    if (position === undefined) throw new Error('position is missing in body')
     if (event === undefined) throw new Error('event value is invalid')
+    if (event === null && position === null) throw new Error('invalid event, position values')
 
     const upsertTimelineTimestamp = performance.now()
     const db = dbFactory(RepositoryType)

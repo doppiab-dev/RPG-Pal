@@ -47,3 +47,18 @@ export const editPoi = async (
   thumbnail: string
 ): Promise<AxiosResponse<PlacesOfInterestDTO>> =>
   await axiosClient.put(`/master/campaign/${id}/poi/${poi}`, { description, parent, thumbnail } satisfies UpdatePoiBody, createApiHeaders(token))
+
+export const upsertTimelineEvent = async (
+  token: string,
+  id: number,
+  position: number | null,
+  name: string,
+  description: string,
+  date: string,
+  event: number | null
+): Promise<AxiosResponse<TimelineDTO[]>> =>
+  await axiosClient.post(`/master/campaign/${id}/timeline`,
+    { position, date, description, event, name } satisfies UpsertTimelineBody, createApiHeaders(token))
+
+export const deleteTimelineEvent = async (token: string, id: number, event: number): Promise<AxiosResponse<TimelineDTO[]>> =>
+  await axiosClient.delete(`/master/campaign/${id}/timeline/${event}`, createApiHeaders(token))

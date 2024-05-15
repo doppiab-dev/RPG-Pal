@@ -7,11 +7,13 @@ import {
   createPoi,
   deleteCampaign,
   deletePoi,
+  deleteTimelineEvent,
   editCampaign,
   editPoi,
   editPoiName,
   upsertDescription,
-  upsertPlot
+  upsertPlot,
+  upsertTimelineEvent
 } from '../Api/master'
 import { formatPOI } from '../Utils/f'
 import { sanitize } from 'dompurify'
@@ -227,6 +229,48 @@ export const editAPoi = createAsyncThunk(
   }
 )
 
+type UpsertATimelineEvent = Authenticated & {
+  id: number
+  position: number | null
+  name: string
+  description: string
+  date: string
+  event: number | null
+}
+
+export const upsertATimelineEvent = createAsyncThunk(
+  'upsertATimelineEvent',
+  async ({ token, date, description, event, name, id, position }: UpsertATimelineEvent, thunkApi) => {
+    try {
+      const response = await upsertTimelineEvent(token, id, position, name, description, date, event)
+      return response.data
+    } catch (e) {
+      const error = formatThunkError(e, 'upsertATimelineEvent error')
+
+      return thunkApi.rejectWithValue(error)
+    }
+  }
+)
+
+type DeleteATimelineEvent = Authenticated & {
+  id: number
+  event: number
+}
+
+export const deleteATimelineEvent = createAsyncThunk(
+  'deleteATimelineEvent',
+  async ({ token, id, event }: DeleteATimelineEvent, thunkApi) => {
+    try {
+      const response = await deleteTimelineEvent(token, id, event)
+      return response.data
+    } catch (e) {
+      const error = formatThunkError(e, 'deleteATimelineEvent error')
+
+      return thunkApi.rejectWithValue(error)
+    }
+  }
+)
+
 export const master = createSlice({
   name: 'master',
   initialState: masterInitialState,
@@ -427,6 +471,40 @@ export const master = createSlice({
       state.campaign = {
         ...state.campaign,
         placesOfInterest
+      }
+      state.campaignInfoStatus = 'success'
+      state.errorMessage = ''
+    })
+    builder.addCase(upsertATimelineEvent.pending, (state) => {
+      state.campaignInfoStatus = 'loading'
+    })
+    builder.addCase(upsertATimelineEvent.rejected, (state, action) => {
+      state.errorMessage = Boolean(action.error) && typeof action.error === 'string'
+        ? action.error
+        : action.payload as string
+      state.campaignInfoStatus = 'error'
+    })
+    builder.addCase(upsertATimelineEvent.fulfilled, (state, action) => {
+      state.campaign = {
+        ...state.campaign,
+        timeline: action.payload
+      }
+      state.campaignInfoStatus = 'success'
+      state.errorMessage = ''
+    })
+    builder.addCase(deleteATimelineEvent.pending, (state) => {
+      state.campaignInfoStatus = 'loading'
+    })
+    builder.addCase(deleteATimelineEvent.rejected, (state, action) => {
+      state.errorMessage = Boolean(action.error) && typeof action.error === 'string'
+        ? action.error
+        : action.payload as string
+      state.campaignInfoStatus = 'error'
+    })
+    builder.addCase(deleteATimelineEvent.fulfilled, (state, action) => {
+      state.campaign = {
+        ...state.campaign,
+        timeline: action.payload
       }
       state.campaignInfoStatus = 'success'
       state.errorMessage = ''

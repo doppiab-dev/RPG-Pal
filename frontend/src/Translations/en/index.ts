@@ -151,7 +151,11 @@ const placesOfInterest = {
   thumbnailLabel: 'Create a Thumbnail for your Point of Interest'
 }
 const timeline = {
-  title: 'Add Event'
+  title: 'Add Event',
+  dateLabel: 'Date should be in format Year or Year-Month or Year-Month-Day',
+  invalidDate: 'Invalid Date, date should be in format Year or Year-Month or Year-Month-Day',
+  deleteTitle: 'Delete this Event?',
+  deleteText: 'Are you sure you want to delete this Timeline Event? This action cannot be undone.'
 }
 
 const en = {

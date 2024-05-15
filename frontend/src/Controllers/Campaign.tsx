@@ -193,13 +193,6 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
     }
   }, [activeCampaign, dispatch, reset, token])
 
-  const expandEvent = useCallback((id: number) => {
-    console.log('show event description, name, date with id:', id)
-  }, [])
-  const addEvent = useCallback((id: number) => {
-    console.log('add event: ', id)
-  }, [])
-
   const clearError = useCallback(() => {
     dispatch(clearMasterState())
     navigate('/home')
@@ -422,9 +415,10 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
           {roots.length === 0 && <Divider />}
         </Box>
       </Box>
-      <Box display='flex' flexDirection='column' height='100%' padding='1vh 0' gap='1vh'>
+      <Box display='flex' flexDirection='column' padding='1vh 0' gap='1vh'>
         <Typography variant="h6" component="h2">{t('activeCampaign.timeline')}</Typography>
-        <EventTimeline campaign={campaign} addEvent={addEvent} expandEvent={expandEvent} />
+        {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+        <EventTimeline campaign={campaign} />
       </Box>
     </Box>
   </Stack>

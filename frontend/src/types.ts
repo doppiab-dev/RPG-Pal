@@ -29,6 +29,15 @@ interface PointOfInterestInputs {
   parent: string
   type: string
 }
+type TimelineInputs = FormDataText & {
+  name: string
+  date?: string
+}
+interface TimelineInputsCreate {
+  text?: string
+  name: string
+  date: string
+}
 /**
  * API
 */
@@ -115,6 +124,13 @@ interface TimelineDTO {
   name: string
   description: string
   date: string
+}
+interface UpsertTimelineBody {
+  position: number | null
+  name: string
+  description: string
+  date: string
+  event: number | null
 }
 /**
  * Redux

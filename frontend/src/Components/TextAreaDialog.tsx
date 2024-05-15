@@ -15,7 +15,17 @@ import {
 import { type Control, Controller, type FieldErrors, type SubmitHandler, type UseFormHandleSubmit } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { Send, Close } from '@mui/icons-material'
-import { faTimes, faEdit, faChevronLeft, faHeading, faUnderline, faItalic, faBold, faTextHeight } from '@fortawesome/free-solid-svg-icons'
+import {
+  faTimes,
+  faEdit,
+  faChevronLeft,
+  faHeading,
+  faUnderline,
+  faItalic,
+  faBold,
+  faTextHeight,
+  faTrashCan
+} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { buttonStyle } from '../Utils/f'
 import HtmlParser from './HtmlParser'
@@ -32,6 +42,7 @@ type TextAreaDialogProps = WithChildren & {
   testId: string
   close: () => void
   cancel: () => void
+  deleteValue?: () => void
   handleSubmit: UseFormHandleSubmit<FormDataText>
   onSubmit: SubmitHandler<FormDataText>
   setValue: (text: string) => void
@@ -48,6 +59,7 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
   children,
   testId,
   defaultEditMode = false,
+  deleteValue,
   cancel,
   handleSubmit,
   close,
@@ -173,6 +185,21 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
             {children}
           </DialogContent>
           <DialogActions sx={{ p: 2, justifyContent: 'flex-end' }}>
+            {
+              deleteValue !== undefined &&
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                endIcon={<FontAwesomeIcon icon={faTrashCan} />}
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                onClick={deleteValue}
+                data-testid={`delete-${testId}-button`}
+                sx={{ ...buttonStyle }}
+              >
+                {t('textArea.delete')}
+              </Button>
+            }
             <Button
               variant="contained"
               color="primary"

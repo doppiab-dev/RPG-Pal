@@ -446,7 +446,7 @@ export const upsertTimelineEvent = async (
   user_id: string,
   name: string,
   date: string,
-  position: number,
+  position: number | null,
   description: string,
   event: number | null
 ): Promise<TimelineDTO[]> => {
@@ -462,11 +462,11 @@ export const upsertTimelineEvent = async (
     `
     : `
       UPDATE ${tableTimeline}
-      SET name = $3, description = $4, date = $5, position = $6
-      WHERE campaign_id = $2 AND user_id = $1 AND event = $7
+      SET name = $3, description = $4, date = $5
+      WHERE campaign_id = $2 AND user_id = $1 AND id = $6
     `
-  const upsertTimelineValues = [user_id, numeric_id, name, description, date, position]
-  const res = await client.query<DBTimeline>(upsertTimelineQuery, event === null ? upsertTimelineValues : [...upsertTimelineValues, event])
+  const upsertTimelineValues = [user_id, numeric_id, name, description, date]
+  const res = await client.query<DBTimeline>(upsertTimelineQuery, event === null ? [...upsertTimelineValues, position] : [...upsertTimelineValues, event])
   client.release()
   if (res.rowCount === null || res.rowCount === 0) throw new Error('upsert timeline event failed')
 

@@ -15,7 +15,7 @@ import {
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
-interface CustomTextModalProps {
+type CustomTextModalProps = WithChildren & {
   onClose: () => void
   handleSubmit: UseFormHandleSubmit<any>
   onSubmit: SubmitHandler<any>
@@ -55,6 +55,7 @@ const CustomTextModal: FC<CustomTextModalProps> = ({
   thirdError,
   thirdLabel,
   thirdOptions,
+  children,
   disabled = false,
   thirdDisabled = false
 }) => {
@@ -99,6 +100,7 @@ const CustomTextModal: FC<CustomTextModalProps> = ({
               />
             )}
           />
+          {children}
           {
             (secondLabel !== undefined && options !== undefined) && <Controller
               name={secondLabel}
