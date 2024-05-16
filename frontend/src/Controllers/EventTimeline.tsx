@@ -112,7 +112,6 @@ const EventTimeline: FC<EventTimelineProps> = ({ campaign }) => {
       }))
 
       setTimeline(null)
-      // reset()
     } catch (e) {
       const msg = parseErrorMessage((e))
       setError('text', { type: 'custom', message: msg ?? 'validation failed' }, { shouldFocus: true })
