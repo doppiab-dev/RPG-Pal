@@ -49,7 +49,7 @@ const EventTimeline: FC<EventTimelineProps> = ({ campaign }) => {
       .matches(/^\d+(?:-\d+){0,2}$/, t('timeline.invalidDate'))
   })
 
-  const upsertEvent = useCallback(async (id: number) => {
+  const upsertEvent = useCallback((id: number) => {
     setTimeline(id)
   }, [])
   const deleteEvent = useCallback(() => {
@@ -138,7 +138,6 @@ const EventTimeline: FC<EventTimelineProps> = ({ campaign }) => {
   }, [resetCreate])
   const onSubmitCreate: SubmitHandler<TimelineInputsCreate> = useCallback(async (data) => {
     try {
-      console.log('data', data)
       const description = data.text ?? ''
       const name = data.name
       const date = data.date ?? ''
@@ -226,7 +225,6 @@ const EventTimeline: FC<EventTimelineProps> = ({ campaign }) => {
       testId='timeline'
       setValue={setText}
       defaultEditMode
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       deleteValue={deleteEvent}
     >
       <Controller
@@ -269,8 +267,10 @@ const EventTimeline: FC<EventTimelineProps> = ({ campaign }) => {
       <TimelineItem>
         <TimelineSeparator>
           <TimelineConnector />
-          {/* eslint-disable-next-line @typescript-eslint/no-floating-promises */}
-          <IconButton onClick={() => { openCreate((campaign.timeline.length === 0 ? 0 : campaign.timeline[0].position - 1)) }}>
+          <IconButton
+            data-testid="add-timeline-event"
+            onClick={() => { openCreate((campaign.timeline.length === 0 ? 0 : campaign.timeline[0].position - 1)) }}
+          >
             <EditCalendar />
           </IconButton>
           <TimelineConnector />
@@ -283,7 +283,7 @@ const EventTimeline: FC<EventTimelineProps> = ({ campaign }) => {
         campaign.timeline.length > 0 && campaign.timeline.map(event => <Fragment key={event.id}>
           <TimelineItem>
             <TimelineOppositeContent alignContent='center'>
-              <Typography>{event.date}</Typography>
+              <Typography data-testid='event-date'>{event.date}</Typography>
             </TimelineOppositeContent>
             <TimelineSeparator>
               <TimelineConnector />
@@ -292,7 +292,6 @@ const EventTimeline: FC<EventTimelineProps> = ({ campaign }) => {
                   setValue('name', event.name)
                   setValue('text', event.description)
                   setValue('date', event.date)
-                  // eslint-disable-next-line @typescript-eslint/no-floating-promises
                   upsertEvent(event.id)
                 }}
                 color={event.position % 2 === 0 ? 'primary' : 'secondary'}
@@ -303,21 +302,20 @@ const EventTimeline: FC<EventTimelineProps> = ({ campaign }) => {
               <TimelineConnector />
             </TimelineSeparator>
             <TimelineContent alignContent='center'>
-              <Typography variant="h6">{event.name}</Typography>
-              <Typography>{event.description}</Typography>
+              <Typography variant="h6" data-testid='event-name'>{event.name}</Typography>
+              <Typography data-testid='event-description'>{event.description}</Typography>
             </TimelineContent>
           </TimelineItem>
           <TimelineItem>
             <TimelineSeparator>
               <TimelineConnector />
-              {/* eslint-disable-next-line @typescript-eslint/no-floating-promises */}
               <IconButton onClick={() => { openCreate(event.position + 1) }}>
                 <EditCalendar />
               </IconButton>
               <TimelineConnector />
             </TimelineSeparator>
             <TimelineContent alignContent='center'>
-              <Typography variant="h6">{t('timeline.title')}</Typography>
+              <Typography variant="h6" data-testid='event-title'>{t('timeline.title')}</Typography>
             </TimelineContent>
           </TimelineItem>
         </Fragment>

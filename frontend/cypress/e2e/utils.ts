@@ -96,6 +96,7 @@ export const description = 'description'
 export const plot = 'plot'
 export const name = 'name'
 export const newName = 'newName'
+export const date = '22'
 
 export const checkUnlinkedLocationDescription = () => {
   cy.get('[data-testid="chunked-poi-description-continent-text"]').should('contain', description)
@@ -165,4 +166,15 @@ export const addDescription = () => {
   cy.get('.MuiInputBase-root').type(description).wait(100)
   cy.get('[data-testid="add-edit-description-title"]').click().wait(200)
   cy.get('[type="submit"]').click().wait(200)
+}
+export const addTimeline = () => {
+  cy.get('[data-testid="campaign-item"]').click().wait(200)
+  cy.get('[data-testid="add-timeline-event"]').click().wait(200)
+  cy.get('[data-testid="first-text"]').type(name).wait(200)
+  cy.get('[data-testid="date-text"]').type(date).wait(200)
+  cy.get('[type="submit"]').click().wait(200)
+}
+export const checkTimeline = () => {
+  cy.get('[data-testid="event-name"]').should('contain', name)
+  cy.get('[data-testid="event-date"]').should('contain', date)
 }
