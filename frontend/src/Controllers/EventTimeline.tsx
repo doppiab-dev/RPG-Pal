@@ -36,7 +36,7 @@ const EventTimeline: FC<EventTimelineProps> = ({ campaign }) => {
       .required(t('campaign.validationErrorRequired'))
       .max(32, t('campaign.nameValidationErrorTooLong'))
       .trim(),
-    date: yup.string().matches(/^\d+(?:[-]\d+){0,2}$/, t('timeline.invalidDate'))
+    date: yup.string().matches(/^\d+(?:-\d+){0,2}$/, t('timeline.invalidDate'))
   })
   const schemaCreate = yup.object().shape({
     text: yup.string().trim(),
@@ -46,7 +46,7 @@ const EventTimeline: FC<EventTimelineProps> = ({ campaign }) => {
       .trim(),
     date: yup.string()
       .required(t('campaign.dateValidationErrorRequired'))
-      .matches(/^\d+(?:[-]\d+){0,2}$/, t('timeline.invalidDate'))
+      .matches(/^\d+(?:-\d+){0,2}$/, t('timeline.invalidDate'))
   })
 
   const upsertEvent = useCallback(async (id: number) => {

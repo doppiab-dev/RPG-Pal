@@ -11,6 +11,7 @@ import swaggerUi from 'swagger-ui-express'
 loggerInit()
 
 const app = express()
+app.disable('x-powered-by')
 app.use(compression())
 
 if (CorsHost !== '') {
