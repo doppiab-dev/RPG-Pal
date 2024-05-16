@@ -124,7 +124,8 @@ const textArea = {
   addSubtitle: 'Subtitle',
   bold: 'Bold',
   italic: 'Italic',
-  underlined: 'Underlined'
+  underlined: 'Underlined',
+  delete: 'Delete'
 }
 const placesOfInterest = {
   world: 'World',
@@ -144,18 +145,24 @@ const placesOfInterest = {
   editName: 'Edit your Point of Interest name',
   placeholder: 'detach it from the Point of Interest',
   poiBody: 'Create/Modify your "',
-  poiBody2: '" description',
+  poiBody2: '" informations',
   createLocation: 'Add a new Point of Interest',
   clear: 'Clear Value',
   button: 'Save data',
   thumbnailLabel: 'Create a Thumbnail for your Point of Interest'
 }
 const timeline = {
-  title: 'Add Event',
+  title: 'Add Timeline Event',
   dateLabel: 'Date should be in format Year or Year-Month or Year-Month-Day',
   invalidDate: 'Invalid Date, date should be in format Year or Year-Month or Year-Month-Day',
   deleteTitle: 'Delete this Event?',
-  deleteText: 'Are you sure you want to delete this Timeline Event? This action cannot be undone.'
+  deleteText: 'Are you sure you want to delete this Timeline Event? This action cannot be undone.',
+  createTitle: 'Add new Timeline Event',
+  createText: 'Create',
+  descriptionLabel: 'Description',
+  textTitle: 'Timeline Event',
+  textBody: 'Create/Modify your Timeline Event informations',
+  nameLabel: 'Name'
 }
 
 const en = {

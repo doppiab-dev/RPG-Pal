@@ -173,8 +173,8 @@ const EventTimeline: FC<EventTimelineProps> = ({ campaign }) => {
       icon={<FontAwesomeIcon icon={faCalendarPlus} />}
       name="name"
       firstLabel="Name"
-      title={t('timeline.createLocation')}
-      editText={t('timeline.create')}
+      title={t('timeline.createTitle')}
+      editText={t('timeline.createText')}
     >
       <Controller
         name='text'
