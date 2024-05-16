@@ -454,6 +454,42 @@ export const upsertTimelineEvent = async (
   if (isNaN(numeric_id)) throw new Error('fetch failed, id not valid.')
 
   const client = await dbConfig.connect()
+
+  if (position !== null) {
+    const checkTimelineQuery = `
+      SELECT * FROM ${tableTimeline}
+      WHERE user_id = $1 AND campaign_id = $2 AND position = $3
+    `
+    const checkTimelineValues = [user_id, numeric_id, position]
+    const res = await client.query<DBTimeline>(checkTimelineQuery, checkTimelineValues)
+    if (res.rowCount !== null && res.rowCount > 0) {
+      const toMoveEventsQuery = `
+      SELECT * FROM ${tableTimeline}
+      WHERE user_id = $1 AND campaign_id = $2 AND position >= $3
+      ORDER BY position DESC
+      `
+      const toMoveEvents = [user_id, numeric_id, position]
+      const toMove = await client.query<DBTimeline>(toMoveEventsQuery, toMoveEvents)
+      if (toMove.rowCount !== null && toMove.rowCount > 0) {
+        let updateQuery = `
+          UPDATE ${tableTimeline}
+          SET position = CASE
+        `
+        toMove.rows.forEach(row => {
+          updateQuery += `
+          WHEN id = ${row.id} THEN ${row.position + 1}
+        `
+        })
+        updateQuery += `
+            ELSE position
+          END
+          WHERE id IN (${toMove.rows.map(row => row.id).join(', ')})
+        `
+        await client.query<DBTimeline>(updateQuery)
+      }
+    }
+  }
+
   const upsertTimelineQuery = event === null
     ? `
       INSERT INTO ${tableTimeline}
