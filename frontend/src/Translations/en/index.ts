@@ -162,7 +162,9 @@ const timeline = {
   descriptionLabel: 'Description',
   textTitle: 'Timeline Event',
   textBody: 'Create/Modify your Timeline Event informations',
-  nameLabel: 'Name'
+  nameLabel: 'Name',
+  validationErrorRequired: 'A name for the event is required',
+  nameValidationErrorTooLong: 'name can be 32 character maximum.'
 }
 
 const en = {

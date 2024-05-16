@@ -33,19 +33,19 @@ const EventTimeline: FC<EventTimelineProps> = ({ campaign }) => {
   const schema = yup.object().shape({
     text: yup.string().trim(),
     name: yup.string()
-      .required(t('campaign.validationErrorRequired'))
-      .max(32, t('campaign.nameValidationErrorTooLong'))
+      .required(t('timeline.validationErrorRequired'))
+      .max(32, t('timeline.nameValidationErrorTooLong'))
       .trim(),
     date: yup.string().matches(/^\d+(?:-\d+){0,2}$/, t('timeline.invalidDate'))
   })
   const schemaCreate = yup.object().shape({
     text: yup.string().trim(),
     name: yup.string()
-      .required(t('campaign.validationErrorRequired'))
-      .max(32, t('campaign.nameValidationErrorTooLong'))
+      .required(t('timeline.validationErrorRequired'))
+      .max(32, t('timeline.nameValidationErrorTooLong'))
       .trim(),
     date: yup.string()
-      .required(t('campaign.dateValidationErrorRequired'))
+      .required(t('timeline.invalidDate'))
       .matches(/^\d+(?:-\d+){0,2}$/, t('timeline.invalidDate'))
   })
 
