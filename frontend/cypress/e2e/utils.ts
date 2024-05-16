@@ -105,6 +105,7 @@ export const changeDescriptionAndUnlinkPoi = () => {
   cy.get('[data-testid="add-edit-poi-description-italic"]').click().wait(200)
   cy.get('[data-testid="add-edit-poi-description-underlined"]').click().wait(200)
   cy.get('[data-testid="poi-description-text"]').type(description).wait(100)
+  cy.get('[data-testid="thumbnail-text"]').type(description).wait(100)
   cy.get('[data-testid="second-select"]').click().wait(200)
   cy.get('[data-testid="option-second-default"]').click().wait(200)
   cy.get('[type="submit"]').click().wait(200)
@@ -119,7 +120,8 @@ export const checkLocationDescription = () => {
 }
 export const addDescriptionToLocation = () => {
   cy.get('[data-testid="add-poi-description-world-button"]').click().wait(200)
-  cy.get('.MuiInputBase-root').type(description).wait(100)
+  cy.get('[data-testid="textArea-dialog"]').type(description).wait(100)
+  cy.get('[data-testid="thumbnail-text"]').type(description).wait(100)
   cy.get('[data-testid="add-edit-poi-description-bold"]').click().wait(200)
   cy.get('[type="submit"]').click().wait(200)
 }
@@ -141,8 +143,8 @@ export const checkLocationCreated = () => {
 export const addLocationUnlinked = () => {
   cy.get('[data-testid="add-location-button"]').click().wait(200)
   cy.get('[data-testid="first-text"]').type(name).wait(200)
-  cy.get('[data-testid="third-select"]').click().wait(200)
-  cy.get('[data-testid="option-third-world"]').click().wait(200)
+  cy.get('[data-testid="second-select"]').click().wait(200)
+  cy.get('[data-testid="option-second-world"]').click().wait(200)
   cy.get('[type="submit"]').click().wait(200)
 }
 export const checkPlot = () => {

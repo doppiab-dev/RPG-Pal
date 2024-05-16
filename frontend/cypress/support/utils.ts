@@ -15,6 +15,7 @@ export const masterInitialState = {
       points: {},
       roots: []
     },
+    timeline: [],
     groups: []
   },
   campaignsInfoStatus: 'idle',
