@@ -17,10 +17,11 @@ import CustomOptionsModal from '../Components/CustomOptionsModal'
 import * as yup from 'yup'
 
 interface EventTimelineProps {
-  campaign: Campaign
+  id: number
+  timelineEvents: Timeline[]
 }
 
-const EventTimeline: FC<EventTimelineProps> = ({ campaign }) => {
+const EventTimeline: FC<EventTimelineProps> = ({ id, timelineEvents }) => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
 
@@ -61,10 +62,10 @@ const EventTimeline: FC<EventTimelineProps> = ({ campaign }) => {
   const handleDelete = useCallback(async () => {
     if (timeline === null) return
 
-    await dispatch(deleteATimelineEvent({ token, id: campaign.id, event: timeline }))
+    await dispatch(deleteATimelineEvent({ token, id, event: timeline }))
     setTimeline(null)
     setPosition(null)
-  }, [campaign.id, dispatch, timeline, token])
+  }, [dispatch, id, timeline, token])
 
   const {
     handleSubmit,
@@ -103,7 +104,7 @@ const EventTimeline: FC<EventTimelineProps> = ({ campaign }) => {
       const description = data.text ?? ''
       await dispatch(upsertATimelineEvent({
         token,
-        id: campaign.id,
+        id,
         position,
         name,
         description,
@@ -116,7 +117,7 @@ const EventTimeline: FC<EventTimelineProps> = ({ campaign }) => {
       const msg = parseErrorMessage((e))
       setError('text', { type: 'custom', message: msg ?? 'validation failed' }, { shouldFocus: true })
     }
-  }, [campaign.id, dispatch, position, setError, timeline, token])
+  }, [dispatch, id, position, setError, timeline, token])
 
   const setText = useCallback((text: string) => {
     const value = getValues('text')
@@ -141,14 +142,14 @@ const EventTimeline: FC<EventTimelineProps> = ({ campaign }) => {
       const description = data.text ?? ''
       const name = data.name
       const date = data.date ?? ''
-      await dispatch(upsertATimelineEvent({ name, date, id: campaign.id, description, token, position, event: null }))
+      await dispatch(upsertATimelineEvent({ name, date, id, description, token, position, event: null }))
       setPosition(null)
       resetCreate()
     } catch (e) {
       const msg = parseErrorMessage((e))
       dispatch(setErrorMessage(msg))
     }
-  }, [campaign.id, dispatch, position, resetCreate, token])
+  }, [dispatch, id, position, resetCreate, token])
 
   return <Box display='flex' flexDirection='column' padding='1vh 0' gap='1vh'>
     <Typography variant="h6" component="h2">{t('activeCampaign.timeline')}</Typography>
@@ -271,7 +272,7 @@ const EventTimeline: FC<EventTimelineProps> = ({ campaign }) => {
             <TimelineConnector />
             <IconButton
               data-testid="add-timeline-event"
-              onClick={() => { openCreate((campaign.timeline.length === 0 ? 0 : campaign.timeline[0].position - 1)) }}
+              onClick={() => { openCreate((timelineEvents.length === 0 ? 0 : timelineEvents[0].position - 1)) }}
             >
               <EditCalendar />
             </IconButton>
@@ -282,7 +283,7 @@ const EventTimeline: FC<EventTimelineProps> = ({ campaign }) => {
           </TimelineContent>
         </TimelineItem>
         {
-          campaign.timeline.length > 0 && campaign.timeline.map(event => <Fragment key={event.id}>
+          timelineEvents.length > 0 && timelineEvents.map(event => <Fragment key={event.id}>
             <TimelineItem>
               <TimelineOppositeContent alignContent='center'>
                 <Typography data-testid='event-date'>{event.date}</Typography>

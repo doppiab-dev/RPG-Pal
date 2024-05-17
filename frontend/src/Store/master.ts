@@ -281,6 +281,9 @@ export const master = createSlice({
     },
     setErrorMessage: (state, action: { payload: string }) => {
       state.errorMessage = action.payload
+    },
+    setTabs: (state, action: { payload: TabTypes }) => {
+      state.tabs = action.payload
     }
   },
   extraReducers: (builder) => {
@@ -515,7 +518,8 @@ export const master = createSlice({
 export const {
   clearMasterState,
   clearErrorMessage,
-  setErrorMessage
+  setErrorMessage,
+  setTabs
 } = master.actions
 
 export const selectCampaigns = (state: State): State['masterInfo']['campaigns'] => state.masterInfo.campaigns
@@ -523,3 +527,4 @@ export const selectCampaignsInfoStatus = (state: State): State['masterInfo']['ca
 export const selectCampaignInfoStatus = (state: State): State['masterInfo']['campaignInfoStatus'] => state.masterInfo.campaignInfoStatus
 export const selectErrorMessage = (state: State): State['masterInfo']['errorMessage'] => state.masterInfo.errorMessage
 export const selectCampaign = (state: State): State['masterInfo']['campaign'] => state.masterInfo.campaign
+export const selectTabs = (state: State): State['masterInfo']['tabs'] => state.masterInfo.tabs

@@ -83,6 +83,7 @@ export const masterInitialState: MasterStore = {
     timeline: [],
     groups: []
   },
+  tabs: '',
   campaignsInfoStatus: 'idle',
   campaignInfoStatus: 'idle',
   errorMessage: ''
