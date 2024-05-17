@@ -230,7 +230,7 @@ interface Timeline {
   description: string
   date: string
 }
-type TabTypes = '' | 'notes' | 'groups' | 'points' | 'events'
+type TabTypes = 'notes' | 'groups' | 'points' | 'events'
 /**
  * Utils
  */

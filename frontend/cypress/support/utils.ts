@@ -18,7 +18,7 @@ export const masterInitialState = {
     timeline: [],
     groups: []
   },
-  tabs: '',
+  tabs: 'notes',
   campaignsInfoStatus: 'idle',
   campaignInfoStatus: 'idle',
   errorMessage: ''

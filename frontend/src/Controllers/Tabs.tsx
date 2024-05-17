@@ -36,10 +36,10 @@ const CampaignTabs: FC<CampaignTabsProps> = ({ activeCampaign, campaign, openCre
     <TabContext value={tab}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <TabList onChange={onChange}>
-          <Tab label={t('tabs.notes')} value="notes" />
-          <Tab label={t('tabs.groups')} value="groups" />
-          <Tab label={t('tabs.points')} value="points" />
-          <Tab label={t('tabs.events')} value="events" />
+          <Tab label={t('tabs.notes')} value="notes" data-testid='notes' />
+          <Tab label={t('tabs.groups')} value="groups" data-testid='groups' />
+          <Tab label={t('tabs.points')} value="points" data-testid='points' />
+          <Tab label={t('tabs.events')} value="events" data-testid='events' />
         </TabList>
       </Box>
       <TabPanel value="notes">

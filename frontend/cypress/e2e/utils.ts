@@ -142,6 +142,7 @@ export const checkLocationCreated = () => {
   cy.get('.MuiListItemButton-root > .MuiBox-root').should('contain', name)
 }
 export const addLocationUnlinked = () => {
+  cy.get("[data-testid='points']").should('exist').and('be.visible').click().wait(200)
   cy.get('[data-testid="add-location-button"]').click().wait(200)
   cy.get('[data-testid="first-text"]').type(name).wait(200)
   cy.get('[data-testid="second-select"]').click().wait(200)
@@ -152,6 +153,7 @@ export const checkPlot = () => {
   cy.get('[data-testid="chunked-plot-text"]').should('contain', plot)
 }
 export const addPlot = () => {
+  cy.get("[data-testid='notes']").should('exist').and('be.visible').click().wait(200)
   cy.get('[data-testid="add-plot-button"]').click().wait(200)
   cy.get('.MuiInputBase-root').type(plot).wait(100)
   cy.get('[data-testid="add-edit-plot-subtitle"]').click().wait(200)
@@ -169,6 +171,7 @@ export const addDescription = () => {
 }
 export const addTimeline = () => {
   cy.get('[data-testid="campaign-item"]').click().wait(200)
+  cy.get("[data-testid='events']").should('exist').and('be.visible').click().wait(200)
   cy.get('[data-testid="add-timeline-event"]').click().wait(200)
   cy.get('[data-testid="first-text"]').type(name).wait(200)
   cy.get('[data-testid="date-text"]').type(date).wait(200)
