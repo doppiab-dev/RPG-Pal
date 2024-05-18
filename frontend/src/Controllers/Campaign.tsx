@@ -1,14 +1,7 @@
 import { useCallback, useEffect, useState, type FC } from 'react'
-import {
-  Box,
-  Button,
-  Divider,
-  List,
-  Stack,
-  Typography
-} from '@mui/material'
+import { Stack } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { PlacesOfInterestEnum, buttonStyle, parseErrorMessage, shrinkText, schema, PlacesOfInterestValues } from '../Utils/f'
+import { PlacesOfInterestEnum, parseErrorMessage, schema, PlacesOfInterestValues } from '../Utils/f'
 import {
   clearMasterState,
   createAPoi,
@@ -22,19 +15,17 @@ import {
 } from '../Store/master'
 import { useAppDispatch, useAppSelector } from '../Utils/store'
 import { selectToken } from '../Store/users'
-import { faMapLocationDot, faPeopleGroup, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faMapLocationDot } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigate } from 'react-router-dom'
-import { GroupAdd } from '@mui/icons-material'
 import { type SubmitHandler, useForm } from 'react-hook-form'
-import PointOfInterest from './PointOfInterest'
-import EventTimeline from './EventTimeline'
+import CampaignTabs from './Tabs'
 import Loader from '../Components/Loader'
 import TextAreaDialog from '../Components/TextAreaDialog'
 import ErrorComponent from '../Components/Error'
-import Text from '../Components/Text'
 import CustomOptionsModal from '../Components/CustomOptionsModal'
+import Title from '../Components/Title'
 import * as yup from 'yup'
 
 interface CampaignProps {
@@ -308,119 +299,16 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       title={t('placesOfInterest.createLocation')}
       editText={t('placesOfInterest.create')}
     />
-    <Box display='flex' width='100%' flexDirection='column' boxShadow={1} height='66px'>
-      <Typography fontSize='3rem' alignSelf='center' height='100%'>{campaign.name}</Typography>
-    </Box>
-    <Box width='98%' alignSelf='center' height='calc(100% - 67px)' flexDirection='column' sx={{ overflowY: 'auto', overflowX: 'hidden' }}>
-      <Box display='flex' width='100%' flexDirection='column' minHeight='80px' maxHeight='250px' sx={{ overflowY: 'auto', overflowX: 'hidden' }}>
-        <Typography variant="h6" component="h2">{t('activeCampaign.description')}</Typography>
-        <Text
-          emptyText={t('activeCampaign.noDescription')}
-          open={openDescription}
-          chunked={shrinkText(campaign.description)}
-          button={t('activeCampaign.descriptionButton')}
-          showMore={t('activeCampaign.showMore')}
-          testId='description'
-          editMode={campaign.description === ''}
-        />
-      </Box>
-      <Divider />
-      <Box display='flex' flexDirection='column' minHeight='80px' maxHeight='250px' sx={{ overflowY: 'auto', overflowX: 'hidden' }}>
-        <Typography variant="h6" component="h2">{t('activeCampaign.plot')}</Typography>
-        <Text
-          emptyText={t('activeCampaign.noPlot')}
-          open={openPlot}
-          chunked={shrinkText(campaign.plot)}
-          button={t('activeCampaign.plotButton')}
-          showMore={t('activeCampaign.showMore')}
-          testId='plot'
-          editMode={campaign.plot === ''}
-        />
-      </Box>
-      <Divider />
-      <Box display='flex' flexDirection='column' minHeight='80px' maxHeight='150px' sx={{ overflowY: 'auto', overflowX: 'hidden' }}>
-        <Typography variant="h6" component="h2">{t('activeCampaign.group')}</Typography>
-        {
-          campaign.groups.length === 0
-            ? <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
-              <Typography>{t('activeCampaign.noGroups')}</Typography>
-              <Button
-                variant="contained"
-                startIcon={<FontAwesomeIcon icon={faPlus} />}
-                endIcon={<GroupAdd />}
-                sx={{
-                  boxShadow: 4,
-                  alignSelf: 'flex-end',
-                  ...buttonStyle
-                }}
-                data-testid="add-group-button"
-              >
-                {t('activeCampaign.addGroupButton')}
-              </Button>
-            </Box>
-            : <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
-              <Typography>{t('activeCampaign.groups')}</Typography>
-              <Box display='flex' gap='3vw' justifyContent='space-between'>
-                <Box display='flex' gap='3vw' justifyContent='flex-end'>
-                  {
-                    campaign.groups.map((group, i) =>
-                      <Button
-                        variant="contained"
-                        endIcon={<FontAwesomeIcon icon={faPeopleGroup} />}
-                        sx={{ boxShadow: 4, ...buttonStyle }}
-                        key={group.id}
-                        data-testid={`group-${i}-button`}
-                      >
-                        {group.name}
-                      </Button>
-                    )
-                  }
-                </Box>
-                <Button
-                  variant="contained"
-                  endIcon={<GroupAdd />}
-                  startIcon={<FontAwesomeIcon icon={faPlus} />}
-                  sx={{ boxShadow: 4, ...buttonStyle }}
-                  data-testid="add-group-button"
-                >
-                  {t('activeCampaign.addGroupButton')}
-                </Button>
-              </Box>
-            </Box>
-        }
-      </Box>
-      <Divider />
-      <Box display='flex' flexDirection='column'>
-        <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
-          <Box display='flex' flexDirection='row' justifyContent='space-between'>
-            <Typography variant="h6" component="h2">{t('activeCampaign.location')}</Typography>
-            <Button
-              variant="contained"
-              endIcon={<FontAwesomeIcon icon={faMapLocationDot} />}
-              startIcon={<FontAwesomeIcon icon={faPlus} />}
-              sx={{
-                boxShadow: 4,
-                alignSelf: 'flex-end',
-                ...buttonStyle
-              }}
-              onClick={openCreate}
-              data-testid="add-location-button"
-            >
-              {t('activeCampaign.addLocationButton')}
-            </Button>
-          </Box>
-          <List>
-            {roots.map(point => <PointOfInterest key={point} point={point} points={points} defaultOpen activeCampaign={activeCampaign} />)}
-          </List>
-          {roots.length === 0 && <Divider />}
-        </Box>
-      </Box>
-      <Box display='flex' flexDirection='column' padding='1vh 0' gap='1vh'>
-        <Typography variant="h6" component="h2">{t('activeCampaign.timeline')}</Typography>
-        {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-        <EventTimeline campaign={campaign} />
-      </Box>
-    </Box>
+    <Title name={campaign.name} />
+    <CampaignTabs
+      openDescription={openDescription}
+      campaign={campaign}
+      openPlot={openPlot}
+      openCreate={openCreate}
+      roots={roots}
+      points={points}
+      activeCampaign={activeCampaign}
+    />
   </Stack>
 }
 

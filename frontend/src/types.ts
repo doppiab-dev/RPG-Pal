@@ -170,6 +170,7 @@ interface PlayerStore {
 interface MasterStore {
   campaigns: Campaigns
   campaign: Campaign
+  tabs: TabTypes
   campaignsInfoStatus: Status
   errorMessage: string
   campaignInfoStatus: Status
@@ -229,6 +230,7 @@ interface Timeline {
   description: string
   date: string
 }
+type TabTypes = 'notes' | 'groups' | 'points' | 'events'
 /**
  * Utils
  */

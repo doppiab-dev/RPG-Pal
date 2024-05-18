@@ -166,6 +166,12 @@ const timeline = {
   validationErrorRequired: 'A name for the event is required',
   nameValidationErrorTooLong: 'name can be 32 character maximum.'
 }
+const tabs = {
+  notes: 'Annotations',
+  groups: 'Groups',
+  points: 'Points of Interest',
+  events: 'Events'
+}
 
 const en = {
   error,
@@ -180,7 +186,8 @@ const en = {
   lorem,
   textArea,
   placesOfInterest,
-  timeline
+  timeline,
+  tabs
 }
 
 export default en
