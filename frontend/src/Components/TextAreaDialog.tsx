@@ -15,7 +15,17 @@ import {
 import { type Control, Controller, type FieldErrors, type SubmitHandler, type UseFormHandleSubmit } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { Send, Close } from '@mui/icons-material'
-import { faTimes, faEdit, faChevronLeft, faHeading, faUnderline, faItalic, faBold, faTextHeight } from '@fortawesome/free-solid-svg-icons'
+import {
+  faTimes,
+  faEdit,
+  faChevronLeft,
+  faHeading,
+  faUnderline,
+  faItalic,
+  faBold,
+  faTextHeight,
+  faTrashCan
+} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { buttonStyle } from '../Utils/f'
 import HtmlParser from './HtmlParser'
@@ -32,6 +42,7 @@ type TextAreaDialogProps = WithChildren & {
   testId: string
   close: () => void
   cancel: () => void
+  deleteValue?: () => void
   handleSubmit: UseFormHandleSubmit<FormDataText>
   onSubmit: SubmitHandler<FormDataText>
   setValue: (text: string) => void
@@ -48,6 +59,7 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
   children,
   testId,
   defaultEditMode = false,
+  deleteValue,
   cancel,
   handleSubmit,
   close,
@@ -68,8 +80,9 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
 
   const getRows = useCallback(() => {
     if (!Boolean(children)) return 29
+    if (Array.isArray(children)) return 21
 
-    return Boolean((children as any)?.props?.children) ? 20 : 25
+    return Boolean((children as any)?.props?.children) ? 22 : 25
   }, [children])
 
   return <Dialog
@@ -127,51 +140,66 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
                 )}
               />
             </Box>
+            <ButtonGroup sx={{ display: 'flex', marginLeft: '2vw' }} variant="outlined">
+              <Button
+                sx={{ fontSize: '0.8rem' }}
+                startIcon={<FontAwesomeIcon icon={faHeading} style={{ fontSize: '0.8rem' }} />}
+                onClick={() => { setValue('<h2> </h2>') }}
+                data-testid={`add-edit-${testId}-title`}
+              >
+                {t('textArea.addTitle')}
+              </Button>
+              <Button
+                sx={{ fontSize: '0.8rem' }}
+                startIcon={<FontAwesomeIcon icon={faTextHeight} style={{ fontSize: '0.8rem' }} />}
+                onClick={() => { setValue('<h3> </h3>') }}
+                data-testid={`add-edit-${testId}-subtitle`}
+              >
+                {t('textArea.addSubtitle')}
+              </Button>
+              <Button
+                sx={{ fontSize: '0.8rem' }}
+                startIcon={<FontAwesomeIcon icon={faBold} style={{ fontSize: '0.8rem' }} />}
+                onClick={() => { setValue('<b> </b>') }}
+                data-testid={`add-edit-${testId}-bold`}
+              >
+                {t('textArea.bold')}
+              </Button>
+              <Button
+                sx={{ fontSize: '0.8rem' }}
+                startIcon={<FontAwesomeIcon icon={faItalic} style={{ fontSize: '0.8rem' }} />}
+                onClick={() => { setValue('<i> </i>') }}
+                data-testid={`add-edit-${testId}-italic`}
+              >
+                {t('textArea.italic')}
+              </Button>
+              <Button
+                sx={{ fontSize: '0.8rem' }}
+                startIcon={<FontAwesomeIcon icon={faUnderline} style={{ fontSize: '0.8rem' }} />}
+                onClick={() => { setValue('<u> </u>') }}
+                data-testid={`add-edit-${testId}-underlined`}
+              >
+                {t('textArea.underlined')}
+              </Button>
+            </ButtonGroup>
             {children}
           </DialogContent>
-          <ButtonGroup sx={{ display: 'flex', marginLeft: '2vw' }} variant="outlined">
-            <Button
-              sx={{ fontSize: '0.8rem' }}
-              startIcon={<FontAwesomeIcon icon={faHeading} style={{ fontSize: '0.8rem' }} />}
-              onClick={() => { setValue('<h2> </h2>') }}
-              data-testid={`add-edit-${testId}-title`}
-            >
-              {t('textArea.addTitle')}
-            </Button>
-            <Button
-              sx={{ fontSize: '0.8rem' }}
-              startIcon={<FontAwesomeIcon icon={faTextHeight} style={{ fontSize: '0.8rem' }} />}
-              onClick={() => { setValue('<h3> </h3>') }}
-              data-testid={`add-edit-${testId}-subtitle`}
-            >
-              {t('textArea.addSubtitle')}
-            </Button>
-            <Button
-              sx={{ fontSize: '0.8rem' }}
-              startIcon={<FontAwesomeIcon icon={faBold} style={{ fontSize: '0.8rem' }} />}
-              onClick={() => { setValue('<b> </b>') }}
-              data-testid={`add-edit-${testId}-bold`}
-            >
-              {t('textArea.bold')}
-            </Button>
-            <Button
-              sx={{ fontSize: '0.8rem' }}
-              startIcon={<FontAwesomeIcon icon={faItalic} style={{ fontSize: '0.8rem' }} />}
-              onClick={() => { setValue('<i> </i>') }}
-              data-testid={`add-edit-${testId}-italic`}
-            >
-              {t('textArea.italic')}
-            </Button>
-            <Button
-              sx={{ fontSize: '0.8rem' }}
-              startIcon={<FontAwesomeIcon icon={faUnderline} style={{ fontSize: '0.8rem' }} />}
-              onClick={() => { setValue('<u> </u>') }}
-              data-testid={`add-edit-${testId}-underlined`}
-            >
-              {t('textArea.underlined')}
-            </Button>
-          </ButtonGroup>
           <DialogActions sx={{ p: 2, justifyContent: 'flex-end' }}>
+            {
+              deleteValue !== undefined &&
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                endIcon={<FontAwesomeIcon icon={faTrashCan} />}
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                onClick={deleteValue}
+                data-testid={`delete-${testId}-button`}
+                sx={{ ...buttonStyle }}
+              >
+                {t('textArea.delete')}
+              </Button>
+            }
             <Button
               variant="contained"
               color="primary"

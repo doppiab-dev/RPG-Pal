@@ -29,6 +29,7 @@ import { useNavigate } from 'react-router-dom'
 import { GroupAdd } from '@mui/icons-material'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import PointOfInterest from './PointOfInterest'
+import EventTimeline from './EventTimeline'
 import Loader from '../Components/Loader'
 import TextAreaDialog from '../Components/TextAreaDialog'
 import ErrorComponent from '../Components/Error'
@@ -411,7 +412,13 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
           <List>
             {roots.map(point => <PointOfInterest key={point} point={point} points={points} defaultOpen activeCampaign={activeCampaign} />)}
           </List>
+          {roots.length === 0 && <Divider />}
         </Box>
+      </Box>
+      <Box display='flex' flexDirection='column' padding='1vh 0' gap='1vh'>
+        <Typography variant="h6" component="h2">{t('activeCampaign.timeline')}</Typography>
+        {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+        <EventTimeline campaign={campaign} />
       </Box>
     </Box>
   </Stack>

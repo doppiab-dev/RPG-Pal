@@ -80,6 +80,7 @@ export const masterInitialState: MasterStore = {
       points: {},
       roots: []
     },
+    timeline: [],
     groups: []
   },
   campaignsInfoStatus: 'idle',

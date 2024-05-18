@@ -106,7 +106,8 @@ const activeCampaign = {
   plotBody: 'Create/Modify your Campaign plot',
   editParent: 'Attach, as a child, to a different Point of Interest',
   parentLabel: 'Create, as a child of "',
-  parentLabel2: '", a new Point of Interest'
+  parentLabel2: '", a new Point of Interest',
+  timeline: 'Timeline'
 }
 const lorem = {
   ipsum: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
@@ -123,7 +124,8 @@ const textArea = {
   addSubtitle: 'Subtitle',
   bold: 'Bold',
   italic: 'Italic',
-  underlined: 'Underlined'
+  underlined: 'Underlined',
+  delete: 'Delete'
 }
 const placesOfInterest = {
   world: 'World',
@@ -143,11 +145,26 @@ const placesOfInterest = {
   editName: 'Edit your Point of Interest name',
   placeholder: 'detach it from the Point of Interest',
   poiBody: 'Create/Modify your "',
-  poiBody2: '" description',
+  poiBody2: '" informations',
   createLocation: 'Add a new Point of Interest',
   clear: 'Clear Value',
   button: 'Save data',
   thumbnailLabel: 'Create a Thumbnail for your Point of Interest'
+}
+const timeline = {
+  title: 'Add Timeline Event',
+  dateLabel: 'Date should be in format Year or Year-Month or Year-Month-Day',
+  invalidDate: 'Invalid Date, date should be in format Year or Year-Month or Year-Month-Day',
+  deleteTitle: 'Delete this Event?',
+  deleteText: 'Are you sure you want to delete this Timeline Event? This action cannot be undone.',
+  createTitle: 'Add new Timeline Event',
+  createText: 'Create',
+  descriptionLabel: 'Description',
+  textTitle: 'Timeline Event',
+  textBody: 'Create/Modify your Timeline Event informations',
+  nameLabel: 'Name',
+  validationErrorRequired: 'A name for the event is required',
+  nameValidationErrorTooLong: 'name can be 32 character maximum.'
 }
 
 const en = {
@@ -162,7 +179,8 @@ const en = {
   activeCampaign,
   lorem,
   textArea,
-  placesOfInterest
+  placesOfInterest,
+  timeline
 }
 
 export default en

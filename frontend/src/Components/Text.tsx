@@ -20,7 +20,7 @@ type TextProps = MoreOrEditButtonProps & {
 
 const Text: FC<TextProps> = ({ open, chunked, emptyText, button, showMore, editMode, testId }) => chunked === ''
   ? <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
-    <Typography>{emptyText}</Typography>
+    <Typography data-testid='empty-text'>{emptyText}</Typography>
     <MoreOrEditButton
       open={open}
       button={button}

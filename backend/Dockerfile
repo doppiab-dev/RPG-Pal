@@ -1,9 +1,22 @@
-FROM maven:3.9.6-eclipse-temurin-21-alpine
+FROM node:lts-alpine AS development
+ENV NODE_ENV development
 
-#COPY pom.xml /workspace/
-#COPY src /workspace/src/
-COPY . /workspace
+WORKDIR /backend
 
-WORKDIR /workspace/
+COPY package.json .
+COPY yarn.lock .
+COPY .env .
+COPY jest.config.ts .
+COPY swagger.json .
+COPY tsconfig.json .
+COPY nodemon.json .
 
-CMD ["mvn", "compile", "quarkus:dev"]
+RUN yarn install --network-timeout 1000000000
+
+RUN yarn global add nodemon
+
+COPY . .
+
+EXPOSE $PORT
+
+CMD ["yarn", "start:dev"]

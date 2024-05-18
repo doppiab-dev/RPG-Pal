@@ -31,35 +31,18 @@ services:
     ports:
       - "3000:3000"
 
-  b4f:
-    container_name: b4f-rpg-pal
-    image: b4f-rpg-pal
+  backend:
+    container_name: backend-rpg-pal
+    image: backend-rpg-pal
     build:
-      context: ./b4f
+      context: ./backend
       target: development
     volumes:
-      - ./b4f:/b4f
+      - ./backend:/backend
     depends_on:
       - db
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "--silent"]
     ports:
       - "3001:3001"
-
-  backend:
-    image: backend-rpg-pal
-    container_name: backend-rpg-pal
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-      - "5005:5005"
-    volumes:
-      - ./backend/:/workspace/
-    links:
-      - db
-    depends_on:
-      - db
-    healthcheck:
-        test: [ "CMD", "mysqladmin", "ping", "--silent" ]
+      
