@@ -21,7 +21,8 @@ const Plot: FC<PlotProps> = ({ plot, openPlot }) => {
       button={t('activeCampaign.plotButton')}
       showMore={t('activeCampaign.showMore')}
       testId='plot'
-      editMode={plot === ''} />
+      editMode={plot === ''}
+    />
   </Box>
 }
 

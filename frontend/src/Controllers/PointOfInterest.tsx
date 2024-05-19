@@ -18,7 +18,7 @@ import {
   type Theme
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { PlacesOfInterestEnum, PlacesOfInterestValues, parseErrorMessage, schema } from '../Utils/f'
+import { PlacesOfInterestEnum, PlacesOfInterestValues, cleanStyle, parseErrorMessage, schema } from '../Utils/f'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { DeleteForever, ExpandLess, ExpandMore, ModeEditOutlineOutlined } from '@mui/icons-material'
 import { type SubmitHandler, useForm, Controller } from 'react-hook-form'
@@ -27,6 +27,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useAppDispatch, useAppSelector } from '../Utils/store'
 import { createAPoi, deleteAPoi, editAPoi, editAPoiName, setErrorMessage } from '../Store/master'
 import { selectToken } from '../Store/users'
+import { sanitize } from 'dompurify'
+import { replaceDomNode, textToHtml } from '../Utils'
+import parse from 'html-react-parser'
 import TextAreaDialog from '../Components/TextAreaDialog'
 import Text from '../Components/Text'
 import POIIcon from '../Components/POIIcon'
@@ -188,6 +191,11 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
     }
   }, [activeCampaign, dispatch, token])
 
+  const printPoi = useCallback(() =>
+    textToHtml(parse(cleanStyle(sanitize(points[point].description)), {
+      replace: replaceDomNode()
+    })), [point, points])
+
   const parentOptions: Option[] = []
   for (const key in points) {
     parentOptions.push({
@@ -263,6 +271,8 @@ const PointOfInterest: FC<PointOfInterestProps> = ({ point, points, style, defau
       defaultEditMode={!Boolean(points[point].description)}
       button={t('placesOfInterest.button')}
       setValue={updateDescriptionValue}
+      printPdf={printPoi}
+      filename={points[point].name}
       testId='poi-description'
     >
       {

@@ -135,3 +135,6 @@ export const removeHtmlTags = (text: string): string => {
 
   return div.innerText
 }
+
+export const cleanStyle = (text: string): string =>
+  text.replace(/<\/?(b|u|i)>/g, '')

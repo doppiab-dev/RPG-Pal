@@ -125,7 +125,9 @@ const textArea = {
   bold: 'Bold',
   italic: 'Italic',
   underlined: 'Underlined',
-  delete: 'Delete'
+  delete: 'Delete',
+  pdf: 'Document',
+  download: 'Download PDF'
 }
 const placesOfInterest = {
   world: 'World',

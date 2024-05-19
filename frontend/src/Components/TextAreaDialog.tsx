@@ -1,4 +1,4 @@
-import { useCallback, useState, type FC } from 'react'
+import { type JSXElementConstructor, type ReactElement, useCallback, useState, type FC } from 'react'
 import {
   TextField,
   Button,
@@ -10,7 +10,8 @@ import {
   DialogTitle,
   DialogActions,
   IconButton,
-  ButtonGroup
+  ButtonGroup,
+  useTheme
 } from '@mui/material'
 import { type Control, Controller, type FieldErrors, type SubmitHandler, type UseFormHandleSubmit } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -24,11 +25,14 @@ import {
   faItalic,
   faBold,
   faTextHeight,
-  faTrashCan
+  faTrashCan,
+  faFilePdf
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { buttonStyle } from '../Utils/f'
+import { PDFDownloadLink } from '@react-pdf/renderer'
 import HtmlParser from './HtmlParser'
+import type ReactPDF from '@react-pdf/renderer'
 
 type TextAreaDialogProps = WithChildren & {
   open: boolean
@@ -40,12 +44,15 @@ type TextAreaDialogProps = WithChildren & {
   text: string
   defaultEditMode?: boolean
   testId: string
+  hide?: boolean
+  filename?: string
   close: () => void
   cancel: () => void
   deleteValue?: () => void
   handleSubmit: UseFormHandleSubmit<FormDataText>
   onSubmit: SubmitHandler<FormDataText>
   setValue: (text: string) => void
+  printPdf?: () => ReactElement<ReactPDF.DocumentProps, JSXElementConstructor<any>>
 }
 
 const TextAreaDialog: FC<TextAreaDialogProps> = ({
@@ -59,14 +66,18 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
   children,
   testId,
   defaultEditMode = false,
+  hide = false,
+  filename,
   deleteValue,
   cancel,
   handleSubmit,
   close,
   onSubmit,
-  setValue
+  setValue,
+  printPdf
 }) => {
   const { t } = useTranslation()
+  const theme = useTheme()
 
   const [editMode, setEditMode] = useState<boolean>(defaultEditMode)
 
@@ -200,17 +211,20 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
                 {t('textArea.delete')}
               </Button>
             }
-            <Button
-              variant="contained"
-              color="primary"
-              size="large"
-              endIcon={<FontAwesomeIcon icon={faChevronLeft} />}
-              onClick={openReadMode}
-              data-testid={`open-read-${testId}-button`}
-              sx={{ ...buttonStyle }}
-            >
-              {t('textArea.read')}
-            </Button>
+            {
+              !hide &&
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                endIcon={<FontAwesomeIcon icon={faChevronLeft} />}
+                onClick={openReadMode}
+                data-testid={`open-read-${testId}-button`}
+                sx={{ ...buttonStyle }}
+              >
+                {t('textArea.read')}
+              </Button>
+            }
             <Button
               variant="contained"
               color="primary"
@@ -225,7 +239,23 @@ const TextAreaDialog: FC<TextAreaDialogProps> = ({
         </form>
         : <DialogContent>
           <HtmlParser style={{ whiteSpace: 'break-spaces' }} testId={testId}>{text}</HtmlParser>
-          <DialogActions sx={{ p: 2, justifyContent: 'flex-end' }}>
+          <DialogActions sx={{ p: 2, justifyContent: 'flex-end', gap: '1vw' }}>
+            {
+              printPdf !== undefined && <Button
+                variant="contained"
+                endIcon={<FontAwesomeIcon icon={faFilePdf} />}
+                sx={{ boxShadow: 4, ...buttonStyle }}
+              >
+                <PDFDownloadLink
+                  data-testid={`pdf-dowload-${testId}-button`}
+                  document={printPdf()}
+                  fileName={filename ?? t('textArea.pdf')}
+                  style={{ textDecoration: 'unset', color: theme.palette.primary.contrastText }}
+                >
+                  {t('textArea.download')}
+                </PDFDownloadLink>
+              </Button>
+            }
             <Button
               variant="contained"
               color="primary"
