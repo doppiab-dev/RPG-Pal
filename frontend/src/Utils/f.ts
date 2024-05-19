@@ -136,5 +136,6 @@ export const removeHtmlTags = (text: string): string => {
   return div.innerText
 }
 
+// TODO: per avere b,u,i segui: https://github.com/diegomura/react-pdf/issues/164#issuecomment-434641415
 export const cleanStyle = (text: string): string =>
   text.replace(/<\/?(b|u|i)>/g, '')
