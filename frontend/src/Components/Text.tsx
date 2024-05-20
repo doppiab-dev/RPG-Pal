@@ -18,47 +18,49 @@ type TextProps = MoreOrEditButtonProps & {
   emptyText: string
 }
 
-const Text: FC<TextProps> = ({ open, chunked, emptyText, button, showMore, editMode, testId }) => chunked === ''
-  ? <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
-    <Typography data-testid='empty-text'>{emptyText}</Typography>
-    <MoreOrEditButton
-      open={open}
-      button={button}
-      showMore={showMore}
-      editMode={editMode}
-      testId={testId}
-    />
-  </Box>
-  : <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
-    <Typography data-testid={`chunked-${testId}-text`}>{removeHtmlTags(chunked)}</Typography>
-    <MoreOrEditButton
-      open={open}
-      button={button}
-      showMore={showMore}
-      editMode={editMode}
-      testId={testId}
-    />
-  </Box>
+const Text: FC<TextProps> = ({ open, chunked, emptyText, button, showMore, editMode, testId }) =>
+  chunked === ''
+    ? <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
+      <Typography data-testid='empty-text'>{emptyText}</Typography>
+      <MoreOrEditButton
+        open={open}
+        button={button}
+        showMore={showMore}
+        editMode={editMode}
+        testId={testId}
+      />
+    </Box>
+    : <Box display='flex' flexDirection='column' justifyContent='space-between' height='100%' padding='1vh 0' gap='1vh'>
+      <Typography data-testid={`chunked-${testId}-text`}>{removeHtmlTags(chunked)}</Typography>
+      <MoreOrEditButton
+        open={open}
+        button={button}
+        showMore={showMore}
+        editMode={editMode}
+        testId={testId}
+      />
+    </Box>
 
 export default Text
 
-const MoreOrEditButton: FC<MoreOrEditButtonProps> = ({ open, button, showMore, editMode, testId }) => editMode
-  ? <Button
-    onClick={open}
-    variant="contained"
-    startIcon={<FontAwesomeIcon icon={faPlus} />}
-    endIcon={<DescriptionIcon />}
-    sx={{ boxShadow: 4, alignSelf: 'flex-end', ...buttonStyle }}
-    data-testid={`add-${testId}-button`}
-  >
-    {button}
-  </Button>
-  : <Button
-    onClick={open}
-    variant="contained"
-    endIcon={<ReadMore />}
-    sx={{ boxShadow: 4, alignSelf: 'flex-end', ...buttonStyle }}
-    data-testid={`read-more-${testId}-button`}
-  >
-    {showMore}
-  </Button>
+const MoreOrEditButton: FC<MoreOrEditButtonProps> = ({ open, button, showMore, editMode, testId }) =>
+  editMode
+    ? <Button
+      onClick={open}
+      variant="contained"
+      startIcon={<FontAwesomeIcon icon={faPlus} />}
+      endIcon={<DescriptionIcon />}
+      sx={{ boxShadow: 4, alignSelf: 'flex-end', ...buttonStyle }}
+      data-testid={`add-${testId}-button`}
+    >
+      {button}
+    </Button>
+    : <Button
+      onClick={open}
+      variant="contained"
+      endIcon={<ReadMore />}
+      sx={{ boxShadow: 4, alignSelf: 'flex-end', ...buttonStyle }}
+      data-testid={`read-more-${testId}-button`}
+    >
+      {showMore}
+    </Button>

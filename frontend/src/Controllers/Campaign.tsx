@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState, type FC } from 'react'
 import { Stack } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { PlacesOfInterestEnum, parseErrorMessage, schema, PlacesOfInterestValues } from '../Utils/f'
+import { PlacesOfInterestEnum, parseErrorMessage, schema, PlacesOfInterestValues, cleanStyle } from '../Utils/f'
 import {
   clearMasterState,
   createAPoi,
@@ -19,7 +19,10 @@ import { faMapLocationDot } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigate } from 'react-router-dom'
+import { sanitize } from 'dompurify'
+import { replaceDomNode, textToHtml } from '../Utils'
 import { type SubmitHandler, useForm } from 'react-hook-form'
+import parse from 'html-react-parser'
 import CampaignTabs from './Tabs'
 import Loader from '../Components/Loader'
 import TextAreaDialog from '../Components/TextAreaDialog'
@@ -162,7 +165,14 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
     const value = getPlotValues('text')
     setPlotValue('text', `${value} ${text}`)
   }, [getPlotValues, setPlotValue])
-
+  const printPlot = useCallback(() =>
+    textToHtml(parse(cleanStyle(sanitize(campaign.plot)), {
+      replace: replaceDomNode()
+    })), [campaign.plot])
+  const printDescription = useCallback(() =>
+    textToHtml(parse(cleanStyle((sanitize(campaign.description))), {
+      replace: replaceDomNode()
+    })), [campaign.description])
   const openCreate = useCallback(() => {
     setCreate(true)
   }, [])
@@ -256,6 +266,8 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       handleSubmit={handleDescriptionSubmit}
       close={closeDescription}
       cancel={cancelDescription}
+      printPdf={printDescription}
+      filename={`${campaign.name} description`}
       body={t('activeCampaign.descriptionBody')}
       title={t('activeCampaign.descriptionTitle')}
       text={campaign.description}
@@ -277,6 +289,8 @@ const Campaign: FC<CampaignProps> = ({ activeCampaign }) => {
       text={campaign.plot}
       defaultEditMode={!Boolean(campaign.plot)}
       setValue={updatePlotValue}
+      printPdf={printPlot}
+      filename={`${campaign.name} plot`}
       testId='plot'
     />
     {/* add/edit location Dialog */}

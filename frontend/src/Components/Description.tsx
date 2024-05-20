@@ -29,7 +29,8 @@ const Description: FC<DescriptionProps> = ({ description, openDescription }) => 
       button={t('activeCampaign.descriptionButton')}
       showMore={t('activeCampaign.showMore')}
       testId='description'
-      editMode={description === ''} />
+      editMode={description === ''}
+    />
   </Box>
 }
 

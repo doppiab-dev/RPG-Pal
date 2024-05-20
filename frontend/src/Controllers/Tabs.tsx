@@ -20,7 +20,7 @@ interface CampaignTabsProps {
   openCreate: () => void
 }
 
-const CampaignTabs: FC<CampaignTabsProps> = ({ activeCampaign, campaign, openCreate, openDescription, openPlot, points, roots }) => {
+const CampaignTabs: FC<CampaignTabsProps> = ({ activeCampaign, campaign, points, roots, openCreate, openDescription, openPlot }) => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
 

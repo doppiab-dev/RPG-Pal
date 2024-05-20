@@ -229,6 +229,7 @@ const EventTimeline: FC<EventTimelineProps> = ({ id, timelineEvents }) => {
         setValue={setText}
         defaultEditMode
         deleteValue={deleteEvent}
+        hide
       >
         <Controller
           name='name'
